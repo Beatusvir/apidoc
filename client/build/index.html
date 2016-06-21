@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Aip Document</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li id="home" class="active"><a href="#">Home</a></li>
+        <li id="add-api"><a href="#">Add Api</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div id="app"></div>
+  <footer>
+    <div class="copy">
+      &copy; <a href="mailto:pirela_carlos@hotmail.com">Ceps</a> <span id="copy"></span>
+    </div>
+  </footer>
+  <script src="./bundle.js"></script>
+  <script>
+    var copy = document.getElementById('copy')
+    var date = new Date()
+    copy.innerHTML = date.getFullYear()
+  </script>
+</body>
+
+</html>

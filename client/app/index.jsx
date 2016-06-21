@@ -1,17 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Method from './components/method'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Api from './components/apis/apis'
 
-if(process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf');
 }
 
-const items = [
-  { title: 'URL', content: 'http://asd.com' },
-  { title: 'Method', content: 'ObtenerCliente' }
+const date =  new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDay()
+
+const apiList = [
+  { title: 'CobecaAPI', description: 'Exponer servicios de transferencias bancarias con el banco Venezolano de Crédito', created: date, updated: date },
+  { title: 'Sitio de Clientes', description: 'Portal web para operaciones de clientes', created: date, updated: date }
 ]
 
 ReactDOM.render(
-  <Method title="Test Method" description="Some description in here" apiItems={items}/>,
+  <Api apiList={apiList}/>,
   document.getElementById('app')
 );

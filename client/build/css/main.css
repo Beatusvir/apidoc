@@ -1,0 +1,90 @@
+body {
+  background-color: #fafafa;
+  font-family: sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction:column;
+}
+
+#app{
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  margin: 20px;
+}
+
+a{
+  text-decoration: none;
+  color: steelblue;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  background: url("../images/banner.jpg") no-repeat left center;
+}
+
+nav{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 300px;
+  background-color: rgba(50, 50, 50, 0.5);
+}
+
+nav a {
+  color: #fff;
+}
+
+nav ul{
+  height: 80px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+nav ul li{
+  height: 70px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  list-style: none;
+  margin: 0;
+  font-size: 1.5em;
+  border-bottom: 10px solid transparent;
+}
+
+#home.active{
+  border-bottom: 10px solid hotpink;
+}
+#home a:hover{
+  color: hotpink;
+}
+#add-api.active{
+  border-bottom: 10px solid orange;
+}
+#add-api a:hover{
+  color: orange;
+}
+#home.active a:hover, #add-api.active a:hover{
+  color: #fff;
+  cursor: default;
+}
+
+footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  background: #333;
+  flex-direction: row;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+}

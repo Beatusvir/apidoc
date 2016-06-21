@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
+import './styles.scss'
 
 export default class apiItems extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export default class apiItems extends Component {
     var itemNode = this.props.items.map(function (item, index) {
       return (
         <li className="apiItem" key={index}>
-          <h2>{item.title}</h2>
+          <h3>{item.title}</h3>
           <p>{item.content}</p>
         </li>
       )
