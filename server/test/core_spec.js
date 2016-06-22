@@ -1,6 +1,6 @@
-import {Map} from 'immutable'
-import {viewApi, getApiList} from '../src/core'
-import {expect} from 'chai'
+import { List, Map } from 'immutable'
+import { viewApi, getApiList, setMethods } from '../src/core'
+import { expect } from 'chai'
 
 describe('application logic', () => {
   describe('viewApi', () => {
@@ -19,7 +19,20 @@ describe('application logic', () => {
 
       const result = getApiList()
 
-      expect(result).to.equal(methods)
+      expect(result).to.deep.equal(methods)
+    })
+  })
+
+  describe('setMethods', () => {
+    it('can set a list of methods', () => {
+      const state = Map()
+      const methods = List.of(require('../methods.json'))
+      const nextState = setMethods(state, methods)
+
+      expect(nextState).to.equal(Map({
+        methods: List.of(require('../methods.json')),
+        initialMethods: List.of(require('../methods.json'))
+      }))
     })
   })
 })

@@ -1,4 +1,9 @@
 [
-  { "title": "ActivarCliente", "description": "Activar cliente en el sistemas de transferencias" },
-  { "title": "ActualizarClave", "description": "Cambiar la clave del cliente" }
+  "ActivarCuenta",
+  "ActualizarClave",
+  "ActualizarCliente",
+  "ActualizarEstadoCuenta",
+  "AfiliarCliente",
+  "AfiliarCuenta",
+  "ActualizarPagos"
 ]

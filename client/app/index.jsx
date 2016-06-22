@@ -1,17 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Api from './components/apis/apis'
+import io from 'socket.io-client'
 
 if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf');
 }
 
-const date =  new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDay()
+let apiList = ['test', 'test2']
 
-const apiList = [
-  { title: 'CobecaAPI', description: 'Exponer servicios de transferencias bancarias con el banco Venezolano de Crédito', created: date, updated: date },
-  { title: 'Sitio de Clientes', description: 'Portal web para operaciones de clientes', created: date, updated: date }
-]
+const socket = io(`${location.protocol}//${location.hostname}:8090`)
+socket.on('state', state => {
+  if (state.methods.length > 0){
+    apiList = state.methods
+  }
+})
+
+const date =  new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDay()
 
 ReactDOM.render(
   <Api apiList={apiList}/>,

@@ -5,6 +5,6 @@ export const store = makeStore()
 startServer(store)
 
 store.dispatch({
-  type: 'LIST_API',
-  action: null
+  type: 'SET_METHODS',
+  methods: require('./methods.json')
 })
