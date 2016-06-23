@@ -1,24 +1,35 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Api from './components/apis/apis'
-import io from 'socket.io-client'
+import { Route, Router, hashHistory } from 'react-router'
+import { ApisContainer } from './components/apis/apis'
+import { MethodsContainer } from './components/api_detail/method_list'
+import App from './components/App'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import reducer from './reducer'
+
+const store = createStore(reducer)
+store.dispatch({
+  type: 'SET_STATE',
+  state: {
+    apis: {
+      apiList: ['Test Api 1', 'Test Api 2']
+    }
+  }
+});
 
 if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf');
 }
 
-let apiList = ['test', 'test2']
-
-const socket = io(`${location.protocol}//${location.hostname}:8090`)
-socket.on('state', state => {
-  if (state.methods.length > 0){
-    apiList = state.methods
-  }
-})
-
-const date =  new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDay()
+const routes = <Route component={App}>
+  <Route path="/detail" component={MethodsContainer}/>
+  <Route path="/" component={ApisContainer}/>
+</Route>
 
 ReactDOM.render(
-  <Api apiList={apiList}/>,
+  <Provider store={store}>
+    <Router history={hashHistory}>{routes}</Router>
+  </Provider>,
   document.getElementById('app')
 );
