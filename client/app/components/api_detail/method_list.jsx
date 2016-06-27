@@ -18,7 +18,7 @@ export class Methods extends Component {
         <div className="method" key={index}>
           <h1>{item.title}</h1>
           <p>{item.description}</p>
-          <MethodItems items={item.detail}/>
+          <MethodItems items={item.items}/>
         </div>
       )
     })
@@ -30,39 +30,9 @@ export class Methods extends Component {
   }
 }
 
-let methodsItemList = [
-  {
-    title: 'Method', content: 'Post'
-  },
-  {
-    title: 'URL Params', content: 'Post'
-  },
-  {
-    title: 'Data Params', content: 'Post'
-  },
-  {
-    title: 'Success Response', content: 'Post'
-  },
-  {
-    title: 'Error Response', content: 'Post'
-  },
-  {
-    title: 'Sample Call', content: 'Post'
-  }
-]
-
 const mapStateToProps = (state) => {
   return {
-    methods: state.getIn(
-      [
-        {
-          title: 'Activar Cuenta', description: 'Cambia el estatus de la cuenta del cliente a activa', apiItems: methodsItemList
-        },
-        {
-          title: 'Actualizar Clave', description: 'Cambiar la clave del cliente', apiItems: methodsItemList
-        }
-      ]
-    )
+    methods: state.getIn(['apiDetail', 'methods'])
   }
 }
 
@@ -72,7 +42,7 @@ Methods.propTypes = {
   methods: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,
-    apiItems: PropTypes.arrayOf(PropTypes.shape({
+    items: PropTypes.arrayOf(PropTypes.shape({
       title: PropTypes.string,
       content: PropTypes.string
     }))

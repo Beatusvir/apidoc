@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
+import {Link} from 'react-router';
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import './styles.scss'
 
@@ -10,10 +11,19 @@ export class Api extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
   render() {
-    const apiNode = this.props.apiList.map(function (item, index) {
+    if (this.props.apiList.size == 0) {
       return (
-        <div className="api" key={index}>
-          {item}
+        <div className="emptyList">
+          <h3>No methods created yet!</h3>
+        </div>
+      )
+    }
+    console.log(this.props.apiList.getIn([0]))  
+    const apiNode = this.props.apiList.map(function (item, index) {
+      const link = '/detail/' + item.getIn(['apiList','id'])
+      return (
+        <div className="api" key={item.id}>
+          <Link to ={link}>{item.title}</Link>
         </div>
       )
     })

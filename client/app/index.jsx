@@ -13,7 +13,30 @@ store.dispatch({
   type: 'SET_STATE',
   state: {
     apis: {
-      apiList: ['Test Api 1', 'Test Api 2']
+      apiList: [
+        {
+          title: 'API Document 1',
+          id: 1
+        },
+        {
+          title: 'API Document 2',
+          id: 2
+        }
+      ]
+    },
+    apiDetail: {
+      methods: [
+        {
+          title: 'Method Title',
+          description: 'Method description',
+          items: [
+            {
+              title: 'Method',
+              content: 'POST'
+            }
+          ]
+        }
+      ]
     }
   }
 });
@@ -23,8 +46,8 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const routes = <Route component={App}>
-  <Route path="/detail" component={MethodsContainer}/>
   <Route path="/" component={ApisContainer}/>
+  <Route path="/detail/:apiId" component={MethodsContainer}/>
 </Route>
 
 ReactDOM.render(
