@@ -13,8 +13,8 @@ export default class apiItems extends Component {
     var itemNode = this.props.items.map(function (item, index) {
       return (
         <li className="apiDetailItem" key={index}>
-          <h3>{item.title}</h3>
-          <p>{item.content}</p>
+          <h3>{item.getIn(['title'])}</h3>
+          <p>{item.getIn(['content'])}</p>
         </li>
       )
     })

@@ -13,14 +13,15 @@ export class Methods extends Component {
   }
 
   render() {
-    var methodNode = this.state.methods.map(function (item, index) {
-      return (
-        <div className="method" key={index}>
-          <h1>{item.title}</h1>
-          <p>{item.description}</p>
-          <MethodItems items={item.items}/>
-        </div>
-      )
+    var methodNode = this.props.methods.map(function (item, index) {
+      console.log(item)
+        return (
+          <div className="method" key={index}>
+            <h1>{item.getIn(['title']) }</h1>
+            <p>{item.getIn(['description']) }</p>
+            <MethodItems items={item.getIn(['items']) }/>
+          </div>
+        )
     })
     return (
       <div>
@@ -32,7 +33,7 @@ export class Methods extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    methods: state.getIn(['apiDetail', 'methods'])
+    methods: state.getIn(['apiDetail'])
   }
 }
 

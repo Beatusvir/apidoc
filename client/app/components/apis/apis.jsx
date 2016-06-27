@@ -18,12 +18,11 @@ export class Api extends Component {
         </div>
       )
     }
-    console.log(this.props.apiList.getIn([0]))  
     const apiNode = this.props.apiList.map(function (item, index) {
-      const link = '/detail/' + item.getIn(['apiList','id'])
+      const link = '/detail/' + item.getIn(['id'])
       return (
-        <div className="api" key={item.id}>
-          <Link to ={link}>{item.title}</Link>
+        <div className="api" key={item.getIn(['id'])}>
+          <Link to ={link}>{item.getIn(['title'])}</Link>
         </div>
       )
     })
@@ -41,7 +40,7 @@ Api.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    apiList: state.getIn(['apis', 'apiList'])
+    apiList: state.getIn(['apis'])
   }
 }
 

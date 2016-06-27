@@ -9,37 +9,52 @@ import { createStore } from 'redux'
 import reducer from './reducer'
 
 const store = createStore(reducer)
-store.dispatch({
+const action = {
   type: 'SET_STATE',
   state: {
-    apis: {
-      apiList: [
-        {
-          title: 'API Document 1',
-          id: 1
-        },
-        {
-          title: 'API Document 2',
-          id: 2
-        }
-      ]
-    },
-    apiDetail: {
-      methods: [
-        {
-          title: 'Method Title',
-          description: 'Method description',
-          items: [
-            {
-              title: 'Method',
-              content: 'POST'
-            }
-          ]
-        }
-      ]
-    }
+    apis: [
+      {
+        id: 1,
+        title: 'API Document 1'
+      },
+      {
+        id: 2,
+        title: 'API Document 2'
+      }
+    ],
+    apiDetail: [
+      {
+        title: 'Method 1',
+        description: 'Method content',
+        items: [
+          {
+            title: 'Method item 1',
+            content: 'content 1'
+          },
+          {
+            title: 'Method item 2',
+            content: 'content 2'
+          }
+        ]
+      },
+      {
+        title: 'Method 2',
+        description: 'Method content 2',
+        items: [
+          {
+            title: 'Method item 1',
+            content: 'content 1'
+          },
+          {
+            title: 'Method item 2',
+            content: 'content 2'
+          }
+        ]
+      }
+    ]
   }
-});
+}
+store.dispatch(action)
 
 if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf');
