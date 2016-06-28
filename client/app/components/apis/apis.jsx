@@ -35,7 +35,7 @@ export class Api extends Component {
 }
 
 Api.propTypes = {
-  apiList: PropTypes.array
+  apiList: PropTypes.object
 }
 
 const mapStateToProps = (state) => {

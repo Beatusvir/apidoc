@@ -14,7 +14,6 @@ export class Methods extends Component {
 
   render() {
     var methodNode = this.props.methods.map(function (item, index) {
-      console.log(item)
         return (
           <div className="method" key={index}>
             <h1>{item.getIn(['title']) }</h1>
@@ -40,12 +39,5 @@ const mapStateToProps = (state) => {
 export const MethodsContainer = connect(mapStateToProps)(Methods)
 
 Methods.propTypes = {
-  methods: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string,
-    description: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      title: PropTypes.string,
-      content: PropTypes.string
-    }))
-  }))
+  methods: PropTypes.object
 }

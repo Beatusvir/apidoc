@@ -1,3 +1,4 @@
+import { List, Map, fromJS } from 'immutable'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
@@ -8,68 +9,33 @@ import {
 import { expect } from 'chai'
 import { Methods } from '../app/components/api_detail/method_list'
 
-const items = [
-  {
-    title: 'Test Method 1',
-    description: 'Test method description',
-    detail: [
-      {
-        title: 'Method',
-        content: 'Post'
-      },
-      {
-        title: 'URL Params',
-        content: 'Post'
-      },
-      {
-        title: 'Data Params',
-        content: 'Post'
-      },
-      {
-        title: 'Success Response',
-        content: 'Post'
-      },
-      {
-        title: 'Error Response',
-        content: 'Post'
-      },
-      {
-        title: 'Sample Call',
-        content: 'Post'
-      }
-    ]
-  },
-  {
-    title: 'Test Method 2',
-    description: 'Test method description',
-    detail: [
-      {
-        title: 'Method',
-        content: 'Post'
-      },
-      {
-        title: 'URL Params',
-        content: 'Post'
-      },
-      {
-        title: 'Data Params',
-        content: 'Post'
-      },
-      {
-        title: 'Success Response',
-        content: 'Post'
-      },
-      {
-        title: 'Error Response',
-        content: 'Post'
-      },
-      {
-        title: 'Sample Call',
-        content: 'Post'
-      }
-    ]
-  }
-]
+const items = List.of(
+          Map({
+            title: 'Method 1',
+            description: 'Method content',
+            items: List.of(
+              Map({
+                title: 'Method item 1',
+                content: 'content 1'
+              }),
+              Map({
+                title: 'Method item 2',
+                content: 'content 2'
+              }))
+          }),
+          Map({
+            title: 'Method 2',
+            description: 'Method content 2',
+            items: List.of(
+              Map({
+                title: 'Method item 1',
+                content: 'content 1'
+              }),
+              Map({
+                title: 'Method item 2',
+                content: 'content 2'
+              }))
+          }))
 
 describe('Api Detail', () => {
   it('renders a list of methods', () => {
@@ -83,11 +49,11 @@ describe('Api Detail', () => {
     const methodDetailHeadings = scryRenderedDOMComponentsWithTag(component, 'h3')
 
     expect(methodList.length).to.equal(2)
-    expect(methodHeadings[0].textContent).to.equal('Test Method 1')
-    expect(methodHeadings[1].textContent).to.equal('Test Method 2')
-    expect(methodDetail.length).to.equal(12)
-    expect(methodDetailHeadings[0].textContent).to.equal('Method')
-    expect(methodDetailHeadings[11].textContent).to.equal('Sample Call')
+    expect(methodHeadings[0].textContent).to.equal('Method 1')
+    expect(methodHeadings[1].textContent).to.equal('Method 2')
+    expect(methodDetail.length).to.equal(4)
+    expect(methodDetailHeadings[0].textContent).to.equal('Method item 1')
+    expect(methodDetailHeadings[3].textContent).to.equal('Method item 2')
 
     // expect(apiList[0].textContent).to.equal('Test Method 1')
     // expect(apiList[1].textContent).to.equal('Test Method 2')

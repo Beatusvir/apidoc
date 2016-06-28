@@ -22,8 +22,8 @@ describe('reducer', () => {
           Map({
             title: 'Method 1',
             description: 'Method content',
-            items: List.of(Map(
-              {
+            items: List.of(
+              Map({
                 title: 'Method item 1',
                 content: 'content 1'
               }),
@@ -35,8 +35,8 @@ describe('reducer', () => {
           Map({
             title: 'Method 2',
             description: 'Method content 2',
-            items: List.of(Map(
-              {
+            items: List.of(
+              Map({
                 title: 'Method item 1',
                 content: 'content 1'
               }),
@@ -47,7 +47,6 @@ describe('reducer', () => {
           }))
       })
     }
-
     const nextState = reducer(initialState, action)
     expect(nextState).to.deep.equal(fromJS({
       apis: [
@@ -185,4 +184,71 @@ describe('reducer', () => {
       ]
     }))
   })
+
+  it('handles GET_DETAIL', () => {
+    const action = {
+      type: 'GET_DETAIL',
+      apiId: 1
+    }
+
+    const nextState = reducer(undefined, action)
+
+    expect(nextState).to.deep.equal(fromJS({
+      apiDetail: [
+        {
+          title: 'Method title',
+          description: 'some description',
+          items: [
+            { title: 'Some method', content: 'Method content' },
+            { title: 'Some method', content: 'Method content' }
+          ]
+        }
+      ]
+    }))
+  })
+
+  it('handles ADD_ITEM', () => {
+    const initialState = fromJS({
+      apis: [
+        { id: 1, title: 'title api 1' },
+        { id: 2, title: 'title api 2' }
+      ]
+    })
+
+    const action = {
+      type: 'ADD_ITEM',
+      title: 'some title'
+    }
+
+    const nextState = reducer(initialState, action)
+    expect(nextState.toJS()).to.deep.equal(({
+      apis: [
+        { id: 1, title: 'title api 1' },
+        { id: 2, title: 'title api 2' },
+        { id: 3, title: 'some title' }
+      ]
+    }))
+  })
+
+  it('handles DELETE_ITEM', () => {
+    const initialState = fromJS({
+      apis: [
+        { id: 1, title: 'title api 1' },
+        { id: 2, title: 'title api 2' }
+      ]
+    })
+
+    const action = {
+      type: 'DELETE_ITEM',
+      apiId: 1
+    }
+
+    const nextState = reducer(initialState, action)
+    expect(nextState.toJS()).to.deep.equal(({
+      apis: [
+        { id: 2, title: 'title api 2' }
+      ]
+    }))
+  })
+
 })

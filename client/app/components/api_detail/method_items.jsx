@@ -27,5 +27,5 @@ export default class apiItems extends Component {
 }
 
 apiItems.propTypes = {
-    items: React.PropTypes.array
+    items: React.PropTypes.object
 }
