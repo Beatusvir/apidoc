@@ -40,7 +40,7 @@ Api.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    apiList: state.getIn(['apis'])
+    apiList: state.get('apis')
   }
 }
 
