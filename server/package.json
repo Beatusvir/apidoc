@@ -26,6 +26,6 @@
     "immutable": "^3.8.1",
     "redux": "^3.5.2",
     "socket.io": "^1.4.6",
-    "sqlite": "^2.0.2"
+    "sqlite3": "^3.1.4"
   }
 }

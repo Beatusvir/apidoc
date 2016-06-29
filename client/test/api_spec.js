@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { fromJS } from 'immutable';
+import { fromJS } from 'immutable'
 import { renderIntoDocument, scryRenderedDOMComponentsWithClass} from 'react-addons-test-utils'
 import { expect } from 'chai'
 import { Api } from '../app/components/apis/apis'

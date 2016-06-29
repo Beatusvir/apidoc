@@ -1,23 +1,19 @@
-import { Map } from 'immutable'
+import { Map, fromJS } from 'immutable'
 
 function setState (state, newState) {
   return state.merge(newState)
 }
 
+const getApis = (state, apiList) => {
+  return state.merge({
+    apis: fromJS(apiList)
+  })
+}
+
 function getDetail (state, id) {
-  // TODO get detail from server APIs using id and return it
   return state.merge(
     {
-      apiDetail: [
-        {
-          title: 'Method title',
-          description: 'some description',
-          items: [
-            { title: 'Some method', content: 'Method content' },
-            { title: 'Some method', content: 'Method content' }
-          ]
-        }
-      ]
+      apiDetail: []
     }
   )
 }
@@ -44,6 +40,8 @@ export default function (state = Map() , action) {
   switch (action.type) {
     case 'SET_STATE':
       return setState(state, action.state)
+    case 'GET_APIS':
+      return getApis(state, action.apiList)
     case 'GET_DETAIL':
       return getDetail(state, action.apiId)
     case 'ADD_ITEM':

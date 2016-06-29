@@ -1,5 +1,5 @@
-import { List, Map } from 'immutable'
-import { viewApi, getApiList, setMethods } from '../src/core'
+import { List, Map, toJS } from 'immutable'
+import { viewApi, getApis, setMethods } from '../src/core'
 import { expect } from 'chai'
 
 describe('application logic', () => {
@@ -15,11 +15,21 @@ describe('application logic', () => {
 
   describe('apiList', () => {
     it('return list of apis', () => {
-      const methods = require('../methods.json')
+      const state = Map()
+      const result = getApis(state)
 
-      const result = getApiList()
-
-      expect(result).to.deep.equal(methods)
+      expect(result.toJS()).to.deep.equal({
+        apis: [
+          {
+            id: 1,
+            title: 'API Document 1'
+          },
+          {
+            id: 2,
+            title: 'API Document 2'
+          }
+        ]
+      })
     })
   })
 
