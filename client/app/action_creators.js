@@ -11,3 +11,4 @@ export function getDetail(apiId) {
     apiId: apiId
   }
 }
+

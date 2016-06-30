@@ -17,7 +17,10 @@ getDbApis(updateState)
 
 export function getApis (state) {
   // TODO read apis from database
-  return state.set('apis', [])
+  return state.set('apis', [
+    { id:1, title: 'Api 1'},
+    { id:2, title: 'Api 2'}
+  ])
 }
 
 export function getDetail (state, apiId) {
