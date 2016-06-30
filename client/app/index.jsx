@@ -7,7 +7,7 @@ import App from './components/App'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import remoteActionMiddleware from './remote_action_middleware'
-import { setState, getDetail } from './action_creators';
+import { requestApis, setState, getDetail } from './action_creators';
 import reducer from './reducer'
 import io from 'socket.io-client'
 
@@ -41,4 +41,4 @@ ReactDOM.render(
     <Router history={hashHistory}>{routes}</Router>
   </Provider>,
   document.getElementById('app')
-);
+)

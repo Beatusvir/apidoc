@@ -1,11 +1,14 @@
-import { getDetail, getApis, INITIAL_STATE } from './core'
+import { fetchApisFromDb, fetchApiDetailFromDb, updateApis } from './core'
+import { List, Map } from 'immutable'
 
-export default function reducer (state = INITIAL_STATE , action) {
+export default function reducer (state = Map() , action) {
   switch (action.type) {
     case 'GET_DETAIL':
-      return getDetail(state, action.apiId)
-    case 'SET_APIS':
-      return getApis(state)
+      return fetchApiDetailFromDb(state, action.apiId)
+    case 'FETCH_APIS':
+      return fetchApisFromDb(state)
+    case 'UPDATE_APIS':
+      return updateApis(state, action.apis)
   }
   return state
 }

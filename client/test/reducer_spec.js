@@ -193,7 +193,8 @@ describe('reducer', () => {
 
     const nextState = reducer(undefined, action)
 
-    expect(nextState).to.deep.equal(fromJS({
+    expect(nextState.toJS()).to.deep.equal({
+      isFetching: false,
       apiDetail: [
         {
           title: 'Method title',
@@ -204,7 +205,7 @@ describe('reducer', () => {
           ]
         }
       ]
-    }))
+    })
   })
 
   it('handles ADD_ITEM', () => {
@@ -249,6 +250,18 @@ describe('reducer', () => {
         { id: 2, title: 'title api 2' }
       ]
     }))
+  })
+
+  it('handles REQUEST_APIS', () => {
+    var initialState = Map()
+    var action = {
+      type: 'REQUEST_APIS'
+    }
+    var nextState = reducer(initialState, action)
+
+    expect(nextState.toJS()).to.deep.equal({
+      isFetching: true
+    })
   })
 
 })

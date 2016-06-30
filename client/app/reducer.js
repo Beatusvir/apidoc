@@ -4,16 +4,19 @@ function setState (state, newState) {
   return state.merge(newState)
 }
 
-const getApis = (state, apiList) => {
-  return state.merge({
-    apis: fromJS(apiList)
-  })
-}
-
 function getDetail (state, id) {
   return state.merge(
     {
-      apiDetail: []
+      apiDetail: [
+        {
+          title: 'Method title',
+          description: 'some description',
+          items: [
+            { title: 'Some method', content: 'Method content' },
+            { title: 'Some method', content: 'Method content' }
+          ]
+        }
+      ]
     }
   )
 }
@@ -36,12 +39,13 @@ function deleteItem (state, itemId) {
   )
 }
 
-export default function (state = Map() , action) {
+
+export default function (state = Map({
+    isFetching: false
+  }) , action) {
   switch (action.type) {
     case 'SET_STATE':
       return setState(state, action.state)
-    case 'GET_APIS':
-      return getApis(state, action.apiList)
     case 'GET_DETAIL':
       return getDetail(state, action.apiId)
     case 'ADD_ITEM':

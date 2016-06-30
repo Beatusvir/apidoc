@@ -1,33 +1,20 @@
-import { List, Map } from 'immutable'
-import { initDb, getDbApis } from './database'
+import {Map} from 'immutable'
+import { getDbApis } from './database'
 
-export const INITIAL_STATE = Map()
-
-export function viewApi (state, api) {
-  return state.set('api', api)
+export function updateApis(state, apis){
+  return state.set('apis', apis)
 }
 
-initDb()
-const updateState = (err, rows) => {
-  if (!err) {
-
-  }
-}
-getDbApis(updateState)
-
-export function getApis (state) {
-  // TODO read apis from database
-  return state.set('apis', [
-    { id:1, title: 'Api 1'},
-    { id:2, title: 'Api 2'}
-  ])
+export function fetchApisFromDb(state){
+  // TODO return api list from db
+  return state.set('apis', [])
 }
 
-export function getDetail (state, apiId) {
-  // TODO read detail from database using apiId
+export function fetchApiDetailFromDb (state, apiId) {
+  // TODO return api detail from db
   return state.set('apiDetail', [
     {
-      title: 'AfiliarCliente ' + apiId,
+      title: 'AfiliarCliente ',
       description: 'Afilia el cliente al sistema de transferencias',
       items: [
         { title: 'Method', content: 'POST' },
@@ -36,11 +23,11 @@ export function getDetail (state, apiId) {
       ]
     },
     {
-      title: 'API Document' + apiId,
-      description: 'Some method description',
+      title: 'AfilicarCuenta',
+      description: 'Afilia una cuenta al cliente',
       items: [
-        { title: 'Some method', content: 'Some method content' },
-        { title: 'Some method', content: 'Some method content' },
+        { title: 'Method', content: 'POST' },
+        { title: 'Url Params', content: 'asd, asd' },
         { title: 'Some method', content: 'Some method content' }
       ]
     }
