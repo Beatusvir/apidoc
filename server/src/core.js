@@ -1,10 +1,6 @@
 import {Map} from 'immutable'
 import { getDbApis } from './database'
 
-export function updateApis(state, apis){
-  return state.set('apis', apis)
-}
-
 export function fetchApisFromDb(state){
   // TODO return api list from db
   return state.set('apis', [])
