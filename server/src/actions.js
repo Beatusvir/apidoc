@@ -1,9 +1,9 @@
 export function requestApis () {
-  return { type: 'REQUEST_APIS' }
+  return { type: 'REQUEST_APIS', isFetching: true }
 }
 
 export function sendApis (apis) {
-  return { type: 'SEND_APIS', apis}
+  return { type: 'SEND_APIS', apis, isFetching: false}
 }
 
 export function addApi (api) {

@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom'
 import { Route, Router, hashHistory } from 'react-router'
 import { ApisContainer } from './components/apis/apis'
 import { MethodsContainer } from './components/api_detail/method_list'
+import { ApiAdd } from './components/api_add/api_add'
 import App from './components/App'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import remoteActionMiddleware from './remote_action_middleware'
-import { requestApis, setState, getDetail } from './action_creators';
+import { requestApis, setState, requestDetail } from './action_creators';
 import reducer from './reducer'
 import io from 'socket.io-client'
 
@@ -22,9 +23,10 @@ const createStoreWithMiddlewate = applyMiddleware(
 )(createStore)
 const store = createStoreWithMiddlewate(reducer)
 
+store.dispatch(requestApis())
 // Load detail
 const fetchApiDetail = (e) => {
-  store.dispatch(getDetail(e.params.apiId))
+  store.dispatch(requestDetail(e.params.apiId))
 }
 
 if (process.env.NODE_ENV !== 'production') {
@@ -33,6 +35,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer}/>
+  <Route path="/add/" component={ApiAdd}/>
   <Route path="/detail/:apiId" component={MethodsContainer} onEnter={fetchApiDetail}/>
 </Route>
 

@@ -1,5 +1,5 @@
-import {Map, fromJS} from 'immutable'
-import {expect} from 'chai'
+import { Map, List, fromJS, toJS } from 'immutable'
+import { expect } from 'chai'
 
 import makeStore from '../src/store'
 
@@ -7,15 +7,18 @@ describe('store', () => {
   it('is a Redux store configured with correct reducer', () => {
     const store = makeStore()
 
-    expect(store.getState()).to.equal(Map())
+    expect(store.getState()).to.equal(Map({
+      apis: List(),
+      isFetching: false
+    }))
 
     store.dispatch({
-      type: 'VIEW_API',
-      api: 1
+      type: 'REQUEST_APIS'
     })
 
-    expect(store.getState()).to.equal(fromJS({
-      api: 1
-    }))
+    expect(store.getState().toJS()).to.deep.equal({
+      apis: [],
+      isFetching: true
+    })
   })
 })

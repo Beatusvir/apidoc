@@ -17,9 +17,9 @@ export class Api extends Component {
       )
     }
     const apiNode = this.props.apiList.map(function (item, index) {
-      const link = '/detail/' + item.get('id')
+      const link = '/detail/' + item.get('apiId')
       return (
-        <div className="api" key={item.get('id')}>
+        <div className="api" key={item.get('apiId')}>
           <Link to ={link}>{item.get('title')}</Link>
         </div>
       )

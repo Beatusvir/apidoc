@@ -5,10 +5,16 @@ export function setState(state) {
   }
 }
 
-export function getDetail(apiId) {
+export function requestApis() {
   return {
-    type: 'GET_DETAIL',
-    apiId: apiId
+    type: 'REQUEST_APIS'
+  }
+}
+
+export function requestDetail(apiId) {
+  return {
+    type: 'REQUEST_DETAIL',
+    apiId
   }
 }
 
