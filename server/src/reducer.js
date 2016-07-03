@@ -1,5 +1,5 @@
 import { List, Map } from 'immutable'
-import { fetchApisFromDb, fetchApiDetailFromDb } from './core'
+import { deleteApiFromDb, addApiToDb, fetchApisFromDb, fetchApiDetailFromDb } from './core'
 
 const initialState = Map(
   {
@@ -8,7 +8,7 @@ const initialState = Map(
   }
 )
 
-export default function reducer (state = initialState , action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case 'REQUEST_APIS':
       fetchApisFromDb()
@@ -22,21 +22,16 @@ export default function reducer (state = initialState , action) {
       }))
     case 'ADD_API':
       {
-      let apis = []
-      if (typeof state.get('apis') != 'undefined') {
-        apis = state.get('apis')
-      }
-      apis.push(action.api)
-      return state.merge(Map({
-        apis: apis
-      }))
+        addApiToDb(action.api)
+        return state
       }
     case 'DELETE_API':
       {
-      const apis = state.get('apis').filter(apis => apis.id != action.apiId)
-      return state.merge(Map({
-        apis: apis
-      }))
+        const apis = state.get('apis').filter(apis => apis.id != action.apiId)
+        deleteApiFromDb(action.apiId)
+        return state.merge(Map({
+          apis: apis
+        }))
       }
 
     case 'REQUEST_DETAIL':

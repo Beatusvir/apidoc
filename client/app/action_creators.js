@@ -5,6 +5,20 @@ export function setState(state) {
   }
 }
 
+export function addApi(api){
+  return {
+    type: 'ADD_API',
+    api
+  }
+}
+
+export function deleteApi(apiId){
+  return {
+    type: 'DELETE_API',
+    apiId
+  }
+}
+
 export function requestApis() {
   return {
     type: 'REQUEST_APIS'

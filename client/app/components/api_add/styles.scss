@@ -1,0 +1,82 @@
+
+.api-add {
+  height: 200px;
+  width: 400px;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  border-radius: 10px 10px;
+  box-shadow: 1px 1px 2px #ddd;
+  background-color: #efefef;
+  background-image: url('../../../build/images/doc.png');
+  background-repeat: no-repeat;
+  background-size: 150px 150px;
+  background-position: 128% -50%;
+}
+.form-add{
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.input-group{
+  display: flex;
+  width: 300px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+    label {
+    flex: 1;
+  }
+
+  input {
+    flex: 2;
+    border: 1px solid #666;
+    border-radius: 2px;
+  }
+
+  input:focus {
+    box-shadow: 0 0 4px steelblue;
+  }
+
+  input:hover {
+    border: 1px solid #666;
+  }
+}
+
+button {
+  flex: 1;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+
+  span {
+    margin-right: 5px;
+  }
+}
+
+.button-add{
+  background-color: skyblue;
+  margin-right: 5px;
+}
+.button-add:hover {
+  cursor: pointer;
+  background-color: deepskyblue;
+}
+
+.button-cancel{
+  margin-left: 5px;
+  background-color: indianred;
+}
+
+.button-cancel:hover{
+  cursor: pointer;
+  background-color: darkred;
+}
+

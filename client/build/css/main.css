@@ -10,14 +10,13 @@ body {
 
 #app{
   display: flex;
-  flex-direction: column;
-  align-content: center;
-  margin: 20px;
+  flex-direction:column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 a{
   text-decoration: none;
-  color: steelblue;
 }
 
 header {

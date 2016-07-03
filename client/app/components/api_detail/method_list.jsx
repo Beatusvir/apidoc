@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import MethodItems from './method_items'
+import NothingFound from '../nothing_found/nothing_found'
 import {connect} from 'react-redux'
 import './styles.scss'
 
@@ -15,7 +16,7 @@ export class Methods extends Component {
   render() {
     if (this.props.methods === undefined || this.props.methods.size == 0){
       return (
-        <div>No hay información...</div>
+        <NothingFound message="No methods added yet :'(" link="/addDetail/"/>
       )
     }
     var methodNode = this.props.methods.map(function (item, index) {

@@ -1,28 +1,48 @@
 .apiList {
+  width: 80%;
+  margin: 0 auto;
   display: flex;
-  flex-direction: row;
-  align-items: center;
   align-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-flow: wrap;
+  justify-content: space-around;
+  background: #efefef;
+  align-self: stretch;
 }
 
 .api {
+  margin: 50px 0 50px 0;
   flex: 0 0 200px;
   display: flex;
-  border: 1px solid #ccc;
-  height: 400px;
-  margin-right: 30px;
-}
-
-.emptyList {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  align-content: center;
-  justify-content: space-around;
+  justify-content: center;
+  border: 1px solid #aaa;
+  height: 200px;
+  text-transform: uppercase;
+  background: linear-gradient(#fff,#efefef);
+  color: steelblue;
+  font-weight: bold;
+  box-shadow: 0 0 2px steelblue;
+  font-size: 1.5em;
+  text-align: center;
+  position: relative;
 }
 
-.emptyList h3 {
-  color:red;
-  font-size: 1.5em;
+.api:hover {
+  box-shadow: 0 0 5px steelblue;
+}
+
+.deleteApiIcon {
+  position: absolute;
+  right: 5px;
+  top: 0;
+  color: maroon;
+  opacity: 0.3;
+  transition: 0.25s;
+}
+
+.deleteApiIcon:hover {
+  opacity: 1;
 }

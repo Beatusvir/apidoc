@@ -13,6 +13,28 @@ export function initDb () {
   return
 }
 
+export function deleteApi(apiId){
+  const db = new sqlite3.Database(file)
+  db.run('DELETE FROM apis WHERE apiId = ?', apiId, (err, rows) => {
+    if (err){
+      console.log(err)
+      return
+    }
+    getDbApis()
+  })
+}
+
+export function addApi (api) {
+  const db = new sqlite3.Database(file)
+  db.run('INSERT INTO apis(title) VALUES(?)', api, (err, rows) => {
+    if (err){
+      console.log(err)
+      return
+    }
+    getDbApis()
+  })
+}
+
 export function getDbApis () {
   const db = new sqlite3.Database(file)
   db.all('SELECT apiId, title FROM apis', (err, rows) => {
@@ -79,8 +101,8 @@ function serializeDetail (classes, methods) {
 function createTables (db) {
   db.serialize(() => {
     db.run('CREATE TABLE apis (apiId INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT)')
-    db.run('CREATE TABLE classes (classId INTEGER PRIMARY KEY AUTOINCREMENT, apiId INTEGER, title TEXT, description TEXT, FOREIGN KEY(apiId) REFERENCES apis(apiId))')
-    db.run('CREATE TABLE methods (methodId INTEGER PRIMARY KEY AUTOINCREMENT, classId INTEGER, title TEXT, content TEXT, FOREIGN KEY(classId) REFERENCES classes(classId))')
+    db.run('CREATE TABLE classes (classId INTEGER PRIMARY KEY AUTOINCREMENT, apiId INTEGER, title TEXT, description TEXT, FOREIGN KEY(apiId) REFERENCES apis(apiId) ON DELETE CASCADE)')
+    db.run('CREATE TABLE methods (methodId INTEGER PRIMARY KEY AUTOINCREMENT, classId INTEGER, title TEXT, content TEXT, FOREIGN KEY(classId) REFERENCES classes(classId) ON DELETE CASCADE)')
     db.run('INSERT INTO apis(title) VALUES("Api from Database")')
     db.run('INSERT INTO classes(apiId, title, description) VALUES(1, "Class from Database", "Class description from database"),' +
       '(1, "Class 2 from Database", "Class description 2 from database")')
