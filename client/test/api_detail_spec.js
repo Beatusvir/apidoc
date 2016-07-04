@@ -55,8 +55,6 @@ describe('Api Detail', () => {
     expect(methodDetailHeadings[0].textContent).to.equal('Method item 1')
     expect(methodDetailHeadings[3].textContent).to.equal('Method item 2')
 
-    // expect(apiList[0].textContent).to.equal('Test Method 1')
-    // expect(apiList[1].textContent).to.equal('Test Method 2')
   })
 
 })

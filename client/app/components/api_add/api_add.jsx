@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import {connect} from 'react-redux'
+import ApiAddDetail from '../api_add_detail/api_add_detail'
 import FontAwesome from 'react-fontawesome'
 import { addApi } from '../../action_creators'
 import { store } from '../../index'
@@ -10,7 +11,7 @@ import './styles.scss'
 export class ApiAdd extends Component {
   constructor(props) {
     super(props)
-    this.state = { value: props.api }
+    this.state = { value: props.api, addDetail: false }
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
@@ -36,18 +37,27 @@ export class ApiAdd extends Component {
     this.setState({ value: e.target.value })
   }
 
-  handleSubmit(event){
+  handleSubmit(event) {
     console.log(event)
     const input = ReactDOM.findDOMNode(this.refs.apiInput)
     const api = input.value
     store.dispatch(addApi(api))
-    this.history.pushState(null, '/')
+    if (confirm('While you are here, why don\'t you add some methods to your api?')) {
+      this.setState({ addDetail: true })
+    } else {
+      // TODO redirect to '/'
+    }
   }
 
   render() {
+    if (this.state.addDetail) {
+      return (
+        <ApiAddDetail api={this.state.value}/>
+      )
+    }
     return (
       <div className="api-add">
-        <form onSubmit={this.handleSubmit.bind(this)} className="form-add">
+        <form onSubmit={this.handleSubmit.bind(this) } className="form-add">
           <div className="input-group">
             <label htmlFor="input-title">Title </label>
             <input
@@ -55,10 +65,10 @@ export class ApiAdd extends Component {
               id="input-title"
               ref="apiInput"
               autoFocus={true}
-              onKeyDown={this.handleKeyDown.bind(this)}
-              onChange={this.handleOnChange.bind(this)}
-              onBlur={this.handleOnBlur.bind(this)}
-            />
+              onKeyDown={this.handleKeyDown.bind(this) }
+              onChange={this.handleOnChange.bind(this) }
+              onBlur={this.handleOnBlur.bind(this) }
+              />
           </div>
           <div className="input-group">
             <button className="button-add" type="submit"><FontAwesome name="floppy-o"/>Save</button>

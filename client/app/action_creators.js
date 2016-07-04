@@ -25,6 +25,13 @@ export function requestApis() {
   }
 }
 
+export function addApiMethod(apiMethod){
+  return {
+    type: 'ADD_API_METHOD',
+    apiMethod
+  }
+}
+
 export function requestDetail(apiId) {
   return {
     type: 'REQUEST_DETAIL',

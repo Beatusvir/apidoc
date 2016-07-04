@@ -1,10 +1,16 @@
 import { Map, fromJS } from 'immutable'
 
-function setState (state, newState) {
+function setState(state, newState) {
   return state.merge(newState)
 }
 
-function getDetail (state, id) {
+function addApi(state, api) {
+  const newApi = Map({ apiId: 0, text: api })
+  return state.update('apis', (apis) => apis.push(newApi)
+  )
+}
+
+function getDetail(state, id) {
   return state.merge(
     {
       apiDetail: [
@@ -21,17 +27,7 @@ function getDetail (state, id) {
   )
 }
 
-function addItem (state, title) {
-  // TODO add api and return new list
-  const newApiId = state.get('apis').reduce((maxId, item) => Math.max(maxId, item.get('id')), 0) + 1
-  const newItem = Map({
-    id: newApiId, title: title
-  })
-  const newState = state.update('apis', (apis) => apis.push(newItem))
-  return newState
-}
-
-function deleteItem (state, itemId) {
+function deleteItem(state, itemId) {
   return state.update('apis',
     (apis) => apis.filterNot(
       (item) => item.get('id') === itemId
@@ -39,19 +35,27 @@ function deleteItem (state, itemId) {
   )
 }
 
+function insertedId(state, apiId) {
+  return state.merge({
+    insertedId: apiId
+  })
+}
+
 
 export default function (state = Map({
-    isFetching: false
-  }) , action) {
+  isFetching: false
+}), action) {
   switch (action.type) {
     case 'SET_STATE':
       return setState(state, action.state)
+    case 'ADD_API':
+      return addApi(state, action.api)
     case 'GET_DETAIL':
       return getDetail(state, action.apiId)
-    case 'ADD_ITEM':
-      return addItem(state, action.title)
     case 'DELETE_ITEM':
       return deleteItem(state, action.apiId)
+    case 'INSERTED_ID':
+      return insertedId(state, action.insertedId)
   }
   return state
 }

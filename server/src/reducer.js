@@ -1,5 +1,11 @@
 import { List, Map } from 'immutable'
-import { deleteApiFromDb, addApiToDb, fetchApisFromDb, fetchApiDetailFromDb } from './core'
+import {
+  deleteApiFromDb,
+  addApiToDb,
+  fetchApisFromDb,
+  fetchApiDetailFromDb,
+  addApiClassToDb
+} from './core'
 
 const initialState = Map(
   {
@@ -33,7 +39,13 @@ export default function reducer(state = initialState, action) {
           apis: apis
         }))
       }
-
+    case 'INSERTED_ID':
+      return state.merge({
+        insertedId: action.apiId
+      })
+    case 'ADD_API_CLASS':
+      addApiClassToDb(action.apiClass)
+      return state
     case 'REQUEST_DETAIL':
       fetchApiDetailFromDb(action.apiId)
       return state.merge(Map({

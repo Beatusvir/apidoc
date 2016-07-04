@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {connect} from 'react-redux'
 import {Link} from 'react-router';
 import PureRenderMixin from 'react-addons-pure-render-mixin'

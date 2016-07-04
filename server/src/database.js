@@ -26,12 +26,13 @@ export function deleteApi(apiId){
 
 export function addApi (api) {
   const db = new sqlite3.Database(file)
-  db.run('INSERT INTO apis(title) VALUES(?)', api, (err, rows) => {
+  db.run('INSERT INTO apis(title) VALUES(?)', api, function(err){
     if (err){
       console.log(err)
       return
     }
-    getDbApis()
+    console.log(this.lastID)
+    store.dispatch(sendInsertedApiId(this.lastID))
   })
 }
 
@@ -42,12 +43,24 @@ export function getDbApis () {
       console.log(err)
       return
     }
-    return store.dispatch(sendApis(rows))
+    store.dispatch(sendApis(rows))
+    return
   })
 }
 
 export function getDbApiDetail (apiId) {
   getApiClasses(apiId)
+}
+
+export function addApiClass (apiClass) {
+  const db = new sqlite3.Database(file)
+  db.run('INSERT INTO classes(apiId, title, description) VALUES(?,?,?)', apiClass.apiId, apiClass.title, apiClass.description, (err, rows) => {
+    if (err){
+      console.log(err)
+      return
+    }
+    return
+  })
 }
 
 function getApiClasses (apiId) {
