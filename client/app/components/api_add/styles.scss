@@ -15,8 +15,8 @@
   background-repeat: no-repeat;
   background-size: 150px 150px;
   background-position: 128% -50%;
-}
-.form-add{
+
+  .form-add{
   height: 150px;
   display: flex;
   flex-direction: column;
@@ -63,6 +63,7 @@ button {
 
 .button-add{
   background-color: skyblue;
+  color: white;
   margin-right: 5px;
 }
 .button-add:hover {
@@ -72,11 +73,13 @@ button {
 
 .button-cancel{
   margin-left: 5px;
+  color: white;
   background-color: indianred;
 }
 
 .button-cancel:hover{
   cursor: pointer;
   background-color: darkred;
+}
 }
 

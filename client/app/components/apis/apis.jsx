@@ -6,7 +6,8 @@ import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
 import NothingFound from '../nothing_found/nothing_found'
 import { store } from '../../index'
-import { deleteApi } from '../../action_creators'
+import { deleteApi, requestApis } from '../../action_creators'
+import { SpinnerContainer } from '../spinner/spinner'
 import './styles.scss'
 
 export class Api extends Component {
@@ -19,10 +20,13 @@ export class Api extends Component {
   handleDelete(e) {
     e.preventDefault()
     let id = e.currentTarget.id
-    console.log(id.substr(id.indexOf('_') + 1))
     if (confirm('Are you sure you want to delete this Api Document?')) {
       store.dispatch(deleteApi(id.substr(id.indexOf('_') + 1)))
     }
+  }
+
+  componentDidMount() {
+    store.dispatch(requestApis())
   }
 
   render() {
@@ -35,15 +39,18 @@ export class Api extends Component {
       const apiId = item.get('apiId')
       const link = '/detail/' + apiId
       return (
-        <Link to={link} className="api" key={apiId}>
-          <div className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this)}><FontAwesome name="trash"/></div>
-          {item.get('title') }
+        <Link to={link} className="api" key={apiId} title={item.get('title')}>
+          <div className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this) } title="Delete this document"><FontAwesome name="trash"/></div>
+          <div className="title">{item.get('title') }</div>
         </Link>
       )
     })
     return (
-      <div className="apiList">
-        {apiNode}
+      <div className="container">
+        <SpinnerContainer />
+        <div className="apiList">
+          {apiNode}
+        </div>
       </div>
     )
   }

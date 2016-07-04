@@ -1,5 +1,7 @@
 import React, {Component, PropTypes} from 'react'
-import { addApiMethod } from '../../action_creators'
+import {connect} from 'react-redux'
+import PureRenderMixin from 'react-addons-pure-render-mixin'
+import { addApiClass } from '../../action_creators'
 import { store } from '../../index'
 import './styles.scss'
 
@@ -7,30 +9,31 @@ class ApiAddDetail extends Component {
   constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
   handleSubmit() {
     const title = this.refs.title
     const description = this.refs.description
-    const apiMethod = {
+    const apiClass = {
       title, description
     }
-    store.dispatch(addApiMethod(apiMethod))
+    store.dispatch(addApiClass(apiClass))
   }
-
 
   render() {
     return (
       <div className="api-add-detail">
+      <h1>{this.props.title}</h1>
         <div>{this.props.api}</div>
-        <form onSubmit={this.handleSubmit}>
+        <form className="form-api-add-detail" onSubmit={this.handleSubmit}>
           <div className="input-group">
             <label htmlFor="inputTitle">Title</label>
-            <input type="text" ref="title" id="inputTitle" />
+            <input type="text" ref="title" id="inputTitle" placeholder="Method call title..."/>
           </div>
           <div className="input-group">
             <label htmlFor="inputDescription">Description</label>
-            <input type="text" ref="description" id="inputDescription" />
+            <input type="text" ref="description" id="inputDescription"  placeholder="Method description..."/>
           </div>
           <button>Save</button>
         </form>
@@ -40,7 +43,14 @@ class ApiAddDetail extends Component {
 }
 
 ApiAddDetail.propTypes = {
-  api: PropTypes.string
+  title: PropTypes.string,
+  id: PropTypes.number
 }
 
-export default ApiAddDetail
+const mapStateToProps = (state) => {
+  return {
+    id: state.get('insertedId')
+  }
+}
+
+export const ApiAddDetailContainer = connect(mapStateToProps)(ApiAddDetail)

@@ -9,8 +9,8 @@ export function fetchApiDetailFromDb (apiId) {
   getDbApiDetail(apiId)
 }
 
-export function addApiToDb(api){
-  addApi(api)
+export function addApiToDb(api, callback){
+  addApi(api, callback)
 }
 
 export function deleteApiFromDb(apiId){

@@ -7,7 +7,7 @@ import {
 } from 'react-addons-test-utils'
 import { fromJS } from 'immutable'
 import { expect } from 'chai'
-import { Api } from '../app/components/apis/apis'
+//import { Api } from '../app/components/apis/apis'
 
 describe('Api', () => {
   it('renders a list of api documents', () => {

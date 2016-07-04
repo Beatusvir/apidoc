@@ -1,4 +1,4 @@
-import { sendApis, sendDetail } from './actions'
+import { sendApis, sendDetail, sendInsertedApiId } from './actions'
 import { store } from '../index'
 
 const fs = require('fs')
@@ -24,15 +24,16 @@ export function deleteApi(apiId){
   })
 }
 
-export function addApi (api) {
+export function addApi (title, callback) {
+  let newApi = { title: title }
   const db = new sqlite3.Database(file)
-  db.run('INSERT INTO apis(title) VALUES(?)', api, function(err){
+  db.run('INSERT INTO apis(title) VALUES(?)', newApi.title, function(err){
     if (err){
       console.log(err)
       return
     }
-    console.log(this.lastID)
-    store.dispatch(sendInsertedApiId(this.lastID))
+    newApi.id = this.lastID
+    store.dispatch(sendInsertedApiId(newApi.id))
   })
 }
 

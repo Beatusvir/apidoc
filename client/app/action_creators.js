@@ -5,10 +5,17 @@ export function setState(state) {
   }
 }
 
-export function addApi(api){
+export function addApi(title){
   return {
     type: 'ADD_API',
-    api
+    title
+  }
+}
+
+export function insertedId(){
+  return {
+    type: 'INSERTED_ID',
+    insertedId
   }
 }
 
@@ -25,10 +32,11 @@ export function requestApis() {
   }
 }
 
-export function addApiMethod(apiMethod){
+export function addApiClass(apiId, apiClass){
   return {
-    type: 'ADD_API_METHOD',
-    apiMethod
+    type: 'ADD_API_CLASS',
+    apiId,
+    apiClass
   }
 }
 

@@ -2,36 +2,50 @@
   width: 80%;
   margin: 0 auto;
   display: flex;
+  justify-content: space-around;
   align-content: center;
   align-items: center;
   flex-direction: row;
   flex-flow: wrap;
-  justify-content: space-around;
   background: #efefef;
   align-self: stretch;
 }
 
 .api {
-  margin: 50px 0 50px 0;
+  margin: 20px;
   flex: 0 0 200px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   border: 1px solid #aaa;
-  height: 200px;
+  height: 150px;
   text-transform: uppercase;
   background: linear-gradient(#fff,#efefef);
-  color: steelblue;
+  background-image: url('../../../build/images/api.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  color: maroon;
   font-weight: bold;
   box-shadow: 0 0 2px steelblue;
-  font-size: 1.5em;
+  font-size: 1.2em;
   text-align: center;
   position: relative;
+  overflow: hidden;
+  opacity: 0.8;
+  transition: all 0.25s;
+
+  .title {
+    max-height: 50px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 50px;
+    max-width: 200px;
+  }
 }
 
 .api:hover {
-  box-shadow: 0 0 5px steelblue;
+  opacity: 1;
 }
 
 .deleteApiIcon {
