@@ -1,6 +1,6 @@
-import { 
-  sendApis, 
-  sendDetail, 
+import {
+  sendApis,
+  sendDetail,
   sendInsertedApiId } from './actions'
 import { store } from '../index'
 
@@ -72,6 +72,7 @@ function getApiClasses (apiId) {
       console.log(err)
       return
     }
+    console.log('Classes: ', rows);
     getClassMethods(rows)
     return
   })
@@ -99,7 +100,7 @@ function serializeDetail (classes, methods) {
     apiDetail.push({
       title: classesItem.title,
       description: classesItem.description
-    })        
+    })
     apiDetail[classesIndex].items = []
     methods.forEach((methodsItem, methodsIndex) => {
       if (methodsItem.classId === classesItem.classId) {

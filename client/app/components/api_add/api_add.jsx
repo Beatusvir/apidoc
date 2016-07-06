@@ -18,7 +18,7 @@ export class ApiAdd extends Component {
   }
 
   cancelAdding() {
-    this.setState({ value: this.props.api })
+    this.setState({ value: this.props.api, id: this.props.selectedApiId })
     //return this.props.cancelAdding()
   }
 
@@ -48,6 +48,7 @@ export class ApiAdd extends Component {
     }
     store.dispatch(addApi(newApi))
     if (confirm('While you are here, why don\'t you add some methods to your api?')) {
+      // TODO redirect to `/view/${apiId}`
       this.setState({ addDetail: true })
     } else {
       // TODO redirect to '/'
@@ -57,7 +58,7 @@ export class ApiAdd extends Component {
   render() {
     if (this.state.addDetail) {
       return (
-        <ApiAddDetailContainer title={this.state.value}/>
+        <ApiAddDetailContainer title={this.state.value} id={this.state.selectedApiId}/>
       )
     }
     return (
@@ -90,12 +91,12 @@ export class ApiAdd extends Component {
 
 ApiAdd.propTypes = {
   title: React.PropTypes.string,
-  insertedId: React.PropTypes.number
+  selectedApiId: React.PropTypes.number
 }
 
 const mapStateToProps = (state) => {
   return {
-    insertedId: state.insertedId
+    selectedApiId: state.selectedApiId
   }
 }
 

@@ -18,6 +18,5 @@ export function deleteApiFromDb(apiId){
 }
 
 export function addApiClassToDb(apiClass){
-  console.log('trying to add: ', apiClass);
   addApiClass(apiClass)
 }

@@ -21,7 +21,3 @@ export function requestDetail (apiId) {
 export function sendDetail (apiDetail) {
   return { type: 'SEND_DETAIL', apiDetail}
 }
-
-export function sendInsertedApiId(apiId){
-  return { type: 'INSERTED_ID', apiId}
-}

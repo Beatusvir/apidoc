@@ -14,22 +14,23 @@ export class Methods extends Component {
   }
 
   render() {
+    const link = `/add/detail/${this.props.params.apiId}`
     if (this.props.methods === undefined || this.props.methods.size == 0){
       return (
-        <NothingFound message="No methods added yet :'(" link="/addDetail/"/>
+        <NothingFound message="No methods added yet :'(" link={link}/>
       )
     }
     var methodNode = this.props.methods.map(function (item, index) {
         return (
           <div className="method" key={index}>
-            <h1>{item.get('title') }</h1>
-            <p>{item.get('description') }</p>
-            <MethodItems items={item.get('items') }/>
+            <h1>{item.get('title')}</h1>
+            <p>{item.get('description')}</p>
+            <MethodItems items={item.get('items')}/>
           </div>
         )
     })
     return (
-      <div>
+      <div className="container">
         {methodNode}
       </div>
     )
