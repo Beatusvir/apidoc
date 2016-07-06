@@ -9,8 +9,8 @@ export function fetchApiDetailFromDb (apiId) {
   getDbApiDetail(apiId)
 }
 
-export function addApiToDb(api, callback){
-  addApi(api, callback)
+export function addApiToDb(newApi){
+  addApi(newApi)
 }
 
 export function deleteApiFromDb(apiId){
@@ -18,5 +18,6 @@ export function deleteApiFromDb(apiId){
 }
 
 export function addApiClassToDb(apiClass){
+  console.log('trying to add: ', apiClass);
   addApiClass(apiClass)
 }

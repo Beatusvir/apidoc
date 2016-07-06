@@ -6,7 +6,7 @@ import './styles.scss'
 
 export default class apiItems extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 

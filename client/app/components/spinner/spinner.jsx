@@ -7,13 +7,13 @@ export class Spinner extends Component {
     if (this.props.isFetching) {
       return (
         <div className="spinner">
-          processing...
+          updating...
         </div>
       )
     }
     return (
         <div className="spinner hide">
-          processing...
+          updating...
         </div>
       )
   }

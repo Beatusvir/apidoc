@@ -1,3 +1,12 @@
+.input-lg {
+  color: steelblue;
+  font-size: 1.5em;
+}
+.input-sm {
+  color: #444;
+  font-size: 1.2em;
+}
+
 .api-add-detail {
   width: 50%;
   margin-top: 50px;
@@ -27,11 +36,6 @@
     flex-direction: row;
     margin-bottom: 30px;
 
-    label {
-      flex: 0 0 100px;
-      margin-right: 20px;
-    }
-
     input[type="text"]{
       flex: 1;
       display: flex;
@@ -39,7 +43,6 @@
       border: none;
       border-bottom: 1px solid #ccc;
       background: inherit;
-      font-size: 1.5em;
     }
 
     input[type="text"]:hover{

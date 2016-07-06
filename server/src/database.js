@@ -1,4 +1,7 @@
-import { sendApis, sendDetail, sendInsertedApiId } from './actions'
+import { 
+  sendApis, 
+  sendDetail, 
+  sendInsertedApiId } from './actions'
 import { store } from '../index'
 
 const fs = require('fs')
@@ -24,16 +27,14 @@ export function deleteApi(apiId){
   })
 }
 
-export function addApi (title, callback) {
-  let newApi = { title: title }
+export function addApi (newApi) {
   const db = new sqlite3.Database(file)
-  db.run('INSERT INTO apis(title) VALUES(?)', newApi.title, function(err){
+  db.run('INSERT INTO apis(apiId, title) VALUES(?, ?)', newApi.apiId, newApi.title, function(err){
     if (err){
       console.log(err)
       return
     }
-    newApi.id = this.lastID
-    store.dispatch(sendInsertedApiId(newApi.id))
+    getDbApis()
   })
 }
 
@@ -98,7 +99,7 @@ function serializeDetail (classes, methods) {
     apiDetail.push({
       title: classesItem.title,
       description: classesItem.description
-    })
+    })        
     apiDetail[classesIndex].items = []
     methods.forEach((methodsItem, methodsIndex) => {
       if (methodsItem.classId === classesItem.classId) {
@@ -114,16 +115,16 @@ function serializeDetail (classes, methods) {
 
 function createTables (db) {
   db.serialize(() => {
-    db.run('CREATE TABLE apis (apiId INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT)')
-    db.run('CREATE TABLE classes (classId INTEGER PRIMARY KEY AUTOINCREMENT, apiId INTEGER, title TEXT, description TEXT, FOREIGN KEY(apiId) REFERENCES apis(apiId) ON DELETE CASCADE)')
-    db.run('CREATE TABLE methods (methodId INTEGER PRIMARY KEY AUTOINCREMENT, classId INTEGER, title TEXT, content TEXT, FOREIGN KEY(classId) REFERENCES classes(classId) ON DELETE CASCADE)')
-    db.run('INSERT INTO apis(title) VALUES("Api from Database")')
-    db.run('INSERT INTO classes(apiId, title, description) VALUES(1, "Class from Database", "Class description from database"),' +
-      '(1, "Class 2 from Database", "Class description 2 from database")')
-    db.run('INSERT INTO methods(classId, title, content) VALUES(1, "Method from Database", "Method content from class 1"),' +
-      '(1, "Method 2 from Database", "Method content 2 from class 1"),' +
-      '(2, "Method 1 from Database", "Method content from class 2"),' +
-      '(2, "Method 2 from Database", "Method content 2 from class 2")')
+    db.run('CREATE TABLE apis (apiId TEXT PRIMARY KEY, title TEXT)')
+    db.run('CREATE TABLE classes (classId TEXT PRIMARY KEY, apiId TEXT, title TEXT, description TEXT, FOREIGN KEY(apiId) REFERENCES apis(apiId) ON DELETE CASCADE)')
+    db.run('CREATE TABLE methods (methodId TEXT PRIMARY KEY, classId TEXT, title TEXT, content TEXT, FOREIGN KEY(classId) REFERENCES classes(classId) ON DELETE CASCADE)')
+    // db.run('INSERT INTO apis(title) VALUES("Api from Database")')
+    // db.run('INSERT INTO classes(apiId, title, description) VALUES(1, "Class from Database", "Class description from database"),' +
+    //   '(1, "Class 2 from Database", "Class description 2 from database")')
+    // db.run('INSERT INTO methods(classId, title, content) VALUES(1, "Method from Database", "Method content from class 1"),' +
+    //   '(1, "Method 2 from Database", "Method content 2 from class 1"),' +
+    //   '(2, "Method 1 from Database", "Method content from class 2"),' +
+    //   '(2, "Method 2 from Database", "Method content 2 from class 2")')
   })
   db.close()
   return

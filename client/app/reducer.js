@@ -64,7 +64,9 @@ export default function (state = Map({
     case 'REQUEST_APIS':
       return requestApis(state)
     case 'ADD_API_CLASS':
-      return state
+      return state.merge(Map({
+        isFetching: true
+      }))
   }
   return state
 }

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
+import uuid from 'node-uuid'
 import {connect} from 'react-redux'
 import { ApiAddDetailContainer } from '../api_add_detail/api_add_detail'
 import { SpinnerContainer } from '../spinner/spinner'
@@ -41,7 +42,11 @@ export class ApiAdd extends Component {
   handleSubmit(event) {
     const input = ReactDOM.findDOMNode(this.refs.apiInput)
     const title = input.value
-    store.dispatch(addApi(title))
+    const apiId = uuid.v4()
+    const newApi = {
+      title, apiId
+    }
+    store.dispatch(addApi(newApi))
     if (confirm('While you are here, why don\'t you add some methods to your api?')) {
       this.setState({ addDetail: true })
     } else {

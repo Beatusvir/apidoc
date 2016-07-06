@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import { addApiClass } from '../../action_creators'
@@ -8,16 +9,21 @@ import './styles.scss'
 class ApiAddDetail extends Component {
   constructor(props) {
     super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.state = { title: props.title, id: props.id }
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
-  handleSubmit() {
-    const title = this.refs.title
-    const description = this.refs.description
+  componentWillMount() {
+    console.log(this.params)
+  }
+
+  handleSubmit(event) {
+    const title = ReactDOM.findDOMNode(this.refs.title).value
+    const description = ReactDOM.findDOMNode(this.refs.description).value
     const apiClass = {
-      title, description
+      apiId: this.state.id, title, description
     }
+    console.log(apiClass)
     store.dispatch(addApiClass(apiClass))
   }
 
@@ -26,16 +32,23 @@ class ApiAddDetail extends Component {
       <div className="api-add-detail">
       <h1>{this.props.title}</h1>
         <div>{this.props.api}</div>
-        <form className="form-api-add-detail" onSubmit={this.handleSubmit}>
+        <form className="form-api-add-detail" onSubmit={this.handleSubmit.bind(this)}>
           <div className="input-group">
-            <label htmlFor="inputTitle">Title</label>
-            <input type="text" ref="title" id="inputTitle" placeholder="Method call title..."/>
+            <input className="input-lg" 
+              type="text" 
+              ref="title" 
+              id="inputTitle" 
+              placeholder="Method call..."/>
           </div>
           <div className="input-group">
-            <label htmlFor="inputDescription">Description</label>
-            <input type="text" ref="description" id="inputDescription"  placeholder="Method description..."/>
+            <input 
+              className="input-sm" 
+              type="text" 
+              ref="description" 
+              id="inputDescription" 
+              placeholder="Aditional information about your api call"/>
           </div>
-          <button>Save</button>
+          <button type="submit">Save</button>
         </form>
       </div>
     )

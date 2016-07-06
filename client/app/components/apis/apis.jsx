@@ -32,14 +32,16 @@ export class Api extends Component {
   render() {
     if (this.props.apiList === undefined || this.props.apiList.size == 0) {
       return (
-        <NothingFound message="No documents created yet :'(" link="/add/"></NothingFound>
+        <div>
+          <SpinnerContainer />
+          <NothingFound message="No documents created yet :'(" link="/add/"></NothingFound>
+        </div>
       )
     }
     const apiNode = this.props.apiList.map((item, index) => {
       const apiId = item.get('apiId')
-      const link = '/detail/' + apiId
       return (
-        <Link to={link} className="api" key={apiId} title={item.get('title')}>
+        <Link to="/view/" className="api" key={apiId} title={item.get('title') }>
           <div className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this) } title="Delete this document"><FontAwesome name="trash"/></div>
           <div className="title">{item.get('title') }</div>
         </Link>

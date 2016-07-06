@@ -5,10 +5,10 @@ export function setState(state) {
   }
 }
 
-export function addApi(title){
+export function addApi(newApi){
   return {
     type: 'ADD_API',
-    title
+    newApi
   }
 }
 
@@ -32,10 +32,9 @@ export function requestApis() {
   }
 }
 
-export function addApiClass(apiId, apiClass){
+export function addApiClass(apiClass){
   return {
     type: 'ADD_API_CLASS',
-    apiId,
     apiClass
   }
 }
