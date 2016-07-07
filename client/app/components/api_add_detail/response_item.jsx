@@ -19,14 +19,23 @@ class ReponseItem extends Component {
         result.push(
           <div className="response-item" key={i}>
             <div className="input-group">
-              <label htmlFor={responseItemCode}>Code</label>
-              <input type="text" name={responseItemCode}/>
+              <label className="flex-2" htmlFor={`inputCode_${i}`}>Code</label>
+              <input
+                className="flex-8"
+                type="text"
+                ref={`code_${i}`}
+                id={`inputCode_${i}`}
+                placeholder="Status code"/>
             </div>
             <div className="input-group">
-              <label htmlFor={responseItemCode}>Content</label>
-              <input type="text" name={responseItemCode}/>
+              <label className="flex-2" htmlFor={`inputContent_${i}`}>Content</label>
+              <input
+                className="flex-8"
+                type="text"
+                ref={`content_${i}`}
+                id={`inputContent_${i}`}
+                placeholder="Reponse content"/>
             </div>
-            <FontAwesome className="icon-delete" name="minus-circle"/>
           </div>
         )
       }
@@ -35,7 +44,7 @@ class ReponseItem extends Component {
 
     return (
       <div className="response-container">
-      {responseItemNode(this.props.count)}
+        {responseItemNode(this.props.count) }
       </div>
     )
   }

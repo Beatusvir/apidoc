@@ -40,11 +40,12 @@ export class Api extends Component {
     }
     const apiNode = this.props.apiList.map((item, index) => {
       const apiId = item.get('apiId')
-      const link = `/view/${apiId}`
+      const apiTitle = item.get('title')
+      const link = `/view/${apiId}/${apiTitle}`
       return (
-        <Link to={link} className="api" key={apiId} title={item.get('title') }>
+        <Link to={link} className="api" key={apiId} title={apiTitle}>
           <div className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this) } title="Delete this document"><FontAwesome name="trash"/></div>
-          <div className="title">{item.get('title') }</div>
+          <div className="title">{apiTitle}</div>
         </Link>
       )
     })

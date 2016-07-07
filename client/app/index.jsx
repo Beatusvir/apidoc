@@ -36,8 +36,8 @@ if (process.env.NODE_ENV !== 'production') {
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer}/>
   <Route path="/add/" component={ApiAddContainer}/>
-  <Route path="/add/detail/:apiId" component={ApiAddDetailContainer}/>
-  <Route path="/view/:apiId" component={MethodsContainer} onEnter={fetchApiDetail}/>
+  <Route path="/add/detail/:apiId/:apiTitle" component={ApiAddDetailContainer}/>
+  <Route path="/view/:apiId/:apiTitle" component={MethodsContainer} onEnter={fetchApiDetail}/>
 </Route>
 
 ReactDOM.render(

@@ -14,7 +14,7 @@ export class Methods extends Component {
   }
 
   render() {
-    const link = `/add/detail/${this.props.params.apiId}`
+    const link = `/add/detail/${this.props.params.apiId}/${this.props.params.apiTitle}`
     if (this.props.methods === undefined || this.props.methods.size == 0){
       return (
         <NothingFound message="No methods added yet :'(" link={link}/>

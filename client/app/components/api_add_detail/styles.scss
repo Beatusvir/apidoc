@@ -1,131 +1,122 @@
-.input-lg {
-  color: steelblue;
-  font-size: 1.5em;
+.flex-8 {
+  flex: 8;
 }
-.input-sm {
-  color: #444;
-  font-size: 1.2em;
+
+.flex-4 {
+  flex: 4;
+}
+
+.flex-2 {
+  flex: 2;
 }
 
 .api-add-detail {
-  width: 40%;
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
+  margin: 50px auto;
 
-  h1 {
-    border: none;
+  h1{
     color: orange;
-    text-transform: uppercase;
-    margin: 0;
-    padding: 0;
     text-align: right;
+    text-shadow: 0 0 5px #ccc;
+    text-transform: uppercase;
   }
 
-  .form-api-add-detail {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    margin-top: 50px;
+  form > * {
+    margin-bottom: 20px;
+    line-height: 1.5em;
   }
 
-  .input-group{
-    height: 30px;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 30px;
-
-    label {
-      align-self: center;
-      margin-right: 20px;
-    }
-
-    select {
-      width: 100px;
-    }
-
-    input[type="text"]{
-      flex: 1;
-      display: flex;
-      align-self: stretch;
-      border: none;
-      border-bottom: 1px solid #ccc;
-      background: inherit;
-    }
-
-    input[type="text"]:hover{
-      border: none;
-      border-bottom: 1px solid #ccc;
-    }
-
-    input[type="text"]:focus{
-      border: none;
-      border-bottom: 1px solid #ccc;
-    }
-  }
-
-  .input-group-response {
+  form {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
 
-    .input-group-response-title {
+    .input-group {
       display: flex;
       flex-direction: row;
+      line-height: 1.5em;
+      align-items: center;
 
-        .icon-add {
-          align-self: center;
+      input[type="text"], select{
+        border: 1px solid #efefef;
+        border-radius: 5px;
+        line-height: 1.3em;
+        font-size: 1.1em;
+        color: #666;
+        padding-left: 10px;
+        margin-right: 20px;
+      }
+
+      input[type="text"]:focus, select:focus{
+        box-shadow: 0 0 4px steelblue;
+      }
+
+      label {
+        margin-right: 10px;
+        text-align: right;
+        color: #333;
+      }
+
+      .response-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .fa {
           color: green;
+          font-size: 1.2em;
+          margin-left: 20px;
         }
-
-        .icon-add:hover {
-          cursor: pointer;
-        }
-    }
-
-    .response-container {
-      display: flex;
-      flex-direction: column;
-
-        .response-item{
-          padding: 15px;
-          position: relative;
-          margin: 10px auto;
-          width: 50%;
-          border: 1px solid #efefef;
-          display: flex;
-          flex-direction: column;
-
-          .icon-delete {
-            font-size: 30px;
-            color: maroon;
-            position: absolute;
-            right: 0;
-            top: 0;
-            left: 102%;
-            opacity: 0.3;
-            transition: 0.25  ease;
-          }
-
-          .icon-delete:hover {
-            cursor: pointer;
-            opacity: 0.8;
-          }
-          label {
-            flex:4;
-          }
-
-          input[type="text"]{
-            flex:8;
-          }
       }
     }
-  }
 
-  button {
-    width: 100px;
-    border: 1px solid #aaa;
-    padding: 5px;
-    border-radius: 5px;
+    .input-group#successResponseContainer, .input-group#errorResponseContainer {
+      background: #dfdfdf;
+      display: flex;
+      flex-direction: column;
+      align-content: flex-start;
+      align-items: flex-start;
+      padding-bottom: 10px; 
+      border-radius: 0 10px 10px 0;
+      width: calc(100% - 10px);
+      border-left: 10px solid steelblue;
+
+      .response-container {
+        width: 100%;
+
+        .response-item {
+          border-bottom: 1px solid #efefef;
+        }
+
+        .response-item:last-child{
+          border: none;
+        }
+
+        .input-group {
+          margin: 10px 0 10px 0;
+        }
+      }
+    }   
+
+    button {
+      background: hotpink;
+      height: 40px;
+      width: 200px;
+      margin: 20px auto;
+      border: 1px solid #efefef;
+      border-radius: 5px;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: pink;
+
+      .fa {
+        margin-right: 10px;
+      }
+    }
+
+    button:hover {
+      cursor: pointer;
+      background: darkmagenta;
+      color: white;
+    }
   }
 }
