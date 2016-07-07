@@ -10,7 +10,8 @@ import {
 const initialState = Map(
   {
     apis: List(),
-    isFetching: false
+    isFetching: false,
+    lastError: ''
   }
 )
 
@@ -48,6 +49,15 @@ export default function reducer (state = initialState , action) {
         isFetching: false,
         apiDetail: action.apiDetail
       }))
+    case 'LAST_ERROR':
+    return state.merge(Map({
+      lastError: action.error
+    }))
+    case 'CLEAR_ERROR': {
+      return state.merge(Map({
+      lastError: ''
+    }))
+    }
     default:
       return state
   }

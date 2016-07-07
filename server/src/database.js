@@ -20,7 +20,7 @@ export function deleteApi(apiId){
   const db = new sqlite3.Database(file)
   db.run('DELETE FROM apis WHERE apiId = ?', apiId, (err, rows) => {
     if (err){
-      console.log(err)
+      store.dispatch(errorOcurred(err))
       return
     }
     getDbApis()
@@ -31,7 +31,7 @@ export function addApi (newApi) {
   const db = new sqlite3.Database(file)
   db.run('INSERT INTO apis(apiId, title) VALUES(?, ?)', newApi.apiId, newApi.title, function(err){
     if (err){
-      console.log(err)
+      store.dispatch(errorOcurred(err))
       return
     }
     getDbApis()
@@ -42,7 +42,7 @@ export function getDbApis () {
   const db = new sqlite3.Database(file)
   db.all('SELECT apiId, title FROM apis', (err, rows) => {
     if (err) {
-      console.log(err)
+      store.dispatch(errorOcurred(err))
       return
     }
     store.dispatch(sendApis(rows))
@@ -58,7 +58,7 @@ export function addApiClass (apiClass) {
   const db = new sqlite3.Database(file)
   db.run('INSERT INTO classes(apiId, title, description) VALUES(?,?,?)', apiClass.apiId, apiClass.title, apiClass.description, (err, rows) => {
     if (err){
-      console.log(err)
+      store.dispatch(errorOcurred(err))
       return
     }
     return
@@ -69,10 +69,9 @@ function getApiClasses (apiId) {
   const db = new sqlite3.Database(file)
   db.all('SELECT classId, title, description FROM classes WHERE apiId = ?', apiId, (err, rows) => {
     if (err) {
-      console.log(err)
+      store.dispatch(errorOcurred(err))
       return
     }
-    console.log('Classes: ', rows);
     getClassMethods(rows)
     return
   })
@@ -86,7 +85,7 @@ function getClassMethods (classes) {
   const db = new sqlite3.Database(file)
   db.all('SELECT classId, title, content FROM methods WHERE classId IN (' + classesIds.toString() + ')', (err, rows) => {
     if (err) {
-      console.log(err)
+      store.dispatch(errorOcurred(err))
       return
     }
     serializeDetail(classes, rows)

@@ -46,3 +46,9 @@ export function requestDetail(apiId) {
   }
 }
 
+export function clearError() {
+  return {
+    type: 'CLEAR_ERROR'
+  }
+}
+

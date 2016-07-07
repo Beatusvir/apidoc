@@ -6,8 +6,9 @@ import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
 import NothingFound from '../nothing_found/nothing_found'
 import { store } from '../../index'
-import { deleteApi, requestApis } from '../../action_creators'
+import { deleteApi, requestApis, clearError } from '../../action_creators'
 import { SpinnerContainer } from '../spinner/spinner'
+import { ErrorContainer } from '../error/error'
 import './styles.scss'
 
 export class Api extends Component {
@@ -23,6 +24,10 @@ export class Api extends Component {
     if (confirm('Are you sure you want to delete this Api Document?')) {
       store.dispatch(deleteApi(id.substr(id.indexOf('_') + 1)))
     }
+  }
+
+  clearError() {
+    store.dispatch(clearError())
   }
 
   componentDidMount() {
@@ -51,6 +56,7 @@ export class Api extends Component {
     })
     return (
       <div className="container">
+        <ErrorContainer clearError={this.clearError.bind(this)}/>
         <SpinnerContainer />
         <div className="apiList">
           {apiNode}

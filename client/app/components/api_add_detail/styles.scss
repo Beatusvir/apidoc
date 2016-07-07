@@ -1,3 +1,7 @@
+.flex-10 {
+  flex: 10;
+}
+
 .flex-8 {
   flex: 8;
 }
@@ -50,13 +54,17 @@
         box-shadow: 0 0 4px steelblue;
       }
 
+      input[type="checkbox"]{
+        margin-left: 10px;
+      }
+
       label {
         margin-right: 10px;
         text-align: right;
         color: #333;
       }
 
-      .response-group {
+      .input-group-add {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -66,39 +74,76 @@
           font-size: 1.2em;
           margin-left: 20px;
         }
+
+        .fa:hover {
+          cursor: pointer;
+        }
       }
     }
 
-    .input-group#successResponseContainer, .input-group#errorResponseContainer {
-      background: #dfdfdf;
+    .input-group#successResponseContainer{
+      background: rgba(0,255,0,0.1);
+      border-left: 10px solid green;
+    }
+    .input-group#errorResponseContainer{
+      background: rgba(128,0,0,0.1);
+      border-left: 10px solid maroon;
+    }
+    .input-group#urlParams{
+      background: rgba(70,130,180,0.1);
+      border-left: 10px solid steelblue;
+    }
+    .input-group#dataParams{
+      background: rgba(255,165,0,0.1);
+      border-left: 10px solid orange;
+    }
+
+    .input-group#successResponseContainer,
+    .input-group#errorResponseContainer,
+    .input-group#urlParams,
+    .input-group#dataParams
+    {
       display: flex;
       flex-direction: column;
       align-content: flex-start;
       align-items: flex-start;
-      padding-bottom: 10px; 
+      padding-bottom: 10px;
       border-radius: 0 10px 10px 0;
       width: calc(100% - 10px);
-      border-left: 10px solid steelblue;
 
       .response-container {
+        position: relative;
         width: 100%;
+        border-bottom: 1px solid #efefef;
 
-        .response-item {
-          border-bottom: 1px solid #efefef;
+        .delete-icon {
+          position: absolute;
+          font-size: 16px;
+          line-height: 16px;
+          color: maroon;
+          opacity: 0.3;
+          left: 20px;
+          transition: opacity 0.25s;
+          top: calc(50% - 8px);
         }
 
-        .response-item:last-child{
-          border: none;
+        .delete-icon:hover {
+          cursor: pointer;
+          opacity: 0.8;
         }
 
         .input-group {
-          margin: 10px 0 10px 0;
+          margin: 10px 0 10px 50px;
         }
       }
-    }   
+
+      .response-container:last-child{
+        border: none;
+      }
+    }
 
     button {
-      background: hotpink;
+      background: steelblue;
       height: 40px;
       width: 200px;
       margin: 20px auto;
@@ -106,7 +151,8 @@
       border-radius: 5px;
       font-size: 1.1em;
       font-weight: bold;
-      color: pink;
+      color: lightsteelblue;
+      transform: color 0.25s ease;
 
       .fa {
         margin-right: 10px;
@@ -115,7 +161,6 @@
 
     button:hover {
       cursor: pointer;
-      background: darkmagenta;
       color: white;
     }
   }

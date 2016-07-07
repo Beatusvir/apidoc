@@ -4,54 +4,36 @@ import FontAwesome from 'react-fontawesome'
 class ReponseItem extends Component {
   constructor(props) {
     super(props)
+    this.state = ({ id: this.props.id })
   }
   render() {
-    if (this.props.count == 0 || this.props.count == undefined) {
-      return (
-        <div withStyles="display: none"></div>
-      )
-    }
-    const responseItemNode = function (count) {
-      var result = []
-      for (let i = 0; i < count; i++) {
-        const responseItemCode = `inputResponseItem_${i}`
-        const responseItemContent = `inputResponseItem_${i}`
-        result.push(
-          <div className="response-item" key={i}>
-            <div className="input-group">
-              <label className="flex-2" htmlFor={`inputCode_${i}`}>Code</label>
-              <input
-                className="flex-8"
-                type="text"
-                ref={`code_${i}`}
-                id={`inputCode_${i}`}
-                placeholder="Status code"/>
-            </div>
-            <div className="input-group">
-              <label className="flex-2" htmlFor={`inputContent_${i}`}>Content</label>
-              <input
-                className="flex-8"
-                type="text"
-                ref={`content_${i}`}
-                id={`inputContent_${i}`}
-                placeholder="Reponse content"/>
-            </div>
-          </div>
-        )
-      }
-      return result
-    }
-
     return (
-      <div className="response-container">
-        {responseItemNode(this.props.count) }
+      <div className="response-item" id={this.state.id}>
+        <div className="input-group">
+          <label className="flex-2" htmlFor={`inputCode_${this.state.id}`}>Code</label>
+          <input
+            className="flex-8"
+            type="text"
+            ref={`code_${this.state.id}`}
+            id={`inputCode_${this.state.id}`}
+            placeholder="Status code"/>
+        </div>
+        <div className="input-group">
+          <label className="flex-2" htmlFor={`inputContent_${this.state.id}`}>Content</label>
+          <input
+            className="flex-8"
+            type="text"
+            ref={`content_${this.state.id}`}
+            id={`inputContent_${this.state.id}`}
+            placeholder="Reponse content"/>
+        </div>
       </div>
     )
   }
 }
 
 ReponseItem.propTypes = {
-  count: PropTypes.number.isRequired
+  id: PropTypes.string.isRequired
 }
 
 export default ReponseItem

@@ -21,3 +21,7 @@ export function requestDetail (apiId) {
 export function sendDetail (apiDetail) {
   return { type: 'SEND_DETAIL', apiDetail}
 }
+
+export function errorOcurred(error) {
+  return { type: 'LAST_ERROR', error}
+}
