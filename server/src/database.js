@@ -1,16 +1,11 @@
-import {
-  sendApis,
-  sendDetail,
-  sendInsertedApiId,
-  errorOcurred
-} from './actions'
+import { sendApis, sendDetail, sendInsertedApiId, errorOcurred } from './actions'
 import { store } from '../index'
 
 const fs = require('fs')
 const sqlite3 = require('sqlite3').verbose()
 const file = './data/apis.db'
 
-export function initDb() {
+export function initDb () {
   if (!fs.existsSync(file)) {
     const db = new sqlite3.Database(file)
     createTables(db)
@@ -18,33 +13,33 @@ export function initDb() {
   return
 }
 
-export function deleteApi(apiId) {
+export function deleteApi (apiId) {
   const db = new sqlite3.Database(file)
   db.run('DELETE FROM apis WHERE apiId = ?', apiId, (err, rows) => {
     if (err) {
-      store.dispatch(errorOcurred(err))
+      store.dispatch(errorOcurred(`Error in [deleteApi]:${err}`))
       return
     }
     getDbApis()
   })
 }
 
-export function addApi(newApi) {
+export function addApi (newApi) {
   const db = new sqlite3.Database(file)
   db.run('INSERT INTO apis(apiId, title) VALUES(?, ?)', newApi.apiId, newApi.title, function (err) {
     if (err) {
-      store.dispatch(errorOcurred(err))
+      store.dispatch(errorOcurred(`Error in [addApi]:${err}`))
       return
     }
     getDbApis()
   })
 }
 
-export function getDbApis() {
+export function getDbApis () {
   const db = new sqlite3.Database(file)
   db.all('SELECT apiId, title FROM apis', (err, rows) => {
     if (err) {
-      store.dispatch(errorOcurred(err))
+      store.dispatch(errorOcurred(`Error in [getDbApis]:${err}`))
       return
     }
     store.dispatch(sendApis(rows))
@@ -52,65 +47,67 @@ export function getDbApis() {
   })
 }
 
-export function getDbApiDetail(apiId) {
+export function getDbApiDetail (apiId) {
   getApiMethods(apiId)
 }
 
-export function addApiMethod(apiMethod) {
+export function addApiMethod (apiMethod) {
   const db = new sqlite3.Database(file)
+  console.log('trying to add: ', apiMethod)
   db.serialize(() => {
-    db.run('INSERT INTO methods(methodId, apiId, title, description, method, url, sampleCall, notes)' +
-      ' VALUES(?,?,?,?,?,?,?,?)',
+    db.run('INSERT INTO methods(methodId, apiId, title, description, method, url, sample_call, notes)' +
+    ' VALUES(?,?,?,?,?,?,?,?)',
       apiMethod.methodId, apiMethod.apiId, apiMethod.title, apiMethod.description, apiMethod.method, apiMethod.url, apiMethod.sampleCall, apiMethod.notes,
       (err, rows) => {
         if (err) {
-          store.dispatch(errorOcurred(err))
+          store.dispatch(errorOcurred(`Error in [addApiMethod - insert methods]:${err}`))
           return
         }
       })
 
     apiMethod.successResponseItems.map((item) => {
-      db.run('INSERT INTO responses(responseId, methodId, responseId, code, content)' +
-        ' VALUES(?,?,?,?,?)',
-        item.responseId, apiMethod.methodId, 1, item.code, item.content,
+      db.run('INSERT INTO responses(responseId, methodId, code, content, type)' +
+      ' VALUES(?,?,?,?,?)',
+        item.responseId, apiMethod.methodId, item.code, item.content, 'SUCCESS',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(err))
+            store.dispatch(errorOcurred(`Error in [addApiMethod - insert responses 1]:${err}`))
             return
           }
         })
     })
+
     apiMethod.errorResponseItems.map((item) => {
-      db.run('INSERT INTO responses(responseId, methodId, responseId, code, content)' +
-        ' VALUES(?,?,?,?,?)',
-        item.responseId, apiMethod.methodId, 2, item.responseId, item.code, item.content,
+      db.run('INSERT INTO responses(responseId, methodId, code, content, type)' +
+      ' VALUES(?,?,?,?,?)',
+        item.responseId, apiMethod.methodId, item.code, item.content, 'ERROR',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(err))
+            store.dispatch(errorOcurred(`Error in [addApiMethod - insert responses 2]:${err}`))
             return
           }
         })
     })
 
     apiMethod.urlParams.map((item) => {
-      db.run('INSERT INTO parameters(parameterId, methodId, parameterId, content, required)' +
-        ' VALUES(?,?,?,?,?)',
-        item.parameterId, apiMethod.methodId, 1, item.content, item.required,
+      db.run('INSERT INTO parameters(parameterId, methodId, content, required, type)' +
+      ' VALUES(?,?,?,?,?)',
+        item.parameterId, apiMethod.methodId, item.content, item.required === 'on' ? 1 : 0, 'URL',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(err))
+            store.dispatch(errorOcurred(`Error in [addApiMethod - insert parameters 1]:${err}`))
             return
           }
         })
     })
 
     apiMethod.dataParams.map((item) => {
-      db.run('INSERT INTO parameters(parameterId, methodId, parameterId, content, required)' +
-        ' VALUES(?,?,?,?,?)',
-        item.parameterId, apiMethod.methodId, 2, item.content, item.required,
+      db.run('INSERT INTO parameters(parameterId, methodId, content, required, type)' +
+      ' VALUES(?,?,?,?,?)',
+        item.parameterId, apiMethod.methodId, item.content, item.required === 'on' ? 1 : 0, 'DATA',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(err))
+            store.dispatch(errorOcurred(`Error in [addApiMethod - insert parameters 2]:${err}`))
             return
           }
         })
@@ -119,15 +116,15 @@ export function addApiMethod(apiMethod) {
   db.close()
 }
 
-function addMethodResponses(methodId, responses) {
+function addMethodResponses (methodId, responses) {
   const db = new sqlite3.Database(file)
   rows.map((item) => {
-    db.run('INSERT INTO responses(responseId, methodId, code, content)' +
-      ' VALUES(?,?,?,?)',
+    db.run('INSERT INTO responses(responseId, methodId, code, content, type)' +
+    ' VALUES(?,?,?,?)',
       item.responseId, methodId, item.code, item.content,
       (err, rows) => {
         if (err) {
-          store.dispatch(errorOcurred(err))
+          store.dispatch(errorOcurred(`Error in [addMethodResponses]:${err}`))
           return
         }
       })
@@ -135,15 +132,15 @@ function addMethodResponses(methodId, responses) {
   db.close()
 }
 
-function addMethodParameters(methodId, parameters) {
+function addMethodParameters (methodId, parameters) {
   const db = new sqlite3.Database(file)
   rows.map((item) => {
     db.run('INSERT INTO parameters(parameterId, methodId, content, required)' +
-      ' VALUES(?,?,?,?)',
+    ' VALUES(?,?,?,?)',
       item.parameterId, methodId, item.content, item.required,
       (err, rows) => {
         if (err) {
-          store.dispatch(errorOcurred(err))
+          store.dispatch(errorOcurred(`Error in [addMethodParameters]:${err}`))
           return
         }
       })
@@ -151,27 +148,62 @@ function addMethodParameters(methodId, parameters) {
   db.close()
 }
 
-function getApiMethods(apiId) {
+function getApiMethods (apiId) {
   const db = new sqlite3.Database(file)
-  db.all(
-    'SELECT a.title as apiTitle, ' + 
-            'a.apiId as apiId, m.title as methodTitle, ' + 
-            'm.description, m.url, m.method, m.sample_call, m.notes ' + 
-            'FROM methods m ' + 
-            'JOIN apis a ON m.apiId = a.apiId ' + 
-            'WHERE a.apiId = ?', apiId, (err, rows) => {
-    if (err) {
-      store.dispatch(errorOcurred(err))
-      return
-    }
-    // TODO set state with rows
-    // TODO get responses by type, and parameters by type
-    store.dispatch(sendDetail(rows))
-    return
-  })
+  db.all('SELECT a.title as apiTitle, ' +
+    'a.apiId as apiId, m.title as methodTitle, ' +
+    'm.description, m.url, m.method, m.sample_call, m.notes, m.methodId ' +
+    'FROM methods m ' +
+    'JOIN apis a ON m.apiId = a.apiId ' +
+    'WHERE a.apiId = ?', apiId, (err, rows) => {
+      if (err) {
+        store.dispatch(errorOcurred(`Error in [getApiMethods]:${err}`))
+        return
+      }
+      // TODO set state with rows
+      // TODO get responses by type, and parameters by type
+      getMethodResponses(rows)
+    })
+  db.close()
 }
 
-function serializeDetail(classes, methods) {
+function getMethodResponses (methods) {
+  const db = new sqlite3.Database(file)
+  methods.map((item, index) => {
+    db.all('SELECT * FROM responses WHERE methodId = ?', item.methodId, (err, rows) => {
+      if (err) {
+        store.dispatch(errorOcurred(`Error in [getMethodResponses]:${err}`))
+        return
+      }
+      item.successResponses = rows.filter((row) => {
+        row.type === 'SUCCESS'})
+      item.errorResponses = rows.filter((row) => {
+        row.type === 'ERROR'})
+      getMethodParameters(methods)
+    })
+  })
+  db.close()
+}
+
+function getMethodParameters (methods) {
+  const db = new sqlite3.Database(file)
+  methods.map((item) => {
+    db.all('SELECT * FROM parameters WHERE methodId = ?', item.methodId, (err, rows) => {
+      if (err) {
+        store.dispatch(errorOcurred(`Error in [getMethodParameters]:${err}`))
+        return
+      }
+      item.successResponses = rows.filter((row) => {
+        row.type === 'URL'})
+      item.errorResponses = rows.filter((row) => {
+        row.type === 'DATA'})
+      store.dispatch(sendDetail(methods))
+    })
+  })
+  db.close()
+}
+
+function serializeDetail (classes, methods) {
   let apiDetail = []
   classes.forEach((classesItem, classesIndex) => {
     apiDetail.push({
@@ -191,22 +223,22 @@ function serializeDetail(classes, methods) {
   return store.dispatch(sendDetail(apiDetail))
 }
 
-function createTables(db) {
+function createTables (db) {
   db.serialize(() => {
     db.run('CREATE TABLE apis (apiId TEXT PRIMARY KEY, title TEXT)')
     db.run('CREATE TABLE methods (methodId TEXT PRIMARY KEY, apiId TEXT, title TEXT, description TEXT, method TEXT, url TEXT, sample_call TEXT, notes TEXT, FOREIGN KEY(apiId) REFERENCES apis(apiId) ON DELETE CASCADE)')
-    db.run('CREATE TABLE responses (responseId TEXT PRIMARY KEY, methodId TEXT, parameterId INTEGER, code TEXT, content TEXT, FOREIGN KEY(methodId) REFERENCES methods(methodId) ON DELETE CASCADE, FOREIGN KEY(parameterId) REFERENCES parameter_types(parameterId) ON DELETE CASCADE, FOREIGN KEY(responseId) REFERENCES response_types(responseId) ON DELETE CASCADE)')
-    db.run('CREATE TABLE response_types (responseId INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT)')
-    db.run('CREATE TABLE parameters (parameterId TEXT PRIMARY KEY, methodId TEXT, content TEXT, required INTEGER, FOREIGN KEY(methodId) REFERENCES methods(methodId) ON DELETE CASCADE)')
-    db.run('CREATE TABLE parameter_types (parameterId INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT)')
-    db.run('INSERT INTO response_types(description) VALUES("Success Response"),("Error Response")')
-    db.run('INSERT INTO parameter_types(description) VALUES("Url Parameters"),("Data Parameters")')
-    // db.run('INSERT INTO classes(apiId, title, description) VALUES(1, "Class from Database", "Class description from database"),' +
-    //   '(1, "Class 2 from Database", "Class description 2 from database")')
-    // db.run('INSERT INTO methods(classId, title, content) VALUES(1, "Method from Database", "Method content from class 1"),' +
-    //   '(1, "Method 2 from Database", "Method content 2 from class 1"),' +
-    //   '(2, "Method 1 from Database", "Method content from class 2"),' +
-    //   '(2, "Method 2 from Database", "Method content 2 from class 2")')
+    db.run('CREATE TABLE responses (responseId TEXT PRIMARY KEY, methodId TEXT, code TEXT, content TEXT, type TEXT, FOREIGN KEY(methodId) REFERENCES methods(methodId) ON DELETE CASCADE)')
+    // db.run('CREATE TABLE response_types (responseId INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT)')
+    db.run('CREATE TABLE parameters (parameterId TEXT PRIMARY KEY, methodId TEXT, content TEXT, required INTEGER, type TEXT, FOREIGN KEY(methodId) REFERENCES methods(methodId) ON DELETE CASCADE)')
+  // db.run('CREATE TABLE parameter_types (parameterId INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT)')
+  // db.run('INSERT INTO response_types(description) VALUES("Success Response"),("Error Response")')
+  // db.run('INSERT INTO parameter_types(description) VALUES("Url Parameters"),("Data Parameters")')
+  // db.run('INSERT INTO classes(apiId, title, description) VALUES(1, "Class from Database", "Class description from database"),' +
+  //   '(1, "Class 2 from Database", "Class description 2 from database")')
+  // db.run('INSERT INTO methods(classId, title, content) VALUES(1, "Method from Database", "Method content from class 1"),' +
+  //   '(1, "Method 2 from Database", "Method content 2 from class 1"),' +
+  //   '(2, "Method 1 from Database", "Method content from class 2"),' +
+  //   '(2, "Method 2 from Database", "Method content 2 from class 2")')
   })
   db.close()
   return

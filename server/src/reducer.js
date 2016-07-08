@@ -11,13 +11,7 @@ const initialState = Map(
   {
     apis: List(),
     isFetching: false,
-    lastError: '',
-    selectedApiTitle: '',
-    selectedApiId: '',
-    selectedApiSuccessResponseItems: List(),
-    selectedApiErrorResponseItems: List(),
-    selectedApiUrlParamItems: List(),
-    selectedApiDataParamItems: List()
+    lastError: ''
   }
 )
 

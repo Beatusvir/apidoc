@@ -12,18 +12,17 @@ import { store } from '../../index'
 import uuid from 'node-uuid'
 import './styles.scss'
 
-class ApiAddDetail extends Component {
+export class ApiAddDetail extends Component {
   constructor(props) {
     super(props)
-    console.log(this.props)
-    // this.state = {
-    //   title: this.props.params.apiTitle,
-    //   id: this.props.params.apiId,
-    //   successResponseItems: this.props.params.successResponseItems,
-    //   errorResponseItems: this.props.params.errorResponseItems,
-    //   urlParamItems: this.props.params.urlParamItems,
-    //   dataParamItems: this.props.params.dataParamItems
-    // }
+    this.state = {
+      title: this.props.params.apiTitle,
+      id: this.props.params.apiId,
+      successResponseItems: [],
+      errorResponseItems: [],
+      urlParamItems: [],
+      dataParamItems: []
+    }
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
@@ -41,7 +40,7 @@ class ApiAddDetail extends Component {
     const sampleCall = ReactDOM.findDOMNode(this.refs.sampleCall).value
     const notes = ReactDOM.findDOMNode(this.refs.notes).value
     let successResponseItems = []
-    this.props.successResponseItems.map((item, index) => {
+    this.state.successResponseItems.map((item, index) => {
       let code = document.getElementById(`inputCode_${item}`).value
       let content = document.getElementById(`inputContent_${item}`).value
       let responseId = uuid.v4()
@@ -49,7 +48,7 @@ class ApiAddDetail extends Component {
       successResponseItems.push(newResponse)
     })
     let errorResponseItems = []
-    this.props.errorResponseItems.map((item, index) => {
+    this.state.errorResponseItems.map((item, index) => {
       let code = document.getElementById(`inputCode_${item}`).value
       let content = document.getElementById(`inputContent_${item}`).value
       let responseId = uuid.v4()
@@ -57,7 +56,7 @@ class ApiAddDetail extends Component {
       errorResponseItems.push(newResponse)
     })
     let urlParams = []
-    this.props.urlParamItems.map((item, index) => {
+    this.state.urlParamItems.map((item, index) => {
       let content = document.getElementById(`inputParam_${item}`).value
       let required = document.getElementById(`inputRequired_${item}`).value
       let parameterId = uuid.v4()
@@ -65,7 +64,7 @@ class ApiAddDetail extends Component {
       urlParams.push(newParameter)
     })
     let dataParams = []
-    this.props.dataParamItems.map((item, index) => {
+    this.state.dataParamItems.map((item, index) => {
       let content = document.getElementById(`inputParam_${item}`).value
       let required = document.getElementById(`inputRequired_${item}`).value
       let parameterId = uuid.v4()
@@ -74,13 +73,14 @@ class ApiAddDetail extends Component {
     })
 
     const apiMethod = {
-      methodId, apiId: this.props.id, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
+      methodId, apiId: this.state.id, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
     }
+    console.log('sending: ', apiMethod);
     store.dispatch(addApiMethod(apiMethod))
   }
 
   handleRemoveSuccessResponse(id) {
-    let currentArray = this.props.successResponseItems
+    let currentArray = this.state.successResponseItems
     delete currentArray[currentArray.indexOf(id)]
     this.setState(
       {
@@ -91,7 +91,7 @@ class ApiAddDetail extends Component {
   }
 
   handleRemoveErrorResponse(id) {
-    let currentArray = this.props.errorResponseItems
+    let currentArray = this.state.errorResponseItems
     delete currentArray[currentArray.indexOf(id)]
     this.setState(
       {
@@ -103,7 +103,7 @@ class ApiAddDetail extends Component {
 
   handleAddSuccessResponse(event) {
     const newId = uuid.v4()
-    let currentArray = this.props.successResponseItems
+    let currentArray = this.state.successResponseItems
     currentArray.push(newId)
     this.setState(
       {
@@ -115,7 +115,7 @@ class ApiAddDetail extends Component {
 
   handleAddErrorResponse(event) {
     const newId = uuid.v4()
-    let currentArray = this.props.errorResponseItems
+    let currentArray = this.state.errorResponseItems
     currentArray.push(newId)
     this.setState(
       {
@@ -127,7 +127,7 @@ class ApiAddDetail extends Component {
 
   handleAddUrlParam(event) {
     const newId = uuid.v4()
-    let currentArray = this.props.urlParamItems
+    let currentArray = this.state.urlParamItems
     currentArray.push(newId)
     this.setState(
       {
@@ -138,7 +138,7 @@ class ApiAddDetail extends Component {
   }
 
   handleRemoveUrlParam(id) {
-    let currentArray = this.props.urlParamItems
+    let currentArray = this.state.urlParamItems
     delete currentArray[currentArray.indexOf(id)]
     this.setState(
       {
@@ -150,7 +150,7 @@ class ApiAddDetail extends Component {
 
   handleAddDataParam(event) {
     const newId = uuid.v4()
-    let currentArray = this.props.dataParamItems
+    let currentArray = this.state.dataParamItems
     currentArray.push(newId)
     this.setState(
       {
@@ -161,7 +161,7 @@ class ApiAddDetail extends Component {
   }
 
   handleRemoveDataParam(id) {
-    let currentArray = this.props.dataParamItems
+    let currentArray = this.state.dataParamItems
     delete currentArray[currentArray.indexOf(id)]
     this.setState(
       {
@@ -172,7 +172,7 @@ class ApiAddDetail extends Component {
   }
 
   render() {
-    const successResponseItemNode = this.props.successResponseItems.map((item, index) => {
+    const successResponseItemNode = this.state.successResponseItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveSuccessResponse(item) }/>
@@ -180,7 +180,7 @@ class ApiAddDetail extends Component {
         </div>
       )
     })
-    const errorResponseItemNode = this.props.errorResponseItems.map((item, index) => {
+    const errorResponseItemNode = this.state.errorResponseItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveErrorResponse(item) }/>
@@ -188,7 +188,7 @@ class ApiAddDetail extends Component {
         </div>
       )
     })
-    const urlParamsNode = this.props.urlParamItems.map((item, index) => {
+    const urlParamsNode = this.state.urlParamItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveUrlParam(item) }/>
@@ -196,7 +196,7 @@ class ApiAddDetail extends Component {
         </div>
       )
     })
-    const dataParamsNode = this.props.dataParamItems.map((item, index) => {
+    const dataParamsNode = this.state.dataParamItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveDataParam(item) }/>
@@ -209,7 +209,7 @@ class ApiAddDetail extends Component {
         <ErrorContainer clearError={this.clearError.bind(this) }/>
         <SpinnerContainer />
         <div className="api-add-detail">
-          <h1>{this.props.title}</h1>
+          <h1>{this.state.title}</h1>
           <form onSubmit={this.handleSubmit.bind(this) }>
             <div className="input-group">
               <label className="flex-2" htmlFor="inputTitle">Title</label>
@@ -303,22 +303,22 @@ class ApiAddDetail extends Component {
 
 ApiAddDetail.propTypes = {
   title: PropTypes.string,
-  id: PropTypes.string,
-  successResponseItems: PropTypes.array,
-  errorResponseItems: PropTypes.array,
-  urlParamItems: PropTypes.array,
-  dataParamItems: PropTypes.array
+  id: PropTypes.string
+  // successResponseItems: PropTypes.array,
+  // errorResponseItems: PropTypes.array,
+  // urlParamItems: PropTypes.array,
+  // dataParamItems: PropTypes.array
 }
 
-const mapStateToProps = (state) => {
-  return {
-    title: state.get('selectedApiTitle'),
-    id: state.get('selectedApiId'),
-    successResponseItems: state.get('selectedApiSuccessResponseItems'),
-    errorResponseItems: state.get('selectedApiErrorResponseItems'),
-    urlParamItems: state.get('selectedApiUrlParamItems'),
-    dataParamItems: state.get('selectedApiDataParamItems')
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     title: state.get('selectedApiTitle'),
+//     id: state.get('selectedApiId'),
+//     successResponseItems: state.get('selectedApiSuccessResponseItems'),
+//     errorResponseItems: state.get('selectedApiErrorResponseItems'),
+//     urlParamItems: state.get('selectedApiUrlParamItems'),
+//     dataParamItems: state.get('selectedApiDataParamItems')
+//   }
+// }
 
-export const ApiAddDetailContainer = connect(mapStateToProps)(ApiAddDetail)
+// export const ApiAddDetailContainer = connect(mapStateToProps)(ApiAddDetail)
