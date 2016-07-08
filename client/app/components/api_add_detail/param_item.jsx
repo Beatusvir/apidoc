@@ -9,13 +9,13 @@ class ParamItem extends Component {
     return (
       <div className="input-group" id={this.state.id}>
         <div className="flex-2">
-          <input type="checkbox" id="inputUrlRequired"/>&nbsp;Required
+          <input type="checkbox" id={`inputRequired_${this.state.id}`}/>&nbsp;Required
         </div>
         <input
           className="flex-8"
           type="text"
-          ref={`urlParam_${this.state.id}`}
-          id={`inputUrlParam_${this.state.id}`}
+          ref={`param_${this.state.id}`}
+          id={`inputParam_${this.state.id}`}
           placeholder="Parameter"/>
       </div>
     );

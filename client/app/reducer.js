@@ -10,23 +10,6 @@ function addApi (state, title) {
   return newState.update('apis', (apis) => apis.push(newApi))
 }
 
-function getDetail (state, id) {
-  return state.merge(
-    {
-      apiDetail: [
-        {
-          title: 'Method title',
-          description: 'some description',
-          items: [
-            { title: 'Some method', content: 'Method content' },
-            { title: 'Some method', content: 'Method content' }
-          ]
-        }
-      ]
-    }
-  )
-}
-
 function deleteItem (state, itemId) {
   return state.update('apis',
     (apis) => apis.filterNot(
@@ -55,15 +38,13 @@ export default function (state = Map({
       return setState(state, action.state)
     case 'ADD_API':
       return addApi(state, action.title)
-    case 'GET_DETAIL':
-      return getDetail(state, action.apiId)
     case 'DELETE_ITEM':
       return deleteItem(state, action.apiId)
     case 'INSERTED_ID':
       return insertedId(state, action.insertedId)
     case 'REQUEST_APIS':
       return requestApis(state)
-    case 'ADD_API_CLASS':
+    case 'ADD_API_METHOD':
       return state.merge(Map({
         isFetching: true
       }))

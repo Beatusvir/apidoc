@@ -32,10 +32,10 @@ export function requestApis() {
   }
 }
 
-export function addApiClass(apiClass){
+export function addApiMethod(apiMethod){
   return {
-    type: 'ADD_API_CLASS',
-    apiClass
+    type: 'ADD_API_METHOD',
+    apiMethod
   }
 }
 

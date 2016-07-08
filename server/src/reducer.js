@@ -4,14 +4,20 @@ import {
   addApiToDb,
   fetchApisFromDb,
   fetchApiDetailFromDb,
-  addApiClassToDb
+  addApiMethodToDb
 } from './core'
 
 const initialState = Map(
   {
     apis: List(),
     isFetching: false,
-    lastError: ''
+    lastError: '',
+    selectedApiTitle: '',
+    selectedApiId: '',
+    selectedApiSuccessResponseItems: List(),
+    selectedApiErrorResponseItems: List(),
+    selectedApiUrlParamItems: List(),
+    selectedApiDataParamItems: List()
   }
 )
 
@@ -38,8 +44,8 @@ export default function reducer (state = initialState , action) {
       return state.merge(Map({
         apis: apis
       }))
-    case 'ADD_API_CLASS':
-      addApiClassToDb(action.apiClass)
+    case 'ADD_API_METHOD':
+      addApiMethodToDb(action.apiMethod)
       return state
     case 'REQUEST_DETAIL':
       fetchApiDetailFromDb(action.apiId)
@@ -50,6 +56,7 @@ export default function reducer (state = initialState , action) {
         apiDetail: action.apiDetail
       }))
     case 'LAST_ERROR':
+    console.log(action.error)
     return state.merge(Map({
       lastError: action.error
     }))
