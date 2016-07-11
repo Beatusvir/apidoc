@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 class Responses extends Component {
   constructor(props){
@@ -12,7 +12,7 @@ class Responses extends Component {
     }
     const responseNode = this.props.responses.map((item, index) => {
       return (
-        <li>
+        <li key={index}>
           <p><strong>Code:</strong>&nbsp;{item.get('code') }</p>
           <p><strong>Content:</strong>&nbsp;<span className="code">{item.get('content') }</span></p>
         </li>
@@ -24,6 +24,10 @@ class Responses extends Component {
       </ul>
     );
   }
+}
+
+Responses.propTypes = {
+  responses: PropTypes.object.isRequired
 }
 
 export default Responses

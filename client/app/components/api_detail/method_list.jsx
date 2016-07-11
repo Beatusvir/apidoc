@@ -6,6 +6,7 @@ import Responses from './responses'
 import Parameters from './parameters'
 import FontAwesome from 'react-fontawesome'
 import {connect} from 'react-redux'
+import {requestApiTitle, deleteMethod, requestDetail} from '../../action_creators'
 import './styles.scss'
 
 export class Methods extends Component {
@@ -15,19 +16,27 @@ export class Methods extends Component {
   }
 
   handleAddApi() {
-    // Redirect to
-    window.location = `#/add/detail/${this.props.state.apiId}/${this.state.params.apiTitle}`
+    window.location = `#/add/detail/${this.props.params.apiId}`
+  }
+
+  handleDeleteMethod(methodId) {
+    if (confirm('Are you sure you want to delete this method?')){
+      this.props.dispatch(deleteMethod(methodId))
+    }
   }
 
   render() {
     if (this.props.methods === undefined || this.props.methods.size == 0) {
+      const link =`/add/detail/${this.props.params.apiId}`
       return (
-        <NothingFound message="No methods added yet :'("/>
+        <NothingFound message="No methods added yet :'(" link={link}/>
       )
     }
-    const methodNode = this.props.methods.map(function (item, index) {
+    const methodNode = this.props.methods.map((item, index) => {
+      const methodId = item.get('methodId')
       return (
         <div className="box method" key={index}>
+          <FontAwesome name="trash" className="delete-method-icon" onClick={() => this.handleDeleteMethod(methodId) }/>
           <h1>{item.get('methodTitle') }</h1>
           <p>{item.get('description') }</p>
           <ul>

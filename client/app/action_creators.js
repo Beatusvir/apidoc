@@ -52,3 +52,21 @@ export function clearError() {
   }
 }
 
+export function requestApiTitle(apiId) {
+  return {
+    type: 'REQUEST_API_TITLE',
+    apiId
+  }
+}
+
+export function deleteMethod(methodId){
+  return { type: 'DELETE_METHOD', methodId }
+}
+
+export function clearDetail() {
+  return { type: 'CLEAR_API_DETAIL' }
+}
+
+export function clearApiTitle() {
+  return { type: 'CLEAR_API_TITLE' }
+}

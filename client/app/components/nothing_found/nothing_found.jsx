@@ -11,12 +11,13 @@ export default class NothingFound extends Component {
   render() {
     return (
       <div className="emptyList">
-          <span>{this.props.message} <Link to="/add/"><FontAwesome name="plus-circle" /> create one now!</Link></span>
+          <span>{this.props.message} <Link to={this.props.link}><FontAwesome name="plus-circle" /> create one now!</Link></span>
       </div>
     )
   }
 }
 
 NothingFound.propTypes = {
-  message: React.PropTypes.string
+  message: React.PropTypes.string,
+  link: React.PropTypes.string
 }

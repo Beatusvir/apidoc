@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
-import { addApiMethod, clearError } from '../../action_creators'
+import { addApiMethod, clearError, requestApiTitle } from '../../action_creators'
 import ResponseItem from './response_item'
 import ParamItem from './param_item'
 import { ErrorContainer } from '../error/error'
@@ -15,8 +15,6 @@ export class ApiAddDetail extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      title: this.props.params.apiTitle,
-      id: this.props.params.apiId,
       successResponseItems: [],
       errorResponseItems: [],
       urlParamItems: [],
@@ -57,7 +55,7 @@ export class ApiAddDetail extends Component {
     let urlParams = []
     this.state.urlParamItems.map((item, index) => {
       let content = document.getElementById(`inputParam_${item}`).value
-      let required = document.getElementById(`inputRequired_${item}`).value
+      let required = document.getElementById(`inputRequired_${item}`).checked
       let parameterId = uuid.v4()
       let newParameter = { parameterId, content, required }
       urlParams.push(newParameter)
@@ -65,17 +63,18 @@ export class ApiAddDetail extends Component {
     let dataParams = []
     this.state.dataParamItems.map((item, index) => {
       let content = document.getElementById(`inputParam_${item}`).value
-      let required = document.getElementById(`inputRequired_${item}`).value
+      let required = document.getElementById(`inputRequired_${item}`).checked
       let parameterId = uuid.v4()
       let newParameter = { parameterId, content, required }
       dataParams.push(newParameter)
     })
 
     const apiMethod = {
-      methodId, apiId: this.state.id, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
+      methodId, apiId: this.props.params.apiId, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
     }
-    console.log('sending: ', apiMethod);
+    //console.log('trying to add: ', apiMethod)
     this.props.dispatch(addApiMethod(apiMethod))
+    window.location = `#/view/${this.props.params.apiId}`
   }
 
   handleRemoveSuccessResponse(id) {
@@ -175,7 +174,7 @@ export class ApiAddDetail extends Component {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveSuccessResponse(item) }/>
-          <ResponseItem id={item}/>
+          <ResponseItem id={item} key={index}/>
         </div>
       )
     })
@@ -183,7 +182,7 @@ export class ApiAddDetail extends Component {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveErrorResponse(item) }/>
-          <ResponseItem id={item}/>
+          <ResponseItem id={item} key={index}/>
         </div>
       )
     })
@@ -191,7 +190,7 @@ export class ApiAddDetail extends Component {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveUrlParam(item) }/>
-          <ParamItem id={item}/>
+          <ParamItem id={item} key={index}/>
         </div>
       )
     })
@@ -199,7 +198,7 @@ export class ApiAddDetail extends Component {
       return (
         <div className="response-container" key={item}>
           <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveDataParam(item) }/>
-          <ParamItem id={item}/>
+          <ParamItem id={item} key={index}/>
         </div>
       )
     })
@@ -208,7 +207,7 @@ export class ApiAddDetail extends Component {
         <ErrorContainer clearError={this.clearError.bind(this) }/>
         <SpinnerContainer />
         <div className="api-add-detail">
-          <h1>{this.state.title}</h1>
+          <h1>{this.props.title}</h1>
           <form onSubmit={this.handleSubmit.bind(this) }>
             <div className="input-group">
               <label className="flex-2" htmlFor="inputTitle">Title</label>
@@ -301,23 +300,13 @@ export class ApiAddDetail extends Component {
 }
 
 ApiAddDetail.propTypes = {
-  title: PropTypes.string,
-  id: PropTypes.string
-  // successResponseItems: PropTypes.array,
-  // errorResponseItems: PropTypes.array,
-  // urlParamItems: PropTypes.array,
-  // dataParamItems: PropTypes.array
+  title: PropTypes.string
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     title: state.get('selectedApiTitle'),
-//     id: state.get('selectedApiId'),
-//     successResponseItems: state.get('selectedApiSuccessResponseItems'),
-//     errorResponseItems: state.get('selectedApiErrorResponseItems'),
-//     urlParamItems: state.get('selectedApiUrlParamItems'),
-//     dataParamItems: state.get('selectedApiDataParamItems')
-//   }
-// }
+const mapStateToProps = (state) => {
+  return {
+    title: state.get('selectedApiTitle')
+  }
+}
 
-// export const ApiAddDetailContainer = connect(mapStateToProps)(ApiAddDetail)
+export const ApiAddDetailContainer = connect(mapStateToProps)(ApiAddDetail)

@@ -25,3 +25,11 @@ export function sendDetail (apiDetail) {
 export function errorOcurred(error) {
   return { type: 'LAST_ERROR', error}
 }
+
+export function sendApiTitle(apiTitle){
+  return { type: 'SEND_API_TITLE', apiTitle }
+}
+
+export function clearApiDetail() {
+  return { type: 'CLEAR_API_DETAIL' }
+}

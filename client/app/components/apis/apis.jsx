@@ -17,11 +17,12 @@ export class Api extends Component {
   }
 
   handleDelete(e) {
+    console.log(e);
     e.preventDefault()
-    let id = e.currentTarget.id
-    if (confirm('Are you sure you want to delete this Api Document?')) {
-      this.props.dispatch(deleteApi(id.substr(id.indexOf('_') + 1)))
-    }
+    // let id = e.currentTarget.id
+    // if (confirm('Are you sure you want to delete this Api Document?')) {
+    //   this.props.dispatch(deleteApi(id.substr(id.indexOf('_') + 1)))
+    // }
   }
 
   clearError() {
@@ -32,13 +33,12 @@ export class Api extends Component {
     this.props.dispatch(requestApis())
   }
 
-  redirectToView(apiId){
-    this.props.dispatch(requestDetail(apiId))
-    window.location = '#/view/'
+  handleViewDetail(apiId){
+    window.location = `#/view/${apiId}`
   }
 
   render() {
-    if (this.props.apiList === undefined || this.props.apiList.size == 0) {
+    if (this.props.apiList === undefined || this.props.apiList.size === 0) {
       return (
         <div>
           <SpinnerContainer />
@@ -49,9 +49,10 @@ export class Api extends Component {
     const apiNode = this.props.apiList.map((item, index) => {
       const apiId = item.get('apiId')
       const apiTitle = item.get('title')
+      // onClick={() => { this.redirectToView(apiId, apiTitle) }}
       return (
-        <div className="api" key={apiId} title={apiTitle} onClick={() => { this.redirectToView(apiId) }}>
-          <div className="deleteApiIcon" id={ 'delete_' + apiId } onClick={() => this.handleDelete.bind(this) } title="Delete this document"><FontAwesome name="trash"/></div>
+        <div className="api" key={apiId} title={apiTitle} onClick={this.handleViewDetail.bind(this, apiId)}>
+          <FontAwesome className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this)} title="Delete this document" name="trash"/>
           <div className="title">{apiTitle}</div>
         </div>
       )

@@ -1,11 +1,5 @@
 import { List, Map } from 'immutable'
-import {
-  deleteApiFromDb,
-  addApiToDb,
-  fetchApisFromDb,
-  fetchApiDetailFromDb,
-  addApiMethodToDb
-} from './core'
+import { deleteApiFromDb, addApiToDb, fetchApisFromDb, fetchApiDetailFromDb, addApiMethodToDb, getApiTitleFromDb, deleteMethodFromDb } from './core'
 
 const initialState = Map(
   {
@@ -43,21 +37,46 @@ export default function reducer (state = initialState , action) {
       return state
     case 'REQUEST_DETAIL':
       fetchApiDetailFromDb(action.apiId)
-      return state.merge(Map({isFetching: true, selectedApiId: action.apiId}))
+      return state.merge(Map({
+        isFetching: true,
+        selectedApiId: action.apiId
+      }))
     case 'SEND_DETAIL':
       return state.merge(Map({
         isFetching: false,
         apiDetail: action.apiDetail
       }))
     case 'LAST_ERROR':
-    return state.merge(Map({
-      lastError: action.error
-    }))
-    case 'CLEAR_ERROR': {
       return state.merge(Map({
-      lastError: ''
-    }))
-    }
+        lastError: action.error
+      }))
+    case 'CLEAR_ERROR':
+      {
+      return state.merge(Map({
+        lastError: ''
+      }))
+      }
+    case 'REQUEST_API_TITLE':
+      {
+      getApiTitleFromDb(action.apiId)
+      return state.merge(Map({isFetching: true}))
+      }
+    case 'SEND_API_TITLE':
+      {
+      return state.merge(Map({
+        isFetching: false,
+        selectedApiTitle: action.apiTitle
+      }))
+      }
+    case 'DELETE_METHOD':
+      {
+      deleteMethodFromDb(action.methodId)
+      return state
+      }
+    case 'CLEAR_API_DETAIL':
+      {
+      return state.delete('apiDetail')
+      }
     default:
       return state
   }

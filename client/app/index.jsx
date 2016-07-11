@@ -4,12 +4,12 @@ import { Route, Router, hashHistory } from 'react-router'
 import { ApisContainer } from './components/apis/apis'
 import { MethodsContainer } from './components/api_detail/method_list'
 import { ApiAddContainer } from './components/api_add/api_add'
-import { ApiAddDetail } from './components/api_add_detail/api_add_detail'
+import { ApiAddDetailContainer } from './components/api_add_detail/api_add_detail'
 import App from './components/App'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import remoteActionMiddleware from './remote_action_middleware'
-import { requestApis, setState, requestDetail } from './action_creators';
+import { requestApis, setState, requestDetail, requestApiTitle, clearDetail, clearApiTitle } from './action_creators';
 import reducer from './reducer'
 import io from 'socket.io-client'
 
@@ -28,11 +28,27 @@ if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf')
 }
 
+const handleEnterViewApi = (nextState) => {
+  store.dispatch(requestDetail(nextState.params.apiId))
+}
+
+const handleLeaveViewApi = () => {
+  store.dispatch(clearDetail())
+}
+
+const handleEnterAddDetail = (nextState) => {
+  store.dispatch(requestApiTitle(nextState.params.apiId))
+}
+
+const handleLeaveAddDetail = () => {
+  store.dispatch(clearApiTitle())
+}
+
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer}/>
   <Route path="/add/" component={ApiAddContainer}/>
-  <Route path="/add/detail/" component={ApiAddDetail}/>
-  <Route path="/view/" component={MethodsContainer}/>
+  <Route path="/add/detail/:apiId" component={ApiAddDetailContainer} onEnter={handleEnterAddDetail} onLeave={handleLeaveAddDetail}/>
+  <Route path="/view/:apiId" component={MethodsContainer} onEnter={handleEnterViewApi} onLeave={handleLeaveViewApi}/>
 </Route>
 
 ReactDOM.render(
