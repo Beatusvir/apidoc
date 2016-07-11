@@ -19,7 +19,6 @@ export function requestDetail (apiId) {
 }
 
 export function sendDetail (apiDetail) {
-  console.log(apiDetail)
   return { type: 'SEND_DETAIL', apiDetail}
 }
 

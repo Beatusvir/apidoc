@@ -7,7 +7,6 @@ import { ApiAddDetailContainer } from '../api_add_detail/api_add_detail'
 import { SpinnerContainer } from '../spinner/spinner'
 import FontAwesome from 'react-fontawesome'
 import { addApi } from '../../action_creators'
-import { store } from '../../index'
 import './styles.scss'
 
 export class ApiAdd extends Component {
@@ -51,7 +50,7 @@ export class ApiAdd extends Component {
           const newApi = {
             title, apiId
           }
-          store.dispatch(addApi(newApi))
+          this.props.dispatch(addApi(newApi))
           if (confirm('While you are here, why don\'t you add some methods to your api?')) {
             // TODO redirect to `/add/detail/${apiId}/${title}`
             this.setState({ addDetail: true })

@@ -8,7 +8,6 @@ import ResponseItem from './response_item'
 import ParamItem from './param_item'
 import { ErrorContainer } from '../error/error'
 import { SpinnerContainer } from '../spinner/spinner'
-import { store } from '../../index'
 import uuid from 'node-uuid'
 import './styles.scss'
 
@@ -27,7 +26,7 @@ export class ApiAddDetail extends Component {
   }
 
   clearError() {
-    store.dispatch(clearError())
+    this.props.dispatch(clearError())
   }
 
   handleSubmit(e) {
@@ -76,7 +75,7 @@ export class ApiAddDetail extends Component {
       methodId, apiId: this.state.id, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
     }
     console.log('sending: ', apiMethod);
-    store.dispatch(addApiMethod(apiMethod))
+    this.props.dispatch(addApiMethod(apiMethod))
   }
 
   handleRemoveSuccessResponse(id) {

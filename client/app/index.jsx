@@ -4,7 +4,6 @@ import { Route, Router, hashHistory } from 'react-router'
 import { ApisContainer } from './components/apis/apis'
 import { MethodsContainer } from './components/api_detail/method_list'
 import { ApiAddContainer } from './components/api_add/api_add'
-// import { ApiAddDetailContainer } from './components/api_add_detail/api_add_detail'
 import { ApiAddDetail } from './components/api_add_detail/api_add_detail'
 import App from './components/App'
 import { Provider } from 'react-redux'
@@ -25,11 +24,6 @@ const createStoreWithMiddlewate = applyMiddleware(
 )(createStore)
 export const store = createStoreWithMiddlewate(reducer)
 
-// Load detail
-const fetchApiDetail = (e) => {
-  store.dispatch(requestDetail(e.params.apiId))
-}
-
 if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf')
 }
@@ -37,8 +31,8 @@ if (process.env.NODE_ENV !== 'production') {
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer}/>
   <Route path="/add/" component={ApiAddContainer}/>
-  <Route path="/add/detail/:apiId/:apiTitle" component={ApiAddDetail}/>
-  <Route path="/view/:apiId/:apiTitle" component={MethodsContainer} onEnter={fetchApiDetail}/>
+  <Route path="/add/detail/" component={ApiAddDetail}/>
+  <Route path="/view/" component={MethodsContainer}/>
 </Route>
 
 ReactDOM.render(

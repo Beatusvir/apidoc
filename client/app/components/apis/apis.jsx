@@ -5,8 +5,7 @@ import {Link} from 'react-router';
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
 import NothingFound from '../nothing_found/nothing_found'
-import { store } from '../../index'
-import { deleteApi, requestApis, clearError } from '../../action_creators'
+import { deleteApi, requestApis, clearError, requestDetail } from '../../action_creators'
 import { SpinnerContainer } from '../spinner/spinner'
 import { ErrorContainer } from '../error/error'
 import './styles.scss'
@@ -14,7 +13,6 @@ import './styles.scss'
 export class Api extends Component {
   constructor(props) {
     super(props)
-    this.handleDelete = this.handleDelete.bind(this)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
@@ -22,16 +20,21 @@ export class Api extends Component {
     e.preventDefault()
     let id = e.currentTarget.id
     if (confirm('Are you sure you want to delete this Api Document?')) {
-      store.dispatch(deleteApi(id.substr(id.indexOf('_') + 1)))
+      this.props.dispatch(deleteApi(id.substr(id.indexOf('_') + 1)))
     }
   }
 
   clearError() {
-    store.dispatch(clearError())
+    this.props.dispatch(clearError())
   }
 
   componentDidMount() {
-    store.dispatch(requestApis())
+    this.props.dispatch(requestApis())
+  }
+
+  redirectToView(apiId){
+    this.props.dispatch(requestDetail(apiId))
+    window.location = '#/view/'
   }
 
   render() {
@@ -46,12 +49,11 @@ export class Api extends Component {
     const apiNode = this.props.apiList.map((item, index) => {
       const apiId = item.get('apiId')
       const apiTitle = item.get('title')
-      const link = `/view/${apiId}/${apiTitle}`
       return (
-        <Link to={link} className="api" key={apiId} title={apiTitle}>
-          <div className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this) } title="Delete this document"><FontAwesome name="trash"/></div>
+        <div className="api" key={apiId} title={apiTitle} onClick={() => { this.redirectToView(apiId) }}>
+          <div className="deleteApiIcon" id={ 'delete_' + apiId } onClick={() => this.handleDelete.bind(this) } title="Delete this document"><FontAwesome name="trash"/></div>
           <div className="title">{apiTitle}</div>
-        </Link>
+        </div>
       )
     })
     return (

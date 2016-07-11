@@ -1,11 +1,49 @@
-.method{
-  margin: 50px auto;
-  padding: 20px;
-  width: 70%;
+.method {
   background-color: #fff;
   border: 1px solid #dfdfdf;
   border-radius: 2px 2px;
   box-shadow: 2px 2px 2px #efefef;
+}
+
+.tools {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+
+  .tools-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+
+    p{
+      font-size: 0.8em;
+      padding: 0;
+      text-align: center;
+      color: #666;
+    }
+  }
+}
+
+.box {
+  margin-top: 20px;
+  width: 70%;
+
+  .fa {
+    font-size: 2em;
+    transition: 0.25s ease;
+    opacity: 0.6;
+  }
+
+  .fa:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  .add-method-button{
+    color: green;
+  }
 }
 
 h1, h3, p {
@@ -15,4 +53,22 @@ h1, h3, p {
 
 h1{
   border-bottom: 1px solid #dfdfdf;
+}
+
+.responses li {
+  display: flex;
+  flex-direction: column;
+
+  p {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.code {
+  background: #efefef;
+  font-family: monospace;
+  padding: 0 5px 0 5px;
+  color: #333;
 }

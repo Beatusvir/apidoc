@@ -50,7 +50,6 @@ export default function reducer (state = initialState , action) {
         apiDetail: action.apiDetail
       }))
     case 'LAST_ERROR':
-    console.log(action.error)
     return state.merge(Map({
       lastError: action.error
     }))
