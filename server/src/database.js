@@ -1,4 +1,6 @@
-import { sendApis, sendDetail, sendInsertedApiId, errorOcurred, sendApiTitle, clearApiDetail } from './actions'
+import { apisSuccess, apisFailure, apisDeleteSuccess, apisDeleteFailure,
+  apisCallAddSuccess, apisCallAddFailure, sendDetail, sendInsertedApiId, errorOcurred, sendApiTitle, clearApiDetail
+} from './actions'
 import { store } from '../index'
 
 const fs = require('fs')
@@ -13,32 +15,46 @@ export function initDb () {
   return
 }
 
+export function getDbApis () {
+  const db = new sqlite3.Database(file)
+  db.all('SELECT apiId, title FROM apis', (err, rows) => {
+    if (err) {
+      store.dispatch(apisFailure(`Error in [getDbApis]:${err}`))
+      return
+    }
+    store.dispatch(apisSuccess(rows))
+    return
+  })
+}
+
 export function deleteApi (apiId) {
-  if (apiId === undefined){
-    store.dispatch(errorOcurred('Error in [deleteApi]: Paramter(s) undefined'))
+  if (apiId === undefined) {
+    store.dispatch(apisDeleteFailure('Error in [deleteApi]: Paramter(s) undefined'))
     return
   }
   const db = new sqlite3.Database(file)
   db.serialize(() => {
     db.run('DELETE FROM methods WHERE apiId = ?', apiId, (err, rows) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [deleteApi - deleting methods]:${err}`))
+        store.dispatch(apisDeleteFailure(`Error in [deleteApi - deleting methods]:${err}`))
         return
       }
     })
     db.run('DELETE FROM apis WHERE apiId = ?', apiId, (err, rows) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [deleteApi - deleting apis]:${err}`))
+        store.dispatch(apisDeleteFailure(`Error in [deleteApi - deleting apis]:${err}`))
         return
       }
-      getDbApis()
+      store.dispatch(apisDeleteSuccess(apiId))
     })
   })
   db.close()
 }
 
+// TODO refactor this
+
 export function addApi (newApi) {
-  if (newApi === undefined){
+  if (newApi === undefined) {
     store.dispatch(errorOcurred('Error in [addApi]: Paramter(s) undefined'))
     return
   }
@@ -52,20 +68,8 @@ export function addApi (newApi) {
   })
 }
 
-export function getDbApis () {
-  const db = new sqlite3.Database(file)
-  db.all('SELECT apiId, title FROM apis', (err, rows) => {
-    if (err) {
-      store.dispatch(errorOcurred(`Error in [getDbApis]:${err}`))
-      return
-    }
-    store.dispatch(sendApis(rows))
-    return
-  })
-}
-
 export function getDbApiDetail (apiId) {
-  if (apiId === undefined){
+  if (apiId === undefined) {
     store.dispatch(errorOcurred('Error in [getDbApiDetail]: Paramter(s) undefined'))
     return
   }
@@ -73,7 +77,7 @@ export function getDbApiDetail (apiId) {
 }
 
 function getApiMethods (apiId) {
-  if (apiId === undefined){
+  if (apiId === undefined) {
     store.dispatch(errorOcurred('Error in [getApiMethods]: Paramter(s) undefined'))
     return
   }
@@ -94,7 +98,7 @@ function getApiMethods (apiId) {
 }
 
 function getMethodResponses (methods) {
-  if (methods === undefined){
+  if (methods === undefined) {
     store.dispatch(errorOcurred('Error in [getMethodResponses]: Paramter(s) undefined'))
     return
   }
@@ -121,7 +125,7 @@ function getMethodResponses (methods) {
 }
 
 function getMethodParameters (methods) {
-  if (methods === undefined){
+  if (methods === undefined) {
     store.dispatch(errorOcurred('Error in [getMethodParameters]: Paramter(s) undefined'))
     return
   }
@@ -147,70 +151,70 @@ function getMethodParameters (methods) {
   db.close()
 }
 
-export function addApiMethod (apiMethod) {
-  if (apiMethod === undefined){
-    store.dispatch(errorOcurred('Error in [addApiMethod]: Paramter(s) undefined'))
+export function addApiCall (apiCall) {
+  if (apiCall === undefined) {
+    store.dispatch(errorOcurred('Error in [addApiCall]: Paramter(s) undefined'))
     return
   }
   const db = new sqlite3.Database(file)
   db.serialize(() => {
     db.run('INSERT INTO methods(methodId, apiId, title, description, method, url, sample_call, notes)' +
     ' VALUES(?,?,?,?,?,?,?,?)',
-      apiMethod.methodId, apiMethod.apiId, apiMethod.title, apiMethod.description, apiMethod.method, apiMethod.url, apiMethod.sampleCall, apiMethod.notes,
+      apiCall.methodId, apiCall.apiId, apiCall.title, apiCall.description, apiCall.method, apiCall.url, apiCall.sampleCall, apiCall.notes,
       (err, rows) => {
         if (err) {
-          store.dispatch(errorOcurred(`Error in [addApiMethod - insert methods]:${err}`))
+          store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert methods]:${err}`))
           return
         }
       })
 
-    apiMethod.successResponseItems.map((item) => {
-      // console.log('trying to add response: ', item.responseId, apiMethod.methodId, item.code, item.content, 'SUCCESS')
+    apiCall.successResponseItems.map((item) => {
+      // console.log('trying to add response: ', item.responseId, apiCall.methodId, item.code, item.content, 'SUCCESS')
       db.run('INSERT INTO responses(responseId, methodId, code, content, type)' +
       ' VALUES(?,?,?,?,?)',
-        item.responseId, apiMethod.methodId, item.code, item.content, 'SUCCESS',
+        item.responseId, apiCall.methodId, item.code, item.content, 'SUCCESS',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(`Error in [addApiMethod - insert responses 1]:${err}`))
+            store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert responses 1]:${err}`))
             return
           }
         })
     })
 
-    apiMethod.errorResponseItems.map((item) => {
-      // console.log('trying to add response: ', item.responseId, apiMethod.methodId, item.code, item.content, 'ERROR');
+    apiCall.errorResponseItems.map((item) => {
+      // console.log('trying to add response: ', item.responseId, apiCall.methodId, item.code, item.content, 'ERROR')
       db.run('INSERT INTO responses(responseId, methodId, code, content, type)' +
       ' VALUES(?,?,?,?,?)',
-        item.responseId, apiMethod.methodId, item.code, item.content, 'ERROR',
+        item.responseId, apiCall.methodId, item.code, item.content, 'ERROR',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(`Error in [addApiMethod - insert responses 2]:${err}`))
+            store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert responses 2]:${err}`))
             return
           }
         })
     })
 
-    apiMethod.urlParams.map((item) => {
-      // console.log('trying to add parameter: ', item.parameterId, apiMethod.methodId, item.content, item.required === 'on' ? 1 : 0, 'URL');
+    apiCall.urlParams.map((item) => {
+      // console.log('trying to add parameter: ', item.parameterId, apiCall.methodId, item.content, item.required === 'on' ? 1 : 0, 'URL')
       db.run('INSERT INTO parameters(parameterId, methodId, content, required, type)' +
       ' VALUES(?,?,?,?,?)',
-        item.parameterId, apiMethod.methodId, item.content, item.required ? 1 : 0, 'URL',
+        item.parameterId, apiCall.methodId, item.content, item.required ? 1 : 0, 'URL',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(`Error in [addApiMethod - insert parameters 1]:${err}`))
+            store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert parameters 1]:${err}`))
             return
           }
         })
     })
 
-    apiMethod.dataParams.map((item) => {
-      // console.log('trying to add parameter: ', item.parameterId, apiMethod.methodId, item.content, item.required === 'on' ? 1 : 0, 'DATA')
+    apiCall.dataParams.map((item) => {
+      // console.log('trying to add parameter: ', item.parameterId, apiCall.methodId, item.content, item.required === 'on' ? 1 : 0, 'DATA')
       db.run('INSERT INTO parameters(parameterId, methodId, content, required, type)' +
       ' VALUES(?,?,?,?,?)',
-        item.parameterId, apiMethod.methodId, item.content, item.required ? 1 : 0, 'DATA',
+        item.parameterId, apiCall.methodId, item.content, item.required ? 1 : 0, 'DATA',
         (err, rows) => {
           if (err) {
-            store.dispatch(errorOcurred(`Error in [addApiMethod - insert parameters 2]:${err}`))
+            store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert parameters 2]:${err}`))
             return
           }
         })
@@ -220,7 +224,7 @@ export function addApiMethod (apiMethod) {
 }
 
 function addMethodResponses (methodId, responses) {
-  if (methodId === undefined || responses === undefined){
+  if (methodId === undefined || responses === undefined) {
     store.dispatch(errorOcurred('Error in [addMethodResponses]: Paramter(s) undefined'))
     return
   }
@@ -240,7 +244,7 @@ function addMethodResponses (methodId, responses) {
 }
 
 function addMethodParameters (methodId, parameters) {
-  if (methodId === undefined || parameters === undefined){
+  if (methodId === undefined || parameters === undefined) {
     store.dispatch(errorOcurred('Error in [addMethodParameters]: Paramter(s) undefined'))
     return
   }
@@ -260,7 +264,7 @@ function addMethodParameters (methodId, parameters) {
 }
 
 export function getApiTitle (apiId) {
-  if (apiId === undefined){
+  if (apiId === undefined) {
     store.dispatch(errorOcurred('Error in [getApiTitle]: Paramter undefined'))
     return
   }
@@ -278,7 +282,7 @@ export function getApiTitle (apiId) {
 }
 
 export function deleteMethod (methodId) {
-  if (methodId === undefined){
+  if (methodId === undefined) {
     store.dispatch(errorOcurred('Error in [deleteMethod]: Paramter undefined'))
     return
   }
@@ -286,7 +290,7 @@ export function deleteMethod (methodId) {
   let apiId = ''
   db.serialize(() => {
     db.get('SELECT apiId from methods WHERE methodId = ?', methodId, (err, row) => {
-      if (err){
+      if (err) {
         store.dispatch(errorOcurred(`Error in [deleteMethod - getting apiId]:${err}`))
       }
       apiId = row.apiId
@@ -298,12 +302,12 @@ export function deleteMethod (methodId) {
       getDbApiDetail(apiId)
     })
     db.get('SELECT methodId from methods WHERE apiId = ?', apiId, (err, row) => {
-      if (err){
+      if (err) {
         store.dispatch(errorOcurred(`Error in [deleteMethod - getting methods after deleting]:${err}`))
       }
       console.log(row)
       if (!row) {
-        console.log('clearing apidetila');
+        console.log('clearing apidetila')
         store.dispatch(clearApiDetail)
       }
     })

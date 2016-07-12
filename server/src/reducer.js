@@ -1,5 +1,6 @@
 import { List, Map } from 'immutable'
-import { deleteApiFromDb, addApiToDb, fetchApisFromDb, fetchApiDetailFromDb, addApiMethodToDb, getApiTitleFromDb, deleteMethodFromDb } from './core'
+import { deleteApiFromDb, addApiToDb, fetchApisFromDb, fetchApiDetailFromDb,
+  addApiCallToDb, getApiTitleFromDb, deleteMethodFromDb } from './core'
 
 const initialState = Map(
   {
@@ -15,23 +16,66 @@ const addApi = (newApi) => {
 
 export default function reducer (state = initialState , action) {
   switch (action.type) {
-    case 'REQUEST_APIS':
+    case 'APIS_REQUEST':
       fetchApisFromDb()
       return state.merge(Map({isFetching: true}))
-    case 'SEND_APIS':
+    case 'APIS_SUCCESS':
       return state.merge(Map({
         isFetching: false,
         apis: action.apis
       }))
+    case 'APIS_FAILURE':
+      return state.merge(Map({
+        isFetching: false,
+        error: action.error
+      }))
+    case 'APIS_DELETE_REQUEST':
+      deleteApiFromDb(action.apiId)
+      return state.merge(Map({
+        isFetching: true
+      }))
+    case 'APIS_DELETE_SUCCESS':
+    {
+      let newApiList = state.get('apis').filter((apis) => apis.apiId != action.apiId)
+      if (newApiList === undefined){
+        newApiList = List()
+      }
+      return state.merge(Map({
+        isFetching: false,
+        apis: newApiList
+      }))
+    }
+    case 'APIS_DELETE_FAILURE':
+      return state.merge(Map({
+        isFetching: false,
+        error: action.error
+      }))
+    case 'APIS_ADD_REQUEST':
+      addApi(action.newApi)
+      return state.merge(Map({
+        isFetching: true
+      }))
+    case 'APIS_ADD_SUCCESS':
+      return state.merge(Map({
+        isFetching: false,
+        apis: state.update('apis', (apis) => apis.push(action.newApi))
+      }))
+
+    case 'APIS_CALL_ADD_REQUEST':
+      addApiCallToDb(action.apiCall)
+      return state.merge(Map({
+        isFetching: true
+      }))
+
+    case 'APIS_DETAIL_REQUEST':
+      fetchApiDetailFromDb(action.apiId)
+      return state.merge(Map({
+        isFetching: true
+      }))
+// TODO refactor this
     case 'ADD_API':
       addApi(action.newApi)
       return state.merge(Map({isFetching: true}))
-    case 'DELETE_API':
-      const apis = state.get('apis').filter(apis => apis.id != action.apiId)
-      deleteApiFromDb(action.apiId)
-      return state.merge(Map({
-        apis: apis
-      }))
     case 'ADD_API_METHOD':
       addApiMethodToDb(action.apiMethod)
       return state

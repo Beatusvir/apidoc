@@ -1,12 +1,18 @@
+// Modules
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
+import FontAwesome from 'react-fontawesome'
+import {connect} from 'react-redux'
+
+// Components
 import NothingFound from '../nothing_found/nothing_found'
 import Responses from './responses'
 import Parameters from './parameters'
-import FontAwesome from 'react-fontawesome'
-import {connect} from 'react-redux'
-import {requestApiTitle, deleteMethod, requestDetail} from '../../action_creators'
+import Spinner from '../spinner/spinner'
+
+// Code, styles
+import {requestApiTitle, deleteMethod, requestDetail} from '../../actions/actions'
 import './styles.scss'
 
 export class Methods extends Component {
@@ -16,7 +22,7 @@ export class Methods extends Component {
   }
 
   handleAddApi() {
-    window.location = `#/add/detail/${this.props.params.apiId}`
+    window.location = '#/add/detail/'
   }
 
   handleDeleteMethod(methodId) {
@@ -26,10 +32,15 @@ export class Methods extends Component {
   }
 
   render() {
+    if (this.props.isFetching){
+      return (
+        <Spinner isFetching={this.props.isFetching}/>
+      )
+    }
     if (this.props.methods === undefined || this.props.methods.size == 0) {
       const link =`/add/detail/${this.props.params.apiId}`
       return (
-        <NothingFound message="No methods added yet :'(" link={link}/>
+        <NothingFound message="No method call added yet :'(" link={link}/>
       )
     }
     const methodNode = this.props.methods.map((item, index) => {
@@ -104,7 +115,8 @@ Methods.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    methods: state.get('apiDetail')
+    methods: state.get('apiDetail'),
+    isFetching: state.get('isFetching')
   }
 }
 

@@ -6,15 +6,11 @@ export class Spinner extends Component {
   render() {
     if (this.props.isFetching) {
       return (
-        <div className="spinner">
-          updating...
-        </div>
+        <div className="spinner"/>
       )
     }
     return (
-        <div className="spinner hide">
-          updating...
-        </div>
+        <div className="spinner hide"/>
       )
   }
 }

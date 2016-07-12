@@ -1,13 +1,18 @@
+// Modules
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
-import {Link} from 'react-router';
+import {Link} from 'react-router'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
+
+// Components
 import NothingFound from '../nothing_found/nothing_found'
-import { deleteApi, requestApis, clearError, requestDetail } from '../../action_creators'
 import { Spinner } from '../spinner/spinner'
 import { Error } from '../error/error'
+
+// Code, styles
+import { selectApi, clearError, apisDeleteRequest, apisDetailRequest } from '../../actions/actions'
 import './styles.scss'
 
 export class Api extends Component {
@@ -16,32 +21,37 @@ export class Api extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
-  handleDelete(e) {
-    e.preventDefault()
-    // let id = e.currentTarget.id
-    // if (confirm('Are you sure you want to delete this Api Document?')) {
-    //   this.props.dispatch(deleteApi(id.substr(id.indexOf('_') + 1)))
-    // }
+  handleDelete(apiId) {
+    if (confirm('Are you sure you want to delete this Api Document?')) {
+      this.props.dispatch(apisDeleteRequest(apiId))
+    }
   }
 
   clearError() {
-    // this.props.dispatch(clearError())
+    this.props.dispatch(clearError())
   }
 
-  componentDidMount() {
-    // this.props.dispatch(requestApis())
-  }
-
-  handleViewDetail(apiId){
-    window.location = `#/view/${apiId}`
+  handleViewDetail(apiId, apiTitle) {
+    this.props.dispatch(selectApi(apiId, apiTitle))
+    this.props.dispatch(apisDetailRequest(apiId))
+    window.location = '#/view/'
   }
 
   render() {
+    if (this.props.isFetching) {
+      return (
+        <Spinner isFetching={this.props.isFetching}/>
+      )
+    }
+    if(this.props.error) {
+      return (
+        <Error message={this.props.error} clearError={this.clearError.bind(this)}/>
+      )
+    }
     if (this.props.apiList === undefined || this.props.apiList.size === 0) {
       return (
         <div>
-          <Spinner isFetching={this.props.isFetching}/>
-          <NothingFound message="No documents created yet :'(" link="/add/"></NothingFound>
+          <NothingFound message="No API documents created yet :'(" link="/add/"></NothingFound>
         </div>
       )
     }
@@ -49,16 +59,14 @@ export class Api extends Component {
       const apiId = item.get('apiId')
       const apiTitle = item.get('title')
       return (
-        <div className="api" key={index} title={apiTitle} onClick={this.handleViewDetail.bind(this, apiId)}>
-          <FontAwesome className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this)} title="Delete this document" name="trash"/>
+        <div className="api" key={index} title={apiTitle} onClick={() => this.handleViewDetail(apiId, apiTitle) }>
+          <FontAwesome className="deleteApiIcon" id={ 'delete_' + apiId } onClick={() => this.handleDelete(apiId) } title="Delete this document" name="trash"/>
           <div className="title">{apiTitle}</div>
         </div>
       )
     })
     return (
       <div className="container">
-        <Error clearError={this.clearError.bind(this)}/>
-        <Spinner isFetching={this.props.isFetching}/>
         <div className="apiList">
           {apiNode}
         </div>
@@ -68,13 +76,15 @@ export class Api extends Component {
 }
 
 Api.propTypes = {
-  apiList: PropTypes.object
+  apiList: PropTypes.object,
+  isFetching: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
   return {
     apiList: state.get('apis'),
-    isFetching: state.get('apis')
+    isFetching: state.get('isFetching'),
+    error: state.get('error')
   }
 }
 

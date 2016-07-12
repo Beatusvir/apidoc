@@ -1,14 +1,19 @@
+// Modules
 import React, {Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
-import { addApiMethod, clearError, requestApiTitle } from '../../action_creators'
+import uuid from 'node-uuid'
+
+// Components
 import ResponseItem from './response_item'
 import ParamItem from './param_item'
 import { ErrorContainer } from '../error/error'
 import { SpinnerContainer } from '../spinner/spinner'
-import uuid from 'node-uuid'
+
+// Code, styles
+import { clearError, apisCallAddRequest } from '../../actions/actions'
 import './styles.scss'
 
 export class ApiAddDetail extends Component {
@@ -69,10 +74,10 @@ export class ApiAddDetail extends Component {
       dataParams.push(newParameter)
     })
 
-    const apiMethod = {
+    const apiCall = {
       methodId, apiId: this.props.apiId, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
     }
-    this.props.dispatch(addApiMethod(apiMethod))
+    this.props.dispatch(apisCallAddRequest(apiCall))
     window.location = '#/view/'
   }
 

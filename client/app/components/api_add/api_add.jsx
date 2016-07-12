@@ -1,31 +1,35 @@
+// Modules
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import uuid from 'node-uuid'
 import {connect} from 'react-redux'
-import { ApiAddDetailContainer } from '../api_add_detail/api_add_detail'
-import { SpinnerContainer } from '../spinner/spinner'
 import FontAwesome from 'react-fontawesome'
-import { addApi, setSelectedApi } from '../../action_creators'
+
+// Components
+import { SpinnerContainer } from '../spinner/spinner'
+
+// Code, styles
+import { selectApi, apisAddRequest } from '../../actions/actions'
 import './styles.scss'
 
 export class ApiAdd extends Component {
   constructor(props) {
     super(props)
+    this.submitNewApi = this.submitNewApi.bind(this)
+    this.cancelAdding = this.cancelAdding.bind(this)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
-  cancelAdding() {
-    //return this.props.cancelAdding()
-  }
-
   handleKeyDown(e) {
-    // switch (e.key) {
-    //   case 'Enter':
-    //     return this.props.doneAdding(this.state.value)
-    //   case 'Escape':
-    //     return this.cancelAdding()
-    // }
+    switch (e.key) {
+      case 'Enter':
+        this.submitNewApi()
+        break;
+      case 'Escape':
+        this.cancelAdding()
+        break;
+    }
   }
 
   handleOnBlur(e) {
@@ -36,33 +40,29 @@ export class ApiAdd extends Component {
     this.setState({ value: e.target.value })
   }
 
+  cancelAdding(e) {
+
+  }
+
   handleSubmit(e) {
     e.preventDefault()
-    switch (e.target.id) {
-      case 'button-save':
-        {
-          const input = ReactDOM.findDOMNode(this.refs.apiInput)
-          const title = input.value
-          if (!title) break;
-          const apiId = uuid.v4()
-          const newApi = {
-            title, apiId
-          }
-          this.props.dispatch(addApi(newApi))
-          if (confirm('While you are here, why don\'t you add some methods to your api?')) {
-            this.props.dispatch(setSelectedApi(apiId, title))
-            window.location = '#/add/detail/'
-            this.setState({ addDetail: true })
-          } else {
-            window.location = '#/'
-          }
-        }
-        break;
-      case 'button-cancel':
-        {
-          window.history.back()
-        }
-        break;
+    this.submitNewApi()
+  }
+
+  submitNewApi() {
+    const input = ReactDOM.findDOMNode(this.refs.apiInput)
+    const apiTitle = input.value
+    if (!apiTitle) return;
+    const apiId = uuid.v4()
+    const newApi = {
+      title: apiTitle, apiId
+    }
+    this.props.dispatch(apisAddRequest(newApi))
+    if (confirm('While you are here, why don\'t you add some methods to your api?')) {
+      this.props.dispatch(selectApi(apiId, apiTitle))
+      window.location = '#/add/detail/'
+    } else {
+      window.location = '#/'
     }
   }
 
@@ -70,7 +70,7 @@ export class ApiAdd extends Component {
     return (
       <div className="container">
         <div className="api-add">
-          <form onSubmit={this.handleSubmit.bind(this) } className="form-add">
+          <form id="form-api-add" className="form-add">
             <div className="input-group">
               <label htmlFor="input-title">Title </label>
               <input
@@ -84,8 +84,8 @@ export class ApiAdd extends Component {
                 />
             </div>
             <div className="input-group">
-              <button id="button-save" className="button-add" onClick={this.handleSubmit.bind(this) }><FontAwesome name="floppy-o"/>Save</button>
-              <button id="button-cancel" className="button-cancel" onClick={this.handleSubmit.bind(this) }><FontAwesome name="ban"/>Cancel</button>
+              <button type="button" id="button-save" className="button-add" onClick={this.handleSubmit.bind(this)}><FontAwesome name="floppy-o"/>Save</button>
+              <button type="button" id="button-cancel" className="button-cancel"><FontAwesome name="ban"/>Cancel</button>
             </div>
           </form>
         </div>
@@ -95,7 +95,7 @@ export class ApiAdd extends Component {
 }
 
 ApiAdd.propTypes = {
-  
+
 }
 
 const mapStateToProps = (state) => {

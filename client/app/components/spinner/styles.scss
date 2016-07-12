@@ -3,14 +3,13 @@
   opacity: 1;
   display: block;
   width: 200px;
-  color: #ccc;
-  font-weight: bold;
-  text-align: center;
-  font-size: 0.8em;
+  height: 40px;
   position: absolute;
-  bottom: 25px;
-  left: calc(50% - 100px);
+  top: calc(50% + 150px);
+  margin: 0 auto;
   transition: all 0.5s ease-in-out;
+  background-image: url('../../../build/images/ajax-loader.gif');
+  background-repeat: no-repeat;
 }
 
 .spinner.hide {

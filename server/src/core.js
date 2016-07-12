@@ -1,5 +1,6 @@
 import { Map } from 'immutable'
-import { addApiMethod, deleteApi, addApi, getDbApis, getDbApiDetail, getApiTitle, deleteMethod} from './database'
+import { addApiMethod, deleteApi, addApi, getDbApis, getDbApiDetail,
+  getApiTitle, deleteMethod} from './database'
 
 export function fetchApisFromDb () {
   getDbApis()
@@ -17,8 +18,8 @@ export function deleteApiFromDb (apiId) {
   deleteApi(apiId)
 }
 
-export function addApiMethodToDb (apiMethod) {
-  addApiMethod(apiMethod)
+export function addApiCallToDb (apiMethod) {
+  addApiCall(apiMethod)
 }
 
 export function getApiTitleFromDb (apiId) {
