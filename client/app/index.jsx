@@ -29,26 +29,26 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const handleEnterViewApi = (nextState) => {
-  store.dispatch(requestDetail(nextState.params.apiId))
+  // store.dispatch(requestDetail(nextState.params.apiId))
 }
 
 const handleLeaveViewApi = () => {
-  store.dispatch(clearDetail())
+  // store.dispatch(clearDetail())
 }
 
 const handleEnterAddDetail = (nextState) => {
-  store.dispatch(requestApiTitle(nextState.params.apiId))
+  // store.dispatch(requestApiTitle(nextState.params.apiId))
 }
 
 const handleLeaveAddDetail = () => {
-  store.dispatch(clearApiTitle())
+  // store.dispatch(clearApiTitle())
 }
 
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer}/>
   <Route path="/add/" component={ApiAddContainer}/>
-  <Route path="/add/detail/:apiId" component={ApiAddDetailContainer} onEnter={handleEnterAddDetail} onLeave={handleLeaveAddDetail}/>
-  <Route path="/view/:apiId" component={MethodsContainer} onEnter={handleEnterViewApi} onLeave={handleLeaveViewApi}/>
+  <Route path="/add/detail/" component={ApiAddDetailContainer} onEnter={handleEnterAddDetail} onLeave={handleLeaveAddDetail}/>
+  <Route path="/view/" component={MethodsContainer} onEnter={handleEnterViewApi} onLeave={handleLeaveViewApi}/>
 </Route>
 
 ReactDOM.render(

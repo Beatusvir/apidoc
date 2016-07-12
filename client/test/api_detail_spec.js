@@ -6,11 +6,10 @@ import { expect } from 'chai'
 import { Methods } from '../app/components/api_detail/method_list'
 
 const apiDetail = List.of(
-  Map({ methodTitle: 'Method 1' }),
-  Map({ methodTitle: 'Method 2' })
-)
+  Map({ methodTitle: 'Method 1', parameters: List.of(), responses: List.of() }),
+  Map({ methodTitle: 'Method 2', parameters: List.of(), responses: List.of() }))
 
-describe('Api Detail', () => {
+describe('api detail', () => {
   it('renders a list of methods', () => {
     const component = renderIntoDocument(
       <Methods methods={apiDetail} />

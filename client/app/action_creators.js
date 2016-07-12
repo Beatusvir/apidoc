@@ -70,3 +70,7 @@ export function clearDetail() {
 export function clearApiTitle() {
   return { type: 'CLEAR_API_TITLE' }
 }
+
+export function setSelectedApi(apiId, apiTitle) {
+  return { type: 'SET_SELECTED_API', apiId, apiTitle }
+}

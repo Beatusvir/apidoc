@@ -15,20 +15,20 @@ class Parameters extends Component {
     const parameterNode = this.props.parameters.map((item, index) => {
       if (item.get('required') === 1){
         return (
-          <div key={index}>
+          <div key={index} className="parameter">
             <p><strong>Required:</strong></p>
             <p>{item.get('content')}</p>
           </div>
         )
       }
       return (
-        <div>
+        <div key={index} className="parameter">
           {item.get('content')}
         </div>
       )
     })
     return (
-      <div>
+      <div className="parameters">
         {parameterNode}
       </div>
     );

@@ -70,11 +70,10 @@ export class ApiAddDetail extends Component {
     })
 
     const apiMethod = {
-      methodId, apiId: this.props.params.apiId, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
+      methodId, apiId: this.props.apiId, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
     }
-    //console.log('trying to add: ', apiMethod)
     this.props.dispatch(addApiMethod(apiMethod))
-    window.location = `#/view/${this.props.params.apiId}`
+    window.location = '#/view/'
   }
 
   handleRemoveSuccessResponse(id) {
@@ -204,8 +203,6 @@ export class ApiAddDetail extends Component {
     })
     return (
       <div className="container">
-        <ErrorContainer clearError={this.clearError.bind(this) }/>
-        <SpinnerContainer />
         <div className="api-add-detail">
           <h1>{this.props.title}</h1>
           <form onSubmit={this.handleSubmit.bind(this) }>
@@ -305,7 +302,8 @@ ApiAddDetail.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    title: state.get('selectedApiTitle')
+    title: state.get('selectedApiTitle'),
+    apiId: state.get('selectedApiId')
   }
 }
 

@@ -6,18 +6,16 @@ import {connect} from 'react-redux'
 import { ApiAddDetailContainer } from '../api_add_detail/api_add_detail'
 import { SpinnerContainer } from '../spinner/spinner'
 import FontAwesome from 'react-fontawesome'
-import { addApi } from '../../action_creators'
+import { addApi, setSelectedApi } from '../../action_creators'
 import './styles.scss'
 
 export class ApiAdd extends Component {
   constructor(props) {
     super(props)
-    this.state = { title: props.title, addDetail: false }
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
   cancelAdding() {
-    this.setState({ value: this.props.api, id: this.props.selectedApiId })
     //return this.props.cancelAdding()
   }
 
@@ -52,30 +50,25 @@ export class ApiAdd extends Component {
           }
           this.props.dispatch(addApi(newApi))
           if (confirm('While you are here, why don\'t you add some methods to your api?')) {
-            // TODO redirect to `/add/detail/${apiId}/${title}`
+            this.props.dispatch(setSelectedApi(apiId, title))
+            window.location = '#/add/detail/'
             this.setState({ addDetail: true })
           } else {
-            // TODO redirect to '/'
+            window.location = '#/'
           }
         }
         break;
       case 'button-cancel':
         {
-          // TODO go back
+          window.history.back()
         }
         break;
     }
   }
 
   render() {
-    if (this.state.addDetail) {
-      return (
-        <ApiAddDetailContainer title={this.state.value} id={this.state.selectedApiId}/>
-      )
-    }
     return (
       <div className="container">
-        <SpinnerContainer />
         <div className="api-add">
           <form onSubmit={this.handleSubmit.bind(this) } className="form-add">
             <div className="input-group">
@@ -102,8 +95,7 @@ export class ApiAdd extends Component {
 }
 
 ApiAdd.propTypes = {
-  title: React.PropTypes.string,
-  selectedApiId: React.PropTypes.number
+  
 }
 
 const mapStateToProps = (state) => {

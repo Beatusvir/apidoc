@@ -23,10 +23,10 @@ Spinner.propTypes = {
   isFetching: React.PropTypes.bool
 }
 
-const mapStateToProps = (state) => {
-  return {
-    isFetching: state.get('isFetching')
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     isFetching: state.get('isFetching')
+//   }
+// }
 
-export const SpinnerContainer = connect(mapStateToProps)(Spinner)
+// export const SpinnerContainer = connect(mapStateToProps)(Spinner)

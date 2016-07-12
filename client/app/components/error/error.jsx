@@ -29,10 +29,10 @@ Error.propTypes = {
   clearError: PropTypes.func
 }
 
-const mapStateToProps = (state) => {
-  return {
-    message: state.get('lastError')
-  }
-}
+// const mapStateToProps = (state) => {
+//   return {
+//     message: state.get('lastError')
+//   }
+// }
 
-export const ErrorContainer = connect(mapStateToProps)(Error)
+// export const ErrorContainer = connect(mapStateToProps)(Error)

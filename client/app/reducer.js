@@ -1,16 +1,19 @@
 import { Map, List, fromJS } from 'immutable'
 
-function setState (state, newState) {
+function setState(state, newState) {
   return state.merge(newState)
 }
 
-function addApi (state, title) {
-  const newApi = Map({ id: 0, title})
-  let newState = state.update('isFetching', (isFetching) => true)
-  return newState.update('apis', (apis) => apis.push(newApi))
+function addApi(state, newApi) {
+  if (state.get('apis') === undefined){
+    return state.merge(Map({
+      apis: List.of(newApi)
+    }))
+  }
+  return state.update('apis', (apis) => apis.push(newApi))
 }
 
-function deleteApi (state, apiId) {
+function deleteApi(state, apiId) {
   return state.update('apis',
     (apis) => apis.filterNot(
       (item) => item.get('id') === apiId
@@ -18,19 +21,19 @@ function deleteApi (state, apiId) {
   )
 }
 
-function insertedId (state, apiId) {
+function insertedId(state, apiId) {
   return state.merge({
     insertedId: apiId
   })
 }
 
-function requestApis (state) {
+function requestApis(state) {
   return state.merge(Map({
     isFetching: true
   }))
 }
 
-function getDetail (state, apiId) {
+function getDetail(state, apiId) {
   return state.merge(Map({
     isFetching: false,
     apiDetail: List.of(
@@ -46,26 +49,35 @@ function getDetail (state, apiId) {
   }))
 }
 
-function deleteMethod(state, methodId){
-    return state.update('apiDetail',
+function deleteMethod(state, methodId) {
+  return state.update('apiDetail',
     (apiDetail) => apiDetail.filterNot(
       (item) => item.get('methodId') === methodId
     )
   )
 }
 
+function addApiMethod(state, apiMethod){
+  if (state.get('apiDetail') === undefined) {
+    return state.merge(Map({
+      apiDetail: List.of(apiMethod)
+    }))
+  }
+  return state.update('apiDetail', (apiDetail) => apiDetail.push(apiMethod))
+}
+
 export default function (state = Map({
-    isFetching: false
-  }) , action) {
+  isFetching: false
+}), action) {
   switch (action.type) {
     case 'SET_STATE':
       return setState(state, action.state)
     case 'GET_DETAIL':
       {
-      return getDetail(state, action.apiId)
+        return getDetail(state, action.apiId)
       }
     case 'ADD_API':
-      return addApi(state, action.title)
+      return addApi(state, action.newApi)
     case 'DELETE_API':
       return deleteApi(state, action.apiId)
     case 'INSERTED_ID':
@@ -73,21 +85,24 @@ export default function (state = Map({
     case 'REQUEST_APIS':
       return requestApis(state)
     case 'ADD_API_METHOD':
-      return state.merge(Map({
-        isFetching: true
-      }))
+      return addApiMethod(state, action.apiMethod)
     case 'CLEAR_API_DETAIL':
       {
-      return state.delete('apiDetail')
+        return state.delete('apiDetail')
       }
     case 'CLEAR_API_TITLE':
       {
-      return state.merge(Map({
-        selectedApiTitle: ''
-      }))
+        return state.merge(Map({
+          selectedApiTitle: ''
+        }))
       }
     case 'DELETE_METHOD':
       return deleteMethod(state, action.methodId)
+    case 'SET_SELECTED_API':
+      return state.merge(Map({
+        selectedApiId: action.apiId,
+        selectedApiTitle: action.apiTitle
+      }))
   }
   return state
 }

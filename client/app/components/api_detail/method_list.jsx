@@ -37,7 +37,7 @@ export class Methods extends Component {
       return (
         <div className="box method" key={index}>
           <FontAwesome name="trash" className="delete-method-icon" onClick={() => this.handleDeleteMethod(methodId) }/>
-          <h1>{item.get('methodTitle') }</h1>
+          <h1>{item.get('title') }</h1>
           <p>{item.get('description') }</p>
           <ul>
             <li className="apiDetailItem">

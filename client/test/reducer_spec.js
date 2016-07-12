@@ -154,24 +154,47 @@ describe('reducer', () => {
   it('handles ADD_API', () => {
     const initialState = Map({
       apis: List([
-        { id: 1, title: 'title api 1' },
-        { id: 2, title: 'title api 2' }
+        { apiId: 1, title: 'title api 1' },
+        { apiId: 2, title: 'title api 2' }
       ])
     })
 
+    const newApi = {
+      title: 'some title',
+      apiId: 0
+    }
     const action = {
       type: 'ADD_API',
-      title: 'some title'
+      newApi
     }
 
     const nextState = reducer(initialState, action)
     expect(nextState.toJS()).to.deep.equal(({
       apis: [
-        { id: 1, title: 'title api 1' },
-        { id: 2, title: 'title api 2' },
-        { id: 0, title: 'some title' }
-      ],
-      isFetching: true
+        { apiId: 1, title: 'title api 1' },
+        { apiId: 2, title: 'title api 2' },
+        { apiId: 0, title: 'some title' }
+      ]
+    }))
+  })
+
+  it('handles ADD_API with empty list', () => {
+    const initialState = Map()
+
+    const newApi = {
+      title: 'some title',
+      apiId: 1
+    }
+    const action = {
+      type: 'ADD_API',
+      newApi
+    }
+
+    const nextState = reducer(initialState, action)
+    expect(nextState.toJS()).to.deep.equal(({
+      apis: [
+        { apiId: 1, title: 'some title' }
+      ]
     }))
   })
 

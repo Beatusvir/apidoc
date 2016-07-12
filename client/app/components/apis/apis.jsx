@@ -6,8 +6,8 @@ import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
 import NothingFound from '../nothing_found/nothing_found'
 import { deleteApi, requestApis, clearError, requestDetail } from '../../action_creators'
-import { SpinnerContainer } from '../spinner/spinner'
-import { ErrorContainer } from '../error/error'
+import { Spinner } from '../spinner/spinner'
+import { Error } from '../error/error'
 import './styles.scss'
 
 export class Api extends Component {
@@ -17,7 +17,6 @@ export class Api extends Component {
   }
 
   handleDelete(e) {
-    console.log(e);
     e.preventDefault()
     // let id = e.currentTarget.id
     // if (confirm('Are you sure you want to delete this Api Document?')) {
@@ -26,11 +25,11 @@ export class Api extends Component {
   }
 
   clearError() {
-    this.props.dispatch(clearError())
+    // this.props.dispatch(clearError())
   }
 
   componentDidMount() {
-    this.props.dispatch(requestApis())
+    // this.props.dispatch(requestApis())
   }
 
   handleViewDetail(apiId){
@@ -41,7 +40,7 @@ export class Api extends Component {
     if (this.props.apiList === undefined || this.props.apiList.size === 0) {
       return (
         <div>
-          <SpinnerContainer />
+          <Spinner isFetching={this.props.isFetching}/>
           <NothingFound message="No documents created yet :'(" link="/add/"></NothingFound>
         </div>
       )
@@ -49,9 +48,8 @@ export class Api extends Component {
     const apiNode = this.props.apiList.map((item, index) => {
       const apiId = item.get('apiId')
       const apiTitle = item.get('title')
-      // onClick={() => { this.redirectToView(apiId, apiTitle) }}
       return (
-        <div className="api" key={apiId} title={apiTitle} onClick={this.handleViewDetail.bind(this, apiId)}>
+        <div className="api" key={index} title={apiTitle} onClick={this.handleViewDetail.bind(this, apiId)}>
           <FontAwesome className="deleteApiIcon" id={ 'delete_' + apiId } onClick={this.handleDelete.bind(this)} title="Delete this document" name="trash"/>
           <div className="title">{apiTitle}</div>
         </div>
@@ -59,8 +57,8 @@ export class Api extends Component {
     })
     return (
       <div className="container">
-        <ErrorContainer clearError={this.clearError.bind(this)}/>
-        <SpinnerContainer />
+        <Error clearError={this.clearError.bind(this)}/>
+        <Spinner isFetching={this.props.isFetching}/>
         <div className="apiList">
           {apiNode}
         </div>
@@ -75,7 +73,8 @@ Api.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    apiList: state.get('apis')
+    apiList: state.get('apis'),
+    isFetching: state.get('apis')
   }
 }
 
