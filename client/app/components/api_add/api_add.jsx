@@ -21,7 +21,18 @@ export class ApiAdd extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
-  handleKeyDown(e) {
+  handleTitleKeyDown(e) {
+    switch (e.key) {
+      case 'Enter':
+        this.submitNewApi()
+        break;
+      case 'Escape':
+        this.cancelAdding()
+        break;
+    }
+  }
+
+  handleDescriptionKeyDown(e) {
     switch (e.key) {
       case 'Enter':
         this.submitNewApi()
@@ -50,16 +61,16 @@ export class ApiAdd extends Component {
   }
 
   submitNewApi() {
-    const input = ReactDOM.findDOMNode(this.refs.apiInput)
-    const apiTitle = input.value
-    if (!apiTitle) return;
+    const title = ReactDOM.findDOMNode(this.refs.apiTitle).value
+    const description = ReactDOM.findDOMNode(this.refs.apiDescription).value
+    if (!title || !description) return;
     const apiId = uuid.v4()
     const newApi = {
-      title: apiTitle, apiId
+      title, description,  apiId
     }
     this.props.dispatch(apisAddRequest(newApi))
     if (confirm('While you are here, why don\'t you add some methods to your api?')) {
-      this.props.dispatch(selectApi(apiId, apiTitle))
+      this.props.dispatch(selectApi(apiId, title))
       window.location = '#/add/detail/'
     } else {
       window.location = '#/'
@@ -72,15 +83,23 @@ export class ApiAdd extends Component {
         <div className="api-add">
           <form id="form-api-add" className="form-add">
             <div className="input-group">
-              <label htmlFor="input-title">Title </label>
+              <label htmlFor="input-title">Title</label>
               <input
                 type="text"
                 id="input-title"
-                ref="apiInput"
+                ref="apiTitle"
                 autoFocus={true}
-                onKeyDown={this.handleKeyDown.bind(this) }
-                onChange={this.handleOnChange.bind(this) }
-                onBlur={this.handleOnBlur.bind(this) }
+                onKeyDown={this.handleTitleKeyDown.bind(this) }
+                />
+            </div>
+            <div className="input-group">
+              <label htmlFor="input-title">Description</label>
+              <textarea
+                rows="5"
+
+                id="input-description"
+                ref="apiDescription"
+                onKeyDown={this.handleDescriptionKeyDown.bind(this) }
                 />
             </div>
             <div className="input-group">

@@ -1,6 +1,6 @@
 import { apisSuccess, apisFailure, apisDeleteSuccess, apisDeleteFailure,
   apisCallAddSuccess, apisCallAddFailure, apisDetailSuccess, apisDetailFailure,
-  apisCallDeleteSuccess, apisCallDeleteFailure, 
+  apisCallDeleteSuccess, apisCallDeleteFailure,
   sendDetail, sendInsertedApiId, errorOcurred, sendApiTitle, clearApiDetail
 } from './actions'
 import { store } from '../index'
@@ -19,7 +19,7 @@ export function initDb () {
 
 export function getDbApis () {
   const db = new sqlite3.Database(file)
-  db.all('SELECT apiId, title FROM apis', (err, rows) => {
+  db.all('SELECT apiId, title, description FROM apis', (err, rows) => {
     if (err) {
       store.dispatch(apisFailure(`Error in [getDbApis]:${err}`))
       return
@@ -61,7 +61,7 @@ export function addApi (newApi) {
     return
   }
   const db = new sqlite3.Database(file)
-  db.run('INSERT INTO apis(apiId, title) VALUES(?, ?)', newApi.apiId, newApi.title, function (err) {
+  db.run('INSERT INTO apis(apiId, title, description) VALUES(?, ?, ?)', newApi.apiId, newApi.title, newApi.description, function (err) {
     if (err) {
       store.dispatch(errorOcurred(`Error in [addApi]:${err}`))
       return
@@ -84,7 +84,7 @@ function getApiMethods (apiId) {
     return
   }
   const db = new sqlite3.Database(file)
-  db.all('SELECT a.title as apiTitle, ' +
+  db.all('SELECT a.title as apiTitle, a.description, ' +
     'a.apiId as apiId, m.title as methodTitle, ' +
     'm.description, m.url, m.method, m.sample_call, m.notes, m.methodId ' +
     'FROM methods m ' +
@@ -320,7 +320,7 @@ export function deleteMethod (methodId) {
 
 function createTables (db) {
   db.serialize(() => {
-    db.run('CREATE TABLE apis (apiId TEXT PRIMARY KEY, title TEXT)')
+    db.run('CREATE TABLE apis (apiId TEXT PRIMARY KEY, title TEXT, description TEXT)')
     db.run('CREATE TABLE methods (methodId TEXT PRIMARY KEY, apiId TEXT, title TEXT, description TEXT, method TEXT, url TEXT, sample_call TEXT, notes TEXT, FOREIGN KEY(apiId) REFERENCES apis(apiId) ON DELETE CASCADE)')
     db.run('CREATE TABLE responses (responseId TEXT PRIMARY KEY, methodId TEXT, code TEXT, content TEXT, type TEXT, FOREIGN KEY(methodId) REFERENCES methods(methodId) ON DELETE CASCADE)')
     db.run('CREATE TABLE parameters (parameterId TEXT PRIMARY KEY, methodId TEXT, content TEXT, required INTEGER, type TEXT, FOREIGN KEY(methodId) REFERENCES methods(methodId) ON DELETE CASCADE)')

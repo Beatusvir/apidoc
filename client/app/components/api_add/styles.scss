@@ -1,7 +1,7 @@
 
 .api-add {
-  height: 200px;
-  width: 400px;
+  height: 350px;
+  width: 500px;
   margin-top: 50px;
   display: flex;
   flex-direction: column;
@@ -14,10 +14,10 @@
   background-image: url('../../../build/images/doc.png');
   background-repeat: no-repeat;
   background-size: 150px 150px;
-  background-position: 128% -50%;
+  background-position: 115% -10%;
 
   .form-add{
-  height: 150px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -25,7 +25,7 @@
 
 .input-group{
   display: flex;
-  width: 300px;
+  width: 400px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -35,13 +35,18 @@
     flex: 1;
   }
 
-  input {
+  textarea {
+    font-family: inherit;
+    resize: none;
+  }
+
+  input, textarea {
     flex: 2;
     border: 1px solid #666;
     border-radius: 2px;
   }
 
-  input:focus {
+  input:focus, textarea:focus {
     box-shadow: 0 0 4px steelblue;
   }
 

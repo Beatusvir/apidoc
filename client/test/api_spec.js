@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { renderIntoDocument, scryRenderedDOMComponentsWithClass, scryRenderedDOMComponentsWithTag } from 'react-addons-test-utils'
 import { expect } from 'chai'
 import { Api } from '../app/components/apis/apis'
-import reducer from '../app/reducer'
+import reducer from '../app/reducers/reducer'
 
 const apis = List.of(
   Map({ title: 'Api 1', apiId: 1 }),

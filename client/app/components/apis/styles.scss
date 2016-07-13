@@ -1,13 +1,12 @@
 .apiList {
   width: 80%;
-  margin: 20px auto;
+  margin: 0 auto;
   display: flex;
   justify-content: space-around;
   align-content: center;
   align-items: center;
   flex-direction: row;
   flex-flow: wrap;
-  background: #efefef;
   align-self: stretch;
 }
 
@@ -16,48 +15,61 @@
 }
 
 .api {
-  margin: 20px;
-  flex: 0 0 200px;
+  height: 130px;
+  flex: 0 0 80%;
   display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: center;
-  border: 1px solid #aaa;
-  height: 150px;
-  text-transform: uppercase;
-  background: linear-gradient(#fff,#efefef);
-  background-image: url('../../../build/images/api.png');
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  color: maroon;
-  font-weight: bold;
-  box-shadow: 0 0 2px steelblue;
-  font-size: 1.2em;
-  text-align: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border-bottom: 1px solid #aaa;
+  // background: linear-gradient(#fff,#efefef);
+  // background-image: url('../../../build/images/api.png');
+  // background-repeat: no-repeat;
+  // background-position: 0 0;
+  // box-shadow: 0 0 2px #cfcfcf;
   position: relative;
   overflow: hidden;
   opacity: 0.8;
   transition: all 0.25s;
+  padding: 20px;
 
   .title {
+    margin: 10px;
+    color: maroon;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
     max-height: 50px;
     text-overflow: ellipsis;
     overflow: hidden;
     line-height: 50px;
     max-width: 200px;
+    text-transform: uppercase;
+  }
+
+  .description {
+    margin: 10px;
+    color: #666;
+    font-size: 1em;
+    line-height: 1.2em;
+    max-height: 3.6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
 .api:hover {
   opacity: 1;
+  background-color: #efefef;
 }
 
 .deleteApiIcon {
+  font-size: 1.5em;
   position: absolute;
-  right: 5px;
-  top: 0;
+  right: 10px;
+  top: 10px;
   color: maroon;
-  opacity: 0.3;
+  opacity: 0.1;
   transition: 0.25s;
 }
 

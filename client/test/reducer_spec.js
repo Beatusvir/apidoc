@@ -1,8 +1,24 @@
 import { List, Map, fromJS } from 'immutable'
 import { expect } from 'chai'
-import reducer from '../app/reducer'
+import reducer from '../app/reducers/reducer'
 
 describe('reducer', () => {
+  it('handles SET_STATE with undefined state', () => {
+    const action = {
+      type: 'SET_STATE'
+    }
+
+    const nextState = reducer(undefined, action)
+
+    expect(nextState.toJS()).to.deep.equal({
+      isFetching: false,
+      apis: [],
+      selectedApiId: null,
+      selectedApiTile: null,
+      error: null
+    })
+  })
+
   it('handles SET_STATE', () => {
     const initialState = Map()
     const action = {
@@ -127,147 +143,4 @@ describe('reducer', () => {
       ]
     }))
   })
-
-  it('handles GET_DETAIL', () => {
-    const action = {
-      type: 'GET_DETAIL',
-      apiId: 1
-    }
-
-    const nextState = reducer(undefined, action)
-
-    expect(nextState.toJS()).to.deep.equal({
-      isFetching: false,
-      apiDetail: [
-        {
-          title: 'Method title',
-          description: 'some description',
-          items: [
-            { title: 'Some method', content: 'Method content' },
-            { title: 'Some method', content: 'Method content' }
-          ]
-        }
-      ]
-    })
-  })
-
-  it('handles ADD_API', () => {
-    const initialState = Map({
-      apis: List([
-        { apiId: 1, title: 'title api 1' },
-        { apiId: 2, title: 'title api 2' }
-      ])
-    })
-
-    const newApi = {
-      title: 'some title',
-      apiId: 0
-    }
-    const action = {
-      type: 'ADD_API',
-      newApi
-    }
-
-    const nextState = reducer(initialState, action)
-    expect(nextState.toJS()).to.deep.equal(({
-      apis: [
-        { apiId: 1, title: 'title api 1' },
-        { apiId: 2, title: 'title api 2' },
-        { apiId: 0, title: 'some title' }
-      ]
-    }))
-  })
-
-  it('handles ADD_API with empty list', () => {
-    const initialState = Map()
-
-    const newApi = {
-      title: 'some title',
-      apiId: 1
-    }
-    const action = {
-      type: 'ADD_API',
-      newApi
-    }
-
-    const nextState = reducer(initialState, action)
-    expect(nextState.toJS()).to.deep.equal(({
-      apis: [
-        { apiId: 1, title: 'some title' }
-      ]
-    }))
-  })
-
-  it('handles DELETE_API', () => {
-    const initialState = fromJS({
-      apis: [
-        { id: 1, title: 'title api 1' },
-        { id: 2, title: 'title api 2' }
-      ]
-    })
-
-    const action = {
-      type: 'DELETE_API',
-      apiId: 1
-    }
-
-    const nextState = reducer(initialState, action)
-    expect(nextState.toJS()).to.deep.equal(({
-      apis: [
-        { id: 2, title: 'title api 2' }
-      ]
-    }))
-  })
-
-  it('handles DELETE_METHOD', () => {
-    const initialState = fromJS({
-      apiDetail: [
-        { methodId: 1, title: 'Method 1', description: 'title api 1' },
-        { methodId: 2, title: 'Method 2', description: 'title api 2' }
-      ]
-    })
-
-    const action = {
-      type: 'DELETE_METHOD',
-      methodId: 1
-    }
-
-    const nextState = reducer(initialState, action)
-    expect(nextState.toJS()).to.deep.equal(({
-      apiDetail: [
-        { methodId: 2, title: 'Method 2', description: 'title api 2' }
-      ]
-    }))
-  })
-
-    it('handles DELETE_METHOD when removing last method', () => {
-    const initialState = fromJS({
-      apiDetail: [
-        { methodId: 1, title: 'Method 1', description: 'title api 1' }
-      ]
-    })
-
-    const action = {
-      type: 'DELETE_METHOD',
-      methodId: 1
-    }
-
-    const nextState = reducer(initialState, action)
-    expect(nextState.toJS()).to.deep.equal(({
-      apiDetail: []
-    }))
-  })
-
-  it('handles REQUEST_APIS', () => {
-    var initialState = Map()
-    var action = {
-      type: 'REQUEST_APIS'
-    }
-    var nextState = reducer(initialState, action)
-
-    expect(nextState.toJS()).to.deep.equal({
-      isFetching: true
-    })
-  })
-
 })

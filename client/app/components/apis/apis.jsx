@@ -10,7 +10,7 @@ import FontAwesome from 'react-fontawesome'
 import NothingFound from '../nothing_found/nothing_found'
 import Spinner from '../spinner/spinner'
 import { Error } from '../error/error'
-import Modal from '../modal/modal'
+import Modal, { modalType, modalButtons } from '../modal/modal'
 
 // Code, styles
 import { selectApi, clearError, apisDeleteRequest, apisDetailRequest } from '../../actions/actions'
@@ -19,22 +19,40 @@ import './styles.scss'
 export class Api extends Component {
   constructor(props) {
     super(props)
+    this.state = ({ apiId: null, apiTitle: null, modalShow: false })
+    this.modelCallback = this.modelCallback.bind(this)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
   }
 
-  handleDelete(apiId) {
-    if (confirm('Are you sure you want to delete this Api Document?')) {
-      this.props.dispatch(apisDeleteRequest(apiId))
+  handleApiClick(apiId, apiTitle, e) {
+    this.setState({ apiId: apiId, apiTitle: apiTitle })
+    switch (e.target.nodeName) {
+      case 'SPAN':
+        this.setState({ modalShow: true })
+        break
+      case 'DIV':
+        this.props.dispatch(selectApi(apiId, apiTitle))
+        window.location = `#/view/${apiId}`
+        break
     }
   }
 
-  clearError() {
-    this.props.dispatch(clearError())
-  }
-
-  handleViewDetail(apiId, apiTitle) {
-    this.props.dispatch(selectApi(apiId, apiTitle))
-    window.location = `#/view/${apiId}`
+  modelCallback(e) {
+    switch (e.target.nodeName) {
+      case 'SPAN':
+        this.setState({ modalShow: false })
+        break
+      case 'BUTTON':
+        if (e.target.id === 'button-modal-ok') {
+          this.setState({ modalShow: false })
+          this.props.dispatch(apisDeleteRequest(this.state.apiId))
+        } else if (e.target.id === 'button-modal-cancel') {
+          this.setState({ modalShow: false })
+        }
+        break
+      default:
+        break
+    }
   }
 
   render() {
@@ -43,9 +61,9 @@ export class Api extends Component {
         <Spinner isFetching={this.props.isFetching}/>
       )
     }
-    if(this.props.error) {
+    if (this.props.error) {
       return (
-        <Error message={this.props.error} clearError={this.clearError.bind(this)}/>
+        <Error message={this.props.error} clearError={this.clearError.bind(this) }/>
       )
     }
     if (this.props.apiList === undefined || this.props.apiList.size === 0) {
@@ -58,16 +76,25 @@ export class Api extends Component {
     const apiNode = this.props.apiList.map((item, index) => {
       const apiId = item.get('apiId')
       const apiTitle = item.get('title')
+      const apiDescription = item.get('description')
       return (
-        <div className="api" key={index} title={apiTitle} onClick={() => this.handleViewDetail(apiId, apiTitle) }>
-          <FontAwesome className="deleteApiIcon" id={ 'delete_' + apiId } onClick={() => this.handleDelete(apiId) } title="Delete this document" name="trash"/>
+        <div className="api" key={index} title={apiTitle} onClick={this.handleApiClick.bind(this, apiId, apiTitle) }>
+          <FontAwesome className="deleteApiIcon" id={ 'delete_' + apiId } title="Delete this document" name="trash"/>
           <div className="title">{apiTitle}</div>
+          <div className="description">{apiDescription}</div>
         </div>
       )
     })
     return (
       <div className="container">
-        <Modal showing={true}/>
+        <Modal
+          showing={this.state.modalShow}
+          callback={this.modelCallback}
+          type={modalType.CONFIRM}
+          buttons={modalButtons.OKCANCEL}
+          header={this.state.apiTitle}
+          message="Are you sure you want to delete this api document?"
+          />
         <div className="apiList">
           {apiNode}
         </div>
