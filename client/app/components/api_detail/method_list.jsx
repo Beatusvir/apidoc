@@ -12,7 +12,7 @@ import Parameters from './parameters'
 import Spinner from '../spinner/spinner'
 
 // Code, styles
-import {requestApiTitle, deleteMethod, requestDetail} from '../../actions/actions'
+import {requestApiTitle, requestDetail, apisCallDeleteRequest} from '../../actions/actions'
 import './styles.scss'
 
 export class Methods extends Component {
@@ -27,20 +27,19 @@ export class Methods extends Component {
 
   handleDeleteMethod(methodId) {
     if (confirm('Are you sure you want to delete this method?')){
-      this.props.dispatch(deleteMethod(methodId))
+      this.props.dispatch(apisCallDeleteRequest(methodId))
     }
   }
 
   render() {
     if (this.props.isFetching){
       return (
-        <Spinner isFetching={this.props.isFetching}/>
+        <Spinner/>
       )
     }
     if (this.props.methods === undefined || this.props.methods.size == 0) {
-      const link =`/add/detail/${this.props.params.apiId}`
       return (
-        <NothingFound message="No method call added yet :'(" link={link}/>
+        <NothingFound message="No method call added yet :'(" link="/add/detail/"/>
       )
     }
     const methodNode = this.props.methods.map((item, index) => {
@@ -48,7 +47,7 @@ export class Methods extends Component {
       return (
         <div className="box method" key={index}>
           <FontAwesome name="trash" className="delete-method-icon" onClick={() => this.handleDeleteMethod(methodId) }/>
-          <h1>{item.get('title') }</h1>
+          <h1>{item.get('methodTitle') }</h1>
           <p>{item.get('description') }</p>
           <ul>
             <li className="apiDetailItem">

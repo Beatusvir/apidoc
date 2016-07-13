@@ -16,6 +16,16 @@ const addApi = (newApi) => {
 
 export default function reducer (state = initialState , action) {
   switch (action.type) {
+    case 'SELECT_API': {
+      return state.merge(Map({
+        selectedApiId: action.apiId,
+        selectedApiTitle: action.apiTitle
+      }))
+    }
+    case 'CLEAR_ERROR':
+      return state.merge(Map({
+        error: null
+      }))
     case 'APIS_REQUEST':
       fetchApisFromDb()
       return state.merge(Map({isFetching: true}))
@@ -67,10 +77,42 @@ export default function reducer (state = initialState , action) {
         isFetching: true
       }))
 
+    case 'APIS_CALL_ADD_SUCCESS':
+      return state.merge(Map({
+        isFetching: false
+      }))
+    
+    case 'APIS_CALL_DELETE_REQUEST':
+      deleteMethodFromDb(action.callId)
+      return state.merge(Map({
+        isFetching: true
+      }))
+
+    case 'APIS_CALL_DELETE_SUCCESS':
+      let newCallList = state.get('apiDetail').filter((apiDetail) => apiDetail.methodId != action.methodId)
+      if (newCallList === undefined){
+        newCallList = List()
+      }
+      return state.merge(Map({
+        isFetching: false,
+        apiDetail: newCallList
+      }))
+
     case 'APIS_DETAIL_REQUEST':
       fetchApiDetailFromDb(action.apiId)
       return state.merge(Map({
         isFetching: true
+      }))
+    case 'APIS_DETAIL_SUCCESS':
+      if (action.apiDetail.length === 0){
+        return state.merge(Map({
+          apiDetail: List(),
+          isFetching: false
+      }))
+      }
+      return state.merge(Map({
+        apiDetail: action.apiDetail,
+        isFetching: false
       }))
 // TODO refactor this
     case 'ADD_API':

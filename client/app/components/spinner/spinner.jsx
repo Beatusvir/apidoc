@@ -2,22 +2,17 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import './styles.scss'
 
-export class Spinner extends Component {
+export default class Spinner extends Component {
   render() {
-    if (this.props.isFetching) {
-      return (
-        <div className="spinner"/>
-      )
-    }
     return (
-        <div className="spinner hide"/>
-      )
+      <div className="spinner"/>
+    )
   }
 }
 
-Spinner.propTypes = {
-  isFetching: React.PropTypes.bool
-}
+// Spinner.propTypes = {
+//   isFetching: React.PropTypes.bool
+// }
 
 // const mapStateToProps = (state) => {
 //   return {

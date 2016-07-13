@@ -1,5 +1,7 @@
 import { apisSuccess, apisFailure, apisDeleteSuccess, apisDeleteFailure,
-  apisCallAddSuccess, apisCallAddFailure, sendDetail, sendInsertedApiId, errorOcurred, sendApiTitle, clearApiDetail
+  apisCallAddSuccess, apisCallAddFailure, apisDetailSuccess, apisDetailFailure,
+  apisCallDeleteSuccess, apisCallDeleteFailure, 
+  sendDetail, sendInsertedApiId, errorOcurred, sendApiTitle, clearApiDetail
 } from './actions'
 import { store } from '../index'
 
@@ -70,7 +72,7 @@ export function addApi (newApi) {
 
 export function getDbApiDetail (apiId) {
   if (apiId === undefined) {
-    store.dispatch(errorOcurred('Error in [getDbApiDetail]: Paramter(s) undefined'))
+    store.dispatch(apisDetailFailure('Error in [getDbApiDetail]: Paramter(s) undefined'))
     return
   }
   getApiMethods(apiId)
@@ -89,24 +91,28 @@ function getApiMethods (apiId) {
     'JOIN apis a ON m.apiId = a.apiId ' +
     'WHERE a.apiId = ?', apiId, (err, rows) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [getApiMethods]:${err}`))
+        store.dispatch(apisDetailFailure(`Error in [getApiMethods]:${err}`))
         return
       }
-      getMethodResponses(rows)
+      if (rows.length > 0){
+        getMethodResponses(rows)
+        return
+      }
+      store.dispatch(apisDetailSuccess(rows))
     })
   db.close()
 }
 
 function getMethodResponses (methods) {
   if (methods === undefined) {
-    store.dispatch(errorOcurred('Error in [getMethodResponses]: Paramter(s) undefined'))
+    store.dispatch(apisDetailFailure('Error in [getMethodResponses]: Paramter(s) undefined'))
     return
   }
   const db = new sqlite3.Database(file)
   methods.map((item, index, array) => {
     db.all('SELECT code, content, type FROM responses WHERE methodId = ?', item.methodId, (err, rows) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [getMethodResponses]:${err}`))
+        store.dispatch(apisDetailFailure(`Error in [getMethodResponses]:${err}`))
         return
       }
       item.successResponses = rows.filter((row) => {
@@ -126,14 +132,14 @@ function getMethodResponses (methods) {
 
 function getMethodParameters (methods) {
   if (methods === undefined) {
-    store.dispatch(errorOcurred('Error in [getMethodParameters]: Paramter(s) undefined'))
+    store.dispatch(apisDetailFailure('Error in [getMethodParameters]: Paramter(s) undefined'))
     return
   }
   const db = new sqlite3.Database(file)
   methods.map((item, index, array) => {
     db.all('SELECT content, required, type FROM parameters WHERE methodId = ?', item.methodId, (err, rows) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [getMethodParameters]:${err}`))
+        store.dispatch(apisDetailFailure(`Error in [getMethodParameters]:${err}`))
         return
       }
       item.urlParameters = rows.filter((row) => {
@@ -144,7 +150,7 @@ function getMethodParameters (methods) {
       })
       // If it's the last item in the array, send the result
       if (array.length === ++index) {
-        store.dispatch(sendDetail(methods))
+        store.dispatch(apisDetailSuccess(methods))
       }
     })
   })
@@ -153,7 +159,7 @@ function getMethodParameters (methods) {
 
 export function addApiCall (apiCall) {
   if (apiCall === undefined) {
-    store.dispatch(errorOcurred('Error in [addApiCall]: Paramter(s) undefined'))
+    store.dispatch(apisCallAddFailure('Error in [addApiCall]: Paramter(s) undefined'))
     return
   }
   const db = new sqlite3.Database(file)
@@ -164,7 +170,6 @@ export function addApiCall (apiCall) {
       (err, rows) => {
         if (err) {
           store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert methods]:${err}`))
-          return
         }
       })
 
@@ -176,7 +181,6 @@ export function addApiCall (apiCall) {
         (err, rows) => {
           if (err) {
             store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert responses 1]:${err}`))
-            return
           }
         })
     })
@@ -189,7 +193,6 @@ export function addApiCall (apiCall) {
         (err, rows) => {
           if (err) {
             store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert responses 2]:${err}`))
-            return
           }
         })
     })
@@ -207,7 +210,7 @@ export function addApiCall (apiCall) {
         })
     })
 
-    apiCall.dataParams.map((item) => {
+    apiCall.dataParams.map((item, index, array) => {
       // console.log('trying to add parameter: ', item.parameterId, apiCall.methodId, item.content, item.required === 'on' ? 1 : 0, 'DATA')
       db.run('INSERT INTO parameters(parameterId, methodId, content, required, type)' +
       ' VALUES(?,?,?,?,?)',
@@ -216,6 +219,9 @@ export function addApiCall (apiCall) {
           if (err) {
             store.dispatch(apisCallAddFailure(`Error in [addApiCall - insert parameters 2]:${err}`))
             return
+          }
+          if(array.length === ++index){
+            store.dispatch(apisCallAddSuccess(apiCall))
           }
         })
     })
@@ -283,7 +289,7 @@ export function getApiTitle (apiId) {
 
 export function deleteMethod (methodId) {
   if (methodId === undefined) {
-    store.dispatch(errorOcurred('Error in [deleteMethod]: Paramter undefined'))
+    store.dispatch(apisCallDeleteFailure('Error in [deleteMethod]: Paramter undefined'))
     return
   }
   const db = new sqlite3.Database(file)
@@ -291,24 +297,22 @@ export function deleteMethod (methodId) {
   db.serialize(() => {
     db.get('SELECT apiId from methods WHERE methodId = ?', methodId, (err, row) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [deleteMethod - getting apiId]:${err}`))
+        store.dispatch(apisCallDeleteFailure(`Error in [deleteMethod - getting apiId]:${err}`))
       }
       apiId = row.apiId
     })
     db.run('DELETE FROM methods WHERE methodId = ?', methodId, (err) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [deleteMethod - deleting method]:${err}`))
+        store.dispatch(apisCallDeleteFailure(`Error in [deleteMethod - deleting method]:${err}`))
       }
       getDbApiDetail(apiId)
     })
     db.get('SELECT methodId from methods WHERE apiId = ?', apiId, (err, row) => {
       if (err) {
-        store.dispatch(errorOcurred(`Error in [deleteMethod - getting methods after deleting]:${err}`))
+        store.dispatch(apisCallDeleteFailure(`Error in [deleteMethod - getting methods after deleting]:${err}`))
       }
-      console.log(row)
       if (!row) {
-        console.log('clearing apidetila')
-        store.dispatch(clearApiDetail)
+        store.dispatch(apisCallDeleteSuccess(methodId))
       }
     })
   })

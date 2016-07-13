@@ -54,12 +54,42 @@ export function apisCallAddRequest (apiCall) {
   return { type: APIS_CALL_ADD_REQUEST, apiCall}
 }
 
-export function apisCallAddSuccess (apiCall) {
-  return { type: APIS_CALL_ADD_SUCCESS, apiCall}
+export function apisCallAddSuccess () {
+  return { type: APIS_CALL_ADD_SUCCESS}
 }
 
 export function apisCallAddFailure (error) {
   return { type: APIS_CALL_ADD_FAILURE, error}
+}
+
+export const APIS_DETAIL_REQUEST = 'APIS_DETAIL_REQUEST'
+export const APIS_DETAIL_SUCCESS = 'APIS_DETAIL_SUCCESS'
+export const APIS_DETAIL_FAILURE = 'APIS_DETAIL_FAILURE'
+
+export function apisDetailRequest (apiId) {
+  return { type: APIS_DETAIL_REQUEST, apiId}
+}
+
+export function apisDetailSuccess (apiDetail) {
+  return { type: APIS_DETAIL_SUCCESS, apiDetail}
+}
+
+export function apisDetailFailure (error) {
+  return { type: APIS_DETAIL_FAILURE, error}
+}
+
+export const APIS_CALL_DELETE_REQUEST = 'APIS_CALL_DELETE_REQUEST'
+export const APIS_CALL_DELETE_SUCCESS = 'APIS_CALL_DELETE_SUCCESS'
+export const APIS_CALL_DELETE_FAILURE = 'APIS_CALL_DELETE_FAILURE'
+
+export function apisCallDeleteRequest (callId) {
+  return { type: APIS_CALL_DELETE_REQUEST, callId}
+}
+export function apisCallDeleteSuccess (callId) {
+  return { type: APIS_CALL_DELETE_SUCCESS, callId}
+}
+export function apisCallDeleteFailure (error) {
+  return { type: APIS_CALL_DELETE_FAILURE, error}
 }
 
 //  TODO refactoring this

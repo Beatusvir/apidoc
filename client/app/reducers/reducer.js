@@ -28,18 +28,10 @@ export default function(state = initialState, action){
   switch(action.type){
     case SET_STATE:
       return state.merge(action.state)
-    case SELECT_API:
-      return state.merge(Map({
-        selectedApiId: action.apiId,
-        selectedApiTile: action.apiTitle
-      }))
-    case CLEAR_ERROR:
-      return state.merge(Map({
-        error: null
-      }))
     case APIS_REQUEST:
     case APIS_DETAIL_REQUEST:
     case APIS_CALL_ADD_REQUEST:
+    case APIS_CALL_DELETE_REQUEST:
     case APIS_DELETE_REQUEST:
       return defaultRequestState(state)
 

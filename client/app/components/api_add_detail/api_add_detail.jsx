@@ -10,7 +10,7 @@ import uuid from 'node-uuid'
 import ResponseItem from './response_item'
 import ParamItem from './param_item'
 import { ErrorContainer } from '../error/error'
-import { SpinnerContainer } from '../spinner/spinner'
+import Spinner from '../spinner/spinner'
 
 // Code, styles
 import { clearError, apisCallAddRequest } from '../../actions/actions'
@@ -78,7 +78,7 @@ export class ApiAddDetail extends Component {
       methodId, apiId: this.props.apiId, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
     }
     this.props.dispatch(apisCallAddRequest(apiCall))
-    window.location = '#/view/'
+    window.location = `#/view/${this.props.apiId}`
   }
 
   handleRemoveSuccessResponse(id) {

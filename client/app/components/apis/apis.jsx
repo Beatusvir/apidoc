@@ -8,8 +8,9 @@ import FontAwesome from 'react-fontawesome'
 
 // Components
 import NothingFound from '../nothing_found/nothing_found'
-import { Spinner } from '../spinner/spinner'
+import Spinner from '../spinner/spinner'
 import { Error } from '../error/error'
+import Modal from '../modal/modal'
 
 // Code, styles
 import { selectApi, clearError, apisDeleteRequest, apisDetailRequest } from '../../actions/actions'
@@ -33,8 +34,7 @@ export class Api extends Component {
 
   handleViewDetail(apiId, apiTitle) {
     this.props.dispatch(selectApi(apiId, apiTitle))
-    this.props.dispatch(apisDetailRequest(apiId))
-    window.location = '#/view/'
+    window.location = `#/view/${apiId}`
   }
 
   render() {
@@ -67,6 +67,7 @@ export class Api extends Component {
     })
     return (
       <div className="container">
+        <Modal showing={true}/>
         <div className="apiList">
           {apiNode}
         </div>

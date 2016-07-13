@@ -41,11 +41,19 @@ const handleLeaveViewApi = () => {
   // store.dispatch(clearDetail())
 }
 
+const handleEnterAddDetail = (nextState) => {
+  
+}
+
+const handleEnterView = (nextState) => {
+  store.dispatch(apisDetailRequest(nextState.params.apiId))
+}
+
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer} onEnter={handleEnterHome}/>
-  <Route path="/view/" component={MethodsContainer}/>
+  <Route path="/view/:apiId" component={MethodsContainer} onEnter={handleEnterView}/>
   <Route path="/add/" component={ApiAddContainer}/>
-  <Route path="/add/detail/" component={ApiAddDetailContainer}/>
+  <Route path="/add/detail/" component={ApiAddDetailContainer} onEnter={handleEnterAddDetail}/>
 </Route>
 
 ReactDOM.render(
