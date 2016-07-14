@@ -8,6 +8,7 @@ import FontAwesome from 'react-fontawesome'
 
 // Components
 import { SpinnerContainer } from '../spinner/spinner'
+import Modal, { modalType, modalButtons } from '../modal/modal'
 
 // Code, styles
 import { selectApi, apisAddRequest } from '../../actions/actions'
@@ -16,9 +17,31 @@ import './styles.scss'
 export class ApiAdd extends Component {
   constructor(props) {
     super(props)
+    this.state = ({ modalShow: false, apiId: null, title: null })
     this.submitNewApi = this.submitNewApi.bind(this)
     this.cancelAdding = this.cancelAdding.bind(this)
+    this.modalCallback = this.modalCallback.bind(this)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
+  }
+
+  modalCallback(e) {
+    switch (e.target.nodeName) {
+      case 'SPAN':
+        this.setState({ modalShow: false })
+        break
+      case 'BUTTON':
+        if (e.target.id === 'button-modal-ok') {
+          this.setState({ modalShow: false })
+          this.props.dispatch(selectApi(this.state.apiId, this.state.title))
+          window.location = '#/add/detail/'
+        } else if (e.target.id === 'button-modal-cancel') {
+          window.location = '#/'
+          this.setState({ modalShow: false })
+        }
+        break
+      default:
+        break
+    }
   }
 
   handleTitleKeyDown(e) {
@@ -66,20 +89,23 @@ export class ApiAdd extends Component {
     if (!title || !description) return;
     const apiId = uuid.v4()
     const newApi = {
-      title, description,  apiId
+      title, description, apiId
     }
     this.props.dispatch(apisAddRequest(newApi))
-    if (confirm('While you are here, why don\'t you add some methods to your api?')) {
-      this.props.dispatch(selectApi(apiId, title))
-      window.location = '#/add/detail/'
-    } else {
-      window.location = '#/'
-    }
+    this.setState({ modalShow: true, apiId, title })
   }
 
   render() {
     return (
       <div className="container">
+        <Modal
+          showing={this.state.modalShow}
+          callback={this.modalCallback}
+          type={modalType.CONFIRM}
+          buttons={modalButtons.OKCANCEL}
+          header="Add API Document"
+          message="While you are here why don't you add a method call to your new api?"
+          />
         <div className="api-add">
           <form id="form-api-add" className="form-add">
             <div className="input-group">
@@ -103,7 +129,7 @@ export class ApiAdd extends Component {
                 />
             </div>
             <div className="input-group">
-              <button type="button" id="button-save" className="button-add" onClick={this.handleSubmit.bind(this)}><FontAwesome name="floppy-o"/>Save</button>
+              <button type="button" id="button-save" className="button-add" onClick={this.handleSubmit.bind(this) }><FontAwesome name="floppy-o"/>Save</button>
               <button type="button" id="button-cancel" className="button-cancel"><FontAwesome name="ban"/>Cancel</button>
             </div>
           </form>

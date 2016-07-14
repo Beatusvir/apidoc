@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .flex-10 {
   flex: 10;
 }
@@ -20,7 +22,7 @@
   h1{
     color: orange;
     text-align: right;
-    text-shadow: 0 0 5px #ccc;
+    text-shadow: $font-shadow;
     text-transform: uppercase;
   }
 
@@ -41,17 +43,16 @@
       align-items: center;
 
       input[type="text"], select{
-        border: 1px solid #efefef;
-        border-radius: 5px;
+        border: $border;
         line-height: 1.3em;
         font-size: 1.1em;
-        color: #666;
+        color: $input-color;
         padding-left: 10px;
         margin-right: 20px;
       }
 
       input[type="text"]:focus, select:focus{
-        box-shadow: 0 0 4px steelblue;
+        box-shadow: $input-shadow;
       }
 
       input[type="checkbox"]{
@@ -61,7 +62,7 @@
       label {
         margin-right: 10px;
         text-align: right;
-        color: #333;
+        color: $primary-color;
       }
 
       .input-group-add {
@@ -114,7 +115,7 @@
       .response-container {
         position: relative;
         width: 100%;
-        border-bottom: 1px solid #efefef;
+        border-bottom: $border;
 
         .delete-icon {
           position: absolute;
@@ -143,16 +144,15 @@
     }
 
     button {
-      background: steelblue;
+      background: $primary-button-color;
       height: 40px;
       width: 200px;
       margin: 20px auto;
       border: 1px solid #efefef;
-      border-radius: 5px;
       font-size: 1.1em;
       font-weight: bold;
-      color: lightsteelblue;
       transform: color 0.25s ease;
+      color: white;
 
       .fa {
         margin-right: 10px;
@@ -160,8 +160,8 @@
     }
 
     button:hover {
+      background: $primary-button-color-hover;
       cursor: pointer;
-      color: white;
     }
   }
 }

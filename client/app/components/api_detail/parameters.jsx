@@ -5,31 +5,33 @@ class Parameters extends Component {
     super(props)
   }
   render() {
-    if (this.props.parameters === undefined || this.props.parameters.size === 0){
+    if (this.props.parameters === undefined || this.props.parameters.size === 0) {
       return (
         <div>
-          No parameters
+          None
         </div>
       )
     }
-    const parameterNode = this.props.parameters.map((item, index) => {
-      if (item.get('required') === 1){
-        return (
-          <div key={index} className="parameter">
-            <p><strong>Required:</strong></p>
-            <p>{item.get('content')}</p>
-          </div>
-        )
-      }
+    const parameterRequired = this.props.parameters.filter((parameter) => parameter.get('required') === 1 ).map((item, index) => {
       return (
         <div key={index} className="parameter">
-          {item.get('content')}
+          <p><span className="code">{item.get('content')}</span></p>
+        </div>
+      )
+    })
+    const parameterOptional = this.props.parameters.filter((parameter) => parameter.get('required') !== 1).map((item, index) => {
+      return (
+        <div key={index} className="parameter">
+          <p><span className="code">{item.get('content')}</span></p>
         </div>
       )
     })
     return (
       <div className="parameters">
-        {parameterNode}
+        <p><strong>Required: </strong></p>
+        {parameterRequired}
+        <p><strong>Optional: </strong></p>
+        {parameterOptional}
       </div>
     );
   }

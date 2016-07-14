@@ -46,4 +46,21 @@ describe('api', () => {
     firstMethod = scryRenderedDOMComponentsWithClass(component, 'api')[0]
     expect(firstMethod.textContent).to.equal('Test Api 1')
   })
+
+  it('filters a list of items', () => {
+    const filter = 'some'
+    const apis = List.of(
+      Map({ apiId: 1, title: 'some api', description: 'description 1' }),
+      Map({ apiId: 2, title: 'api', description: 'description 2' }),
+      Map({ apiId: 3, title: 'test api', description: 'description 3' }),
+      Map({ apiId: 4, title: 'some api 2', description: 'description 4' })
+    )
+    const container = document.createElement('div')
+    let component = ReactDOM.render(
+      <Api apiList={apis} filter={filter} />,
+      container
+    )
+    let filteredApis = scryRenderedDOMComponentsWithClass(component, 'api')
+    expect(filteredApis.length).to.equal(2)
+  })
 })

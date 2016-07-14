@@ -1,4 +1,6 @@
 
+@import '../../variables.scss';
+
 .api-add {
   height: 350px;
   width: 500px;
@@ -9,8 +11,8 @@
   justify-content: center;
   align-content: center;
   border-radius: 10px 10px;
-  box-shadow: 1px 1px 2px #ddd;
-  background-color: #efefef;
+  box-shadow: $primary-shadow;
+  background-color: $background-color;
   background-image: url('../../../build/images/doc.png');
   background-repeat: no-repeat;
   background-size: 150px 150px;
@@ -38,20 +40,22 @@
   textarea {
     font-family: inherit;
     resize: none;
+    padding: 5px;
   }
 
   input, textarea {
     flex: 2;
-    border: 1px solid #666;
+    border: $border;
     border-radius: 2px;
+    padding: 5px;
   }
 
   input:focus, textarea:focus {
-    box-shadow: 0 0 4px steelblue;
+    box-shadow: $input-shadow;
   }
 
   input:hover {
-    border: 1px solid #666;
+    border: $border;
   }
 }
 
@@ -59,7 +63,7 @@ button {
   flex: 1;
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid #aaa;
+  border: $border;
 
   span {
     margin-right: 5px;
@@ -67,24 +71,24 @@ button {
 }
 
 .button-add{
-  background-color: skyblue;
+  background-color: $primary-button-color;
   color: white;
   margin-right: 5px;
 }
 .button-add:hover {
   cursor: pointer;
-  background-color: deepskyblue;
+  background-color: $primary-button-color-hover;
 }
 
 .button-cancel{
   margin-left: 5px;
   color: white;
-  background-color: indianred;
+  background-color: $secondary-button-color;
 }
 
 .button-cancel:hover{
   cursor: pointer;
-  background-color: darkred;
+  background-color: $secondary-button-color-hover;
 }
 }
 

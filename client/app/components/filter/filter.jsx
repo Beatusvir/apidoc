@@ -1,17 +1,24 @@
 // Modules
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import FontAwesome from 'react-fontawesome'
 import { connect } from 'react-redux'
 
 // Code, styles
-import { filter } from '../../actions/actions'
 import './styles.scss'
 
-class Filter extends Component {
+export default class Filter extends Component {
   handleOnChange() {
     let value = ReactDOM.findDOMNode(this.refs.filter).value
-    this.props.dispatch(filter(value))
+    this.props.filterChanged(value)
+  }
+  handleOnFocus() {
+    console.log('focus')
+    document.getElementsByClassName('filter')[0].style.boxShadow = '0 0 5px orange'
+  }
+  handleOnBlur() {
+    console.log('blur')
+    document.getElementsByClassName('filter')[0].style.boxShadow = 'none'
   }
   render() {
     return (
@@ -22,6 +29,8 @@ class Filter extends Component {
           autoFocus={true}
           ref="filter"
           onChange={this.handleOnChange.bind(this)}
+          onFocus={this.handleOnFocus.bind(this)}
+          onBlur={this.handleOnBlur.bind(this)}
           placeholder="Find a document by title"
           />
       </div>
@@ -29,10 +38,6 @@ class Filter extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    filter: state.get('filter')
-  }
+Filter.propTypes = {
+  filterChanged: PropTypes.func
 }
-
-export const FilterContainer = connect(mapStateToProps)(Filter)

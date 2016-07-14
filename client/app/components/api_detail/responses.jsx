@@ -7,7 +7,7 @@ class Responses extends Component {
   render() {
     if (this.props.responses === undefined || this.props.responses.length === 0) {
       return (
-        <div>No responses</div>
+        <div>None</div>
       )
     }
     const responseNode = this.props.responses.map((item, index) => {

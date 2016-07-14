@@ -12,7 +12,7 @@ import NothingFound from '../nothing_found/nothing_found'
 import Spinner from '../spinner/spinner'
 import { Error } from '../error/error'
 import Modal, { modalType, modalButtons } from '../modal/modal'
-import { FilterContainer } from '../filter/filter'
+import Filter from '../filter/filter'
 
 // Code, styles
 import { selectApi, clearError, apisDeleteRequest, apisDetailRequest } from '../../actions/actions'
@@ -21,9 +21,13 @@ import './styles.scss'
 export class Api extends Component {
   constructor(props) {
     super(props)
-    this.state = ({ apiId: null, apiTitle: null, modalShow: false })
-    this.modelCallback = this.modelCallback.bind(this)
+    this.state = ({ apiId: null, apiTitle: null, modalShow: false, filter: this.props.filter })
+    this.modalCallback = this.modalCallback.bind(this)
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
+  }
+
+  handleFilterChanged(filter) {
+    this.setState({ filter: filter })
   }
 
   handleApiClick(apiId, apiTitle, e) {
@@ -39,7 +43,7 @@ export class Api extends Component {
     }
   }
 
-  modelCallback(e) {
+  modalCallback(e) {
     switch (e.target.nodeName) {
       case 'SPAN':
         this.setState({ modalShow: false })
@@ -68,14 +72,17 @@ export class Api extends Component {
         <Error message={this.props.error} clearError={this.clearError.bind(this) }/>
       )
     }
-    // if (this.props.apiList === undefined || this.props.apiList.size === 0) {
-    //   return (
-    //     <div>
-    //       <NothingFound message="No API documents created yet :'(" link="/add/"></NothingFound>
-    //     </div>
-    //   )
-    // }
-    const apiNode = this.props.apiList.map((item, index) => {
+    if (this.props.apiList === undefined || this.props.apiList.size === 0) {
+      return (
+        <div>
+          <NothingFound message="No API documents created yet :'(" link="/add/"></NothingFound>
+        </div>
+      )
+    }
+    const filteredApiList = this.state.filter
+      ? this.props.apiList.filter((apis) => apis.get('title').toUpperCase().includes(this.state.filter.toUpperCase()))
+      : this.props.apiList
+    const apiNode = filteredApiList.map((item, index) => {
       const apiId = item.get('apiId')
       const apiTitle = item.get('title')
       const apiDescription = item.get('description')
@@ -91,17 +98,15 @@ export class Api extends Component {
       <div className="container">
         <Modal
           showing={this.state.modalShow}
-          callback={this.modelCallback}
+          callback={this.modalCallback}
           type={modalType.CONFIRM}
           buttons={modalButtons.OKCANCEL}
           header={this.state.apiTitle}
           message="Are you sure you want to delete this api document?"
           />
-        <FilterContainer/>
+        <Filter filterChanged={this.handleFilterChanged.bind(this)}/>
         <div className="apiList">
-          <ReactCSSTransitionGroup transitionName="apis" transitionAppear={true} transitionAppearTimeout={500} transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-            {apiNode}
-          </ReactCSSTransitionGroup>
+          {apiNode}
         </div>
       </div>
     )
@@ -110,12 +115,13 @@ export class Api extends Component {
 
 Api.propTypes = {
   apiList: PropTypes.object,
-  isFetching: PropTypes.bool
+  isFetching: PropTypes.bool,
+  filter: PropTypes.string
 }
 
 const mapStateToProps = (state) => {
   return {
-    apiList: state.get('filteredApis'),
+    apiList: state.get('apis'),
     isFetching: state.get('isFetching'),
     error: state.get('error')
   }

@@ -1,9 +1,3 @@
-export const FILTER = 'FILTER'
-
-export function filter(filter) {
-  return { type: FILTER, filter }
-}
-
 export const APIS_REQUEST = 'APIS_REQUEST'
 export const APIS_SUCCESS = 'APIS_SUCCESS'
 export const APIS_FAILURE = 'APIS_FAILURE'

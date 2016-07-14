@@ -5,8 +5,6 @@ import { deleteApiFromDb, addApiToDb, fetchApisFromDb, fetchApiDetailFromDb,
 const initialState = Map(
   {
     apis: List(),
-    filteredApis: List(),
-    filter: '',
     isFetching: false,
     lastError: ''
   }
@@ -38,8 +36,7 @@ export default function reducer(state = initialState, action) {
     case 'APIS_SUCCESS':
       return state.merge(Map({
         isFetching: false,
-        apis: action.apis,
-        filteredApis: action.apis
+        apis: action.apis
       }))
     case 'APIS_FAILURE':
       return state.merge(Map({
@@ -121,18 +118,6 @@ export default function reducer(state = initialState, action) {
         apiDetail: action.apiDetail,
         isFetching: false
       }))
-    case 'FILTER':
-      const newFilteredApis = state.get('apis').filter((apis) => apis.title.toUpperCase().includes(action.filter.toUpperCase()))
-      return action.filter
-        ? state.merge(Map({
-          filter: action.filter,
-          filteredApis: newFilteredApis
-        }))
-        :
-        state.merge(Map({
-          filter: action.filter,
-          filteredApis: state.get('apis')
-        }))
 
     // TODO refactor this
     case 'ADD_API':
