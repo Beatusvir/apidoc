@@ -35,7 +35,7 @@
 
   .title {
     margin: 10px;
-    color: maroon;
+    color: steelblue;
     font-weight: bold;
     font-size: 1.5em;
     text-align: center;
@@ -43,7 +43,6 @@
     text-overflow: ellipsis;
     overflow: hidden;
     line-height: 50px;
-    max-width: 200px;
     text-transform: uppercase;
   }
 
@@ -75,4 +74,31 @@
 
 .deleteApiIcon:hover {
   opacity: 1;
+}
+
+.apis-enter {
+  opacity: 0.01;
+}
+
+.apis-enter.apis-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.apis-leave {
+  opacity: 1;
+}
+
+.apis-leave.apis-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.apis-appear {
+  opacity: 0.01;
+}
+
+.apis-appear.apis-appear-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
 }

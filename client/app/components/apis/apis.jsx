@@ -5,12 +5,14 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import FontAwesome from 'react-fontawesome'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 // Components
 import NothingFound from '../nothing_found/nothing_found'
 import Spinner from '../spinner/spinner'
 import { Error } from '../error/error'
 import Modal, { modalType, modalButtons } from '../modal/modal'
+import { FilterContainer } from '../filter/filter'
 
 // Code, styles
 import { selectApi, clearError, apisDeleteRequest, apisDetailRequest } from '../../actions/actions'
@@ -66,13 +68,13 @@ export class Api extends Component {
         <Error message={this.props.error} clearError={this.clearError.bind(this) }/>
       )
     }
-    if (this.props.apiList === undefined || this.props.apiList.size === 0) {
-      return (
-        <div>
-          <NothingFound message="No API documents created yet :'(" link="/add/"></NothingFound>
-        </div>
-      )
-    }
+    // if (this.props.apiList === undefined || this.props.apiList.size === 0) {
+    //   return (
+    //     <div>
+    //       <NothingFound message="No API documents created yet :'(" link="/add/"></NothingFound>
+    //     </div>
+    //   )
+    // }
     const apiNode = this.props.apiList.map((item, index) => {
       const apiId = item.get('apiId')
       const apiTitle = item.get('title')
@@ -95,8 +97,11 @@ export class Api extends Component {
           header={this.state.apiTitle}
           message="Are you sure you want to delete this api document?"
           />
+        <FilterContainer/>
         <div className="apiList">
-          {apiNode}
+          <ReactCSSTransitionGroup transitionName="apis" transitionAppear={true} transitionAppearTimeout={500} transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+            {apiNode}
+          </ReactCSSTransitionGroup>
         </div>
       </div>
     )
@@ -110,7 +115,7 @@ Api.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    apiList: state.get('apis'),
+    apiList: state.get('filteredApis'),
     isFetching: state.get('isFetching'),
     error: state.get('error')
   }

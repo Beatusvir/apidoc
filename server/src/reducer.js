@@ -5,6 +5,8 @@ import { deleteApiFromDb, addApiToDb, fetchApisFromDb, fetchApiDetailFromDb,
 const initialState = Map(
   {
     apis: List(),
+    filteredApis: List(),
+    filter: '',
     isFetching: false,
     lastError: ''
   }
@@ -14,7 +16,11 @@ const addApi = (newApi) => {
   addApiToDb(newApi)
 }
 
-export default function reducer (state = initialState , action) {
+function regexEscape(str) {
+    return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+}
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case 'SELECT_API': {
       return state.merge(Map({
@@ -28,11 +34,12 @@ export default function reducer (state = initialState , action) {
       }))
     case 'APIS_REQUEST':
       fetchApisFromDb()
-      return state.merge(Map({isFetching: true}))
+      return state.merge(Map({ isFetching: true }))
     case 'APIS_SUCCESS':
       return state.merge(Map({
         isFetching: false,
-        apis: action.apis
+        apis: action.apis,
+        filteredApis: action.apis
       }))
     case 'APIS_FAILURE':
       return state.merge(Map({
@@ -45,16 +52,16 @@ export default function reducer (state = initialState , action) {
         isFetching: true
       }))
     case 'APIS_DELETE_SUCCESS':
-    {
-      let newApiList = state.get('apis').filter((apis) => apis.apiId != action.apiId)
-      if (newApiList === undefined){
-        newApiList = List()
+      {
+        let newApiList = state.get('apis').filter((apis) => apis.apiId != action.apiId)
+        if (newApiList === undefined) {
+          newApiList = List()
+        }
+        return state.merge(Map({
+          isFetching: false,
+          apis: newApiList
+        }))
       }
-      return state.merge(Map({
-        isFetching: false,
-        apis: newApiList
-      }))
-    }
     case 'APIS_DELETE_FAILURE':
       return state.merge(Map({
         isFetching: false,
@@ -81,7 +88,7 @@ export default function reducer (state = initialState , action) {
       return state.merge(Map({
         isFetching: false
       }))
-    
+
     case 'APIS_CALL_DELETE_REQUEST':
       deleteMethodFromDb(action.callId)
       return state.merge(Map({
@@ -90,7 +97,7 @@ export default function reducer (state = initialState , action) {
 
     case 'APIS_CALL_DELETE_SUCCESS':
       let newCallList = state.get('apiDetail').filter((apiDetail) => apiDetail.methodId != action.methodId)
-      if (newCallList === undefined){
+      if (newCallList === undefined) {
         newCallList = List()
       }
       return state.merge(Map({
@@ -104,20 +111,33 @@ export default function reducer (state = initialState , action) {
         isFetching: true
       }))
     case 'APIS_DETAIL_SUCCESS':
-      if (action.apiDetail.length === 0){
+      if (action.apiDetail.length === 0) {
         return state.merge(Map({
           apiDetail: List(),
           isFetching: false
-      }))
+        }))
       }
       return state.merge(Map({
         apiDetail: action.apiDetail,
         isFetching: false
       }))
-// TODO refactor this
+    case 'FILTER':
+      const newFilteredApis = state.get('apis').filter((apis) => apis.title.toUpperCase().includes(action.filter.toUpperCase()))
+      return action.filter
+        ? state.merge(Map({
+          filter: action.filter,
+          filteredApis: newFilteredApis
+        }))
+        :
+        state.merge(Map({
+          filter: action.filter,
+          filteredApis: state.get('apis')
+        }))
+
+    // TODO refactor this
     case 'ADD_API':
       addApi(action.newApi)
-      return state.merge(Map({isFetching: true}))
+      return state.merge(Map({ isFetching: true }))
     case 'ADD_API_METHOD':
       addApiMethodToDb(action.apiMethod)
       return state
@@ -138,30 +158,30 @@ export default function reducer (state = initialState , action) {
       }))
     case 'CLEAR_ERROR':
       {
-      return state.merge(Map({
-        lastError: ''
-      }))
+        return state.merge(Map({
+          lastError: ''
+        }))
       }
     case 'REQUEST_API_TITLE':
       {
-      getApiTitleFromDb(action.apiId)
-      return state.merge(Map({isFetching: true}))
+        getApiTitleFromDb(action.apiId)
+        return state.merge(Map({ isFetching: true }))
       }
     case 'SEND_API_TITLE':
       {
-      return state.merge(Map({
-        isFetching: false,
-        selectedApiTitle: action.apiTitle
-      }))
+        return state.merge(Map({
+          isFetching: false,
+          selectedApiTitle: action.apiTitle
+        }))
       }
     case 'DELETE_METHOD':
       {
-      deleteMethodFromDb(action.methodId)
-      return state
+        deleteMethodFromDb(action.methodId)
+        return state
       }
     case 'CLEAR_API_DETAIL':
       {
-      return state.delete('apiDetail')
+        return state.delete('apiDetail')
       }
     default:
       return state

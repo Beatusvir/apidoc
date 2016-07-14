@@ -13,6 +13,12 @@ export function selectApi(apiId, apiTitle) {
   return { type: SELECT_API, apiId, apiTitle }
 }
 
+export const FILTER = 'FILTER'
+
+export function filter(filter) {
+  return { type: FILTER, filter }
+}
+
 export const CLEAR_ERROR = 'CLEAR_ERROR'
 
 export function clearError() {
