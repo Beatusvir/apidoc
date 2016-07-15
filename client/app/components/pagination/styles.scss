@@ -28,11 +28,10 @@
 
 .pagination {
   display: flex;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin: 50px auto;
+  justify-content: center;
 
   button {
-    flex:1;
     border: none;
     font-size: 1.5em;
     margin-right: 5px;

@@ -70,7 +70,7 @@ export class Methods extends Component {
         <div className="box method" key={index}>
           <div className="method-header">
             <h1>{item.get('methodTitle') }</h1>
-            <i size="2x" className="fa fa-pencil edit-method-icon" onClick={() => this.handleEditMethod(methodId) } title="Edit this method"/>
+            <i className="fa fa-pencil edit-method-icon" onClick={() => this.handleEditMethod(methodId) } title="Edit this method"/>
             <i className="fa fa-trash delete-method-icon" onClick={() => this.handleDeleteMethod(methodId) }  title="Delete this method"/>
           </div>
           <div className="method-content">
@@ -118,7 +118,7 @@ export class Methods extends Component {
       )
     })
     return (
-      <div className="container">
+      <div className="methods">
         <Modal
           showing={this.state.modalShow}
           callback={this.modalCallback}

@@ -206,95 +206,93 @@ export class ApiAddDetail extends Component {
       )
     })
     return (
-      <div className="container">
-        <div className="api-add-detail">
-          <h1>{this.props.title}</h1>
-          <form onSubmit={this.handleSubmit.bind(this) }>
-            <div className="input-group">
-              <label className="flex-2" htmlFor="inputTitle">Title</label>
-              <input
-                className="flex-8"
-                type="text"
-                ref="title"
-                id="inputTitle"
-                placeholder="Method call"/>
+      <div className="api-add-detail">
+        <h1>{this.props.title}</h1>
+        <form onSubmit={this.handleSubmit.bind(this) }>
+          <div className="input-group">
+            <label className="flex-2" htmlFor="inputTitle">Title</label>
+            <input
+              className="flex-8"
+              type="text"
+              ref="title"
+              id="inputTitle"
+              placeholder="Method call"/>
+          </div>
+          <div className="input-group">
+            <label className="flex-2" htmlFor="inputDescription">Description</label>
+            <input
+              className="flex-8"
+              type="text"
+              ref="description"
+              id="inputDescription"
+              placeholder="Aditional information about your api call"/>
+          </div>
+          <div className="input-group">
+            <label className="flex-2" htmlFor="inputUrl">Url</label>
+            <input
+              className="flex-8"
+              type="text"
+              ref="url"
+              id="inputUrl"
+              placeholder="The URL Structure (path only, no root url)"/>
+          </div>
+          <div className="input-group">
+            <label className="flex-2" htmlFor="inputMethod">Method</label>
+            <select name="inputMethod" className="flex-8" id="inputMethod" placeholder="The request type" ref="method">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="DELETE">DELETE</option>
+              <option value="PUT">PUT</option>
+            </select>
+          </div>
+          <div className="input-group" id="urlParams">
+            <h3>Url Parameters</h3>
+            <div className="input-group-add">
+              <i className="fa fa-plus-circle icon-add" id="addUrlParam"  onClick={this.handleAddUrlParam.bind(this) }/> <p>Which Url parameters does your call use?</p>
             </div>
-            <div className="input-group">
-              <label className="flex-2" htmlFor="inputDescription">Description</label>
-              <input
-                className="flex-8"
-                type="text"
-                ref="description"
-                id="inputDescription"
-                placeholder="Aditional information about your api call"/>
+            {urlParamsNode}
+          </div>
+          <div className="input-group" id="dataParams">
+            <h3>Data Parameters</h3>
+            <div className="input-group-add">
+              <i className="fa fa-plus-circle icon-add" id="addDataParam"  onClick={this.handleAddDataParam.bind(this) }/> <p>Which Data parameters does your call use?</p>
             </div>
-            <div className="input-group">
-              <label className="flex-2" htmlFor="inputUrl">Url</label>
-              <input
-                className="flex-8"
-                type="text"
-                ref="url"
-                id="inputUrl"
-                placeholder="The URL Structure (path only, no root url)"/>
+            {dataParamsNode}
+          </div>
+          <div className="input-group" id="successResponseContainer">
+            <h3>Success Response</h3>
+            <div className="input-group-add">
+              <i className="fa fa-plus-circle icon-add" id="addSuccessResponse"  onClick={this.handleAddSuccessResponse.bind(this) }/> <p>What should the status code (or codes) be on success and is there any returned data?</p>
             </div>
-            <div className="input-group">
-              <label className="flex-2" htmlFor="inputMethod">Method</label>
-              <select name="inputMethod" className="flex-8" id="inputMethod" placeholder="The request type" ref="method">
-                <option value="GET">GET</option>
-                <option value="POST">POST</option>
-                <option value="DELETE">DELETE</option>
-                <option value="PUT">PUT</option>
-              </select>
+            {successResponseItemNode}
+          </div>
+          <div className="input-group" id="errorResponseContainer">
+            <h3>Error Response</h3>
+            <div className="input-group-add">
+              <i name="fa fa-plus-circle plus-circle" id="addErrorResponse"  onClick={this.handleAddErrorResponse.bind(this) }/> <p>What should the status code (or codes) be on error?</p>
             </div>
-            <div className="input-group" id="urlParams">
-              <h3>Url Parameters</h3>
-              <div className="input-group-add">
-                <i className="fa fa-plus-circle icon-add" id="addUrlParam"  onClick={this.handleAddUrlParam.bind(this) }/> <p>Which Url parameters does your call use?</p>
-              </div>
-              {urlParamsNode}
-            </div>
-            <div className="input-group" id="dataParams">
-              <h3>Data Parameters</h3>
-              <div className="input-group-add">
-                <i className="fa fa-plus-circle icon-add" id="addDataParam"  onClick={this.handleAddDataParam.bind(this) }/> <p>Which Data parameters does your call use?</p>
-              </div>
-              {dataParamsNode}
-            </div>
-            <div className="input-group" id="successResponseContainer">
-              <h3>Success Response</h3>
-              <div className="input-group-add">
-                <i className="fa fa-plus-circle icon-add" id="addSuccessResponse"  onClick={this.handleAddSuccessResponse.bind(this) }/> <p>What should the status code (or codes) be on success and is there any returned data?</p>
-              </div>
-              {successResponseItemNode}
-            </div>
-            <div className="input-group" id="errorResponseContainer">
-              <h3>Error Response</h3>
-              <div className="input-group-add">
-                <i name="fa fa-plus-circle plus-circle" id="addErrorResponse"  onClick={this.handleAddErrorResponse.bind(this) }/> <p>What should the status code (or codes) be on error?</p>
-              </div>
-              {errorResponseItemNode}
-            </div>
-            <div className="input-group">
-              <label className="flex-2" htmlFor="inputNotes">Sample Call</label>
-              <input
-                className="flex-8"
-                type="text"
-                ref="sampleCall"
-                id="inputSampleCall"
-                placeholder="Sample call to your endpoint in a runnable format"/>
-            </div>
-            <div className="input-group">
-              <label className="flex-2" htmlFor="inputNotes">Notes</label>
-              <input
-                className="flex-8"
-                type="text"
-                ref="notes"
-                id="inputNotes"
-                placeholder="This is where all uncertainties, commentary, discussion etc. can go"/>
-            </div>
-            <button onClick={this.handleSubmit.bind(this) }><i clasName="fa fa-floppy-o"/>Save</button>
-          </form>
-        </div>
+            {errorResponseItemNode}
+          </div>
+          <div className="input-group">
+            <label className="flex-2" htmlFor="inputNotes">Sample Call</label>
+            <input
+              className="flex-8"
+              type="text"
+              ref="sampleCall"
+              id="inputSampleCall"
+              placeholder="Sample call to your endpoint in a runnable format"/>
+          </div>
+          <div className="input-group">
+            <label className="flex-2" htmlFor="inputNotes">Notes</label>
+            <input
+              className="flex-8"
+              type="text"
+              ref="notes"
+              id="inputNotes"
+              placeholder="This is where all uncertainties, commentary, discussion etc. can go"/>
+          </div>
+          <button onClick={this.handleSubmit.bind(this) }><i clasName="fa fa-floppy-o"/>Save</button>
+        </form>
       </div>
     )
   }

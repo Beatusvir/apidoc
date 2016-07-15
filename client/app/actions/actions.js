@@ -118,3 +118,32 @@ export function apisCallDeleteSuccess (callId) {
 export function apisCallDeleteFailure (error) {
   return { type: APIS_CALL_DELETE_FAILURE, error}
 }
+
+export const APIS_CALL_REQUEST = 'APIS_CALL_REQUEST'
+export const APIS_CALL_SUCCESS = 'APIS_CALL_SUCCESS'
+export const APIS_CALL_FAILURE = 'APIS_CALL_FAILURE'
+
+export function apisCallRequest (callId) {
+  return { type: APIS_CALL_REQUEST, callId}
+}
+export function apisCallSuccess (callId) {
+  return { type: APIS_CALL_SUCCESS, callId}
+}
+export function apisCallFailure (error) {
+  return { type: APIS_CALL_FAILURE, error}
+}
+
+export const APIS_CALL_EDIT_REQUEST = 'APIS_CALL_EDIT_REQUEST'
+export const APIS_CALL_EDIT_SUCCESS = 'APIS_CALL_EDIT_SUCCESS'
+export const APIS_CALL_EDIT_FAILURE = 'APIS_CALL_EDIT_FAILURE'
+
+export function apisCallEditRequest (callId) {
+  return { type: APIS_CALL_EDIT_REQUEST, callId}
+}
+export function apisCallEditSuccess (call) {
+  return { type: APIS_CALL_EDIT_SUCCESS, call}
+}
+export function apisCallEditFailure (error) {
+  return { type: APIS_CALL_EDIT_FAILURE, error}
+}
+

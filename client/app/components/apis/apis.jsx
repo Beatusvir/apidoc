@@ -65,7 +65,7 @@ export class Api extends Component {
     for(let i = 0; i < buttons.length; i++){
       if (buttons[i].id == e.currentTarget.id){
         document.getElementById(buttons[i].id).className = 'selected-page'
-        break    
+        break
       }
     }
     this.setState({ currentPage: value})
@@ -92,12 +92,7 @@ export class Api extends Component {
   render() {
     if (this.props.isFetching) {
       return (
-        <Spinner isFetching={this.props.isFetching}/>
-      )
-    }
-    if (this.props.error) {
-      return (
-        <Error message={this.props.error} clearError={this.clearError.bind(this) }/>
+        <Spinner />
       )
     }
     if (this.props.apiList === undefined || this.props.apiList.size === 0) {
@@ -130,7 +125,7 @@ export class Api extends Component {
       )
     })
     return (
-      <div className="container">
+      <div className="apis">
         <Modal
           showing={this.state.modalShow}
           callback={this.modalCallback}
@@ -147,9 +142,9 @@ export class Api extends Component {
         <div className="apiList">
           {apiNode}
         </div>
-        <Pagination 
+        <Pagination
         totalItems={filteredApiList.size}
-        totalItemsPerPage={this.state.totalItemsPerPage} 
+        totalItemsPerPage={this.state.totalItemsPerPage}
         onPageSelect={this.handleOnPageSelect.bind(this)}
         />
       </div>
@@ -166,8 +161,7 @@ Api.propTypes = {
 const mapStateToProps = (state) => {
   return {
     apiList: state.get('apis'),
-    isFetching: state.get('isFetching'),
-    error: state.get('error')
+    isFetching: state.get('isFetching')
   }
 }
 

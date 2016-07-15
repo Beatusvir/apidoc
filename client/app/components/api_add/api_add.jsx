@@ -96,7 +96,7 @@ export class ApiAdd extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="api-add">
         <Modal
           showing={this.state.modalShow}
           callback={this.modalCallback}
@@ -105,34 +105,32 @@ export class ApiAdd extends Component {
           header="Add API Document"
           message="While you are here why don't you add a method call to your new api?"
           />
-        <div className="api-add">
-          <form id="form-api-add" className="form-add">
-            <div className="input-group">
-              <label htmlFor="input-title">Title</label>
-              <input
-                type="text"
-                id="input-title"
-                ref="apiTitle"
-                autoFocus={true}
-                onKeyDown={this.handleTitleKeyDown.bind(this) }
-                />
-            </div>
-            <div className="input-group">
-              <label htmlFor="input-title">Description</label>
-              <textarea
-                rows="5"
+        <form id="form-api-add" className="form-add">
+          <div className="input-group">
+            <label htmlFor="input-title">Title</label>
+            <input
+              type="text"
+              id="input-title"
+              ref="apiTitle"
+              autoFocus={true}
+              onKeyDown={this.handleTitleKeyDown.bind(this) }
+              />
+          </div>
+          <div className="input-group">
+            <label htmlFor="input-title">Description</label>
+            <textarea
+              rows="5"
 
-                id="input-description"
-                ref="apiDescription"
-                onKeyDown={this.handleDescriptionKeyDown.bind(this) }
-                />
-            </div>
-            <div className="input-group">
-              <button type="button" id="button-save" className="button-add" onClick={this.handleSubmit.bind(this) }><i className="fa fa-floppy-o"/>Save</button>
-              <button type="button" id="button-cancel" className="button-cancel"><i className="fa fa-ban"/>Cancel</button>
-            </div>
-          </form>
-        </div>
+              id="input-description"
+              ref="apiDescription"
+              onKeyDown={this.handleDescriptionKeyDown.bind(this) }
+              />
+          </div>
+          <div className="input-group">
+            <button type="button" id="button-save" className="button-add" onClick={this.handleSubmit.bind(this) }><i className="fa fa-floppy-o"/>Save</button>
+            <button type="button" id="button-cancel" className="button-cancel"><i className="fa fa-ban"/>Cancel</button>
+          </div>
+        </form>
       </div>
     )
   }
