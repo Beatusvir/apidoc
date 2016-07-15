@@ -2,7 +2,6 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import FontAwesome from 'react-fontawesome'
 import {connect} from 'react-redux'
 
 // Components
@@ -71,8 +70,8 @@ export class Methods extends Component {
         <div className="box method" key={index}>
           <div className="method-header">
             <h1>{item.get('methodTitle') }</h1>
-            <FontAwesome name="pencil" size="2x" className="edit-method-icon" onClick={() => this.handleEditMethod(methodId) } title="Edit this method"/>
-            <FontAwesome name="trash" className="delete-method-icon" onClick={() => this.handleDeleteMethod(methodId) }  title="Delete this method"/>
+            <i size="2x" className="fa fa-pencil edit-method-icon" onClick={() => this.handleEditMethod(methodId) } title="Edit this method"/>
+            <i className="fa fa-trash delete-method-icon" onClick={() => this.handleDeleteMethod(methodId) }  title="Delete this method"/>
           </div>
           <div className="method-content">
             <p>{item.get('description') }</p>
@@ -130,11 +129,11 @@ export class Methods extends Component {
           />
         <div className="box tools">
           <div className="tools-icon">
-            <FontAwesome className="" name="print" title="Print method list"/>
+            <i className="fa fa-print" title="Print method list"/>
             <p>Print</p>
           </div>
           <div className="tools-icon">
-            <FontAwesome className="add-method-button" name="plus-circle" title="Add a new method" onClick={this.handleAddApi.bind(this) }/>
+            <i className="fa fa-plus-circle add-method-button" title="Add a new method" onClick={this.handleAddApi.bind(this) }/>
             <p>Add Method</p>
           </div>
         </div>

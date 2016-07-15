@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import { Link } from 'react-router'
-import FontAwesome from 'react-fontawesome'
 import './styles.scss'
 
 export default class NothingFound extends Component {
@@ -11,7 +10,7 @@ export default class NothingFound extends Component {
   render() {
     return (
       <div className="emptyList">
-          <span>{this.props.message} <Link to={this.props.link}><FontAwesome name="plus-circle" /> create one now!</Link></span>
+          <span>{this.props.message} <Link to={this.props.link}><i className="fa fa-plus-circle" /> create one now!</Link></span>
       </div>
     )
   }

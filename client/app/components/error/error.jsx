@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import FontAwesome from 'react-fontawesome'
 import {connect} from 'react-redux'
 import './styles.scss'
 
@@ -9,9 +8,9 @@ export class Error extends Component {
       return (
         <div className="error">
           <div className="error-content">
-            <FontAwesome name="exclamation-circle"/>
+            <i clasName="fa fa-exclamation-circle"/>
             {this.props.message}
-            <FontAwesome className="error-close" name="times" onClick={this.props.clearError} title="Cose message"/>
+            <i className="fa fa-times error-close" onClick={this.props.clearError} title="Cose message"/>
           </div>
         </div>
       )
@@ -28,11 +27,3 @@ Error.propTypes = {
   message: PropTypes.string,
   clearError: PropTypes.func
 }
-
-// const mapStateToProps = (state) => {
-//   return {
-//     message: state.get('lastError')
-//   }
-// }
-
-// export const ErrorContainer = connect(mapStateToProps)(Error)

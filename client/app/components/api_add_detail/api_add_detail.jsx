@@ -3,7 +3,6 @@ import React, {Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
-import FontAwesome from 'react-fontawesome'
 import uuid from 'node-uuid'
 
 // Components
@@ -177,7 +176,7 @@ export class ApiAddDetail extends Component {
     const successResponseItemNode = this.state.successResponseItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
-          <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveSuccessResponse(item) }/>
+          <i className="fa fa-trash delete-icon" onClick={() => this.handleRemoveSuccessResponse(item) }/>
           <ResponseItem id={item} key={index}/>
         </div>
       )
@@ -185,7 +184,7 @@ export class ApiAddDetail extends Component {
     const errorResponseItemNode = this.state.errorResponseItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
-          <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveErrorResponse(item) }/>
+          <i className="fa fa-trash delete-icon" onClick={() => this.handleRemoveErrorResponse(item) }/>
           <ResponseItem id={item} key={index}/>
         </div>
       )
@@ -193,7 +192,7 @@ export class ApiAddDetail extends Component {
     const urlParamsNode = this.state.urlParamItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
-          <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveUrlParam(item) }/>
+          <i className="fa fa-trash delete-icon" onClick={() => this.handleRemoveUrlParam(item) }/>
           <ParamItem id={item} key={index}/>
         </div>
       )
@@ -201,7 +200,7 @@ export class ApiAddDetail extends Component {
     const dataParamsNode = this.state.dataParamItems.map((item, index) => {
       return (
         <div className="response-container" key={item}>
-          <FontAwesome className="delete-icon" name="trash" onClick={() => this.handleRemoveDataParam(item) }/>
+          <i className="fa fa-trash  delete-icon" onClick={() => this.handleRemoveDataParam(item) }/>
           <ParamItem id={item} key={index}/>
         </div>
       )
@@ -250,28 +249,28 @@ export class ApiAddDetail extends Component {
             <div className="input-group" id="urlParams">
               <h3>Url Parameters</h3>
               <div className="input-group-add">
-                <FontAwesome className="icon-add" name="plus-circle" id="addUrlParam"  onClick={this.handleAddUrlParam.bind(this) }/> <p>Which Url parameters does your call use?</p>
+                <i className="fa fa-plus-circle icon-add" id="addUrlParam"  onClick={this.handleAddUrlParam.bind(this) }/> <p>Which Url parameters does your call use?</p>
               </div>
               {urlParamsNode}
             </div>
             <div className="input-group" id="dataParams">
               <h3>Data Parameters</h3>
               <div className="input-group-add">
-                <FontAwesome className="icon-add" name="plus-circle" id="addDataParam"  onClick={this.handleAddDataParam.bind(this) }/> <p>Which Data parameters does your call use?</p>
+                <i className="fa fa-plus-circle icon-add" id="addDataParam"  onClick={this.handleAddDataParam.bind(this) }/> <p>Which Data parameters does your call use?</p>
               </div>
               {dataParamsNode}
             </div>
             <div className="input-group" id="successResponseContainer">
               <h3>Success Response</h3>
               <div className="input-group-add">
-                <FontAwesome className="icon-add" name="plus-circle" id="addSuccessResponse"  onClick={this.handleAddSuccessResponse.bind(this) }/> <p>What should the status code (or codes) be on success and is there any returned data?</p>
+                <i className="fa fa-plus-circle icon-add" id="addSuccessResponse"  onClick={this.handleAddSuccessResponse.bind(this) }/> <p>What should the status code (or codes) be on success and is there any returned data?</p>
               </div>
               {successResponseItemNode}
             </div>
             <div className="input-group" id="errorResponseContainer">
               <h3>Error Response</h3>
               <div className="input-group-add">
-                <FontAwesome name="plus-circle" id="addErrorResponse"  onClick={this.handleAddErrorResponse.bind(this) }/> <p>What should the status code (or codes) be on error?</p>
+                <i name="fa fa-plus-circle plus-circle" id="addErrorResponse"  onClick={this.handleAddErrorResponse.bind(this) }/> <p>What should the status code (or codes) be on error?</p>
               </div>
               {errorResponseItemNode}
             </div>
@@ -293,7 +292,7 @@ export class ApiAddDetail extends Component {
                 id="inputNotes"
                 placeholder="This is where all uncertainties, commentary, discussion etc. can go"/>
             </div>
-            <button onClick={this.handleSubmit.bind(this) }><FontAwesome name="save"/>Save</button>
+            <button onClick={this.handleSubmit.bind(this) }><i clasName="fa fa-floppy-o"/>Save</button>
           </form>
         </div>
       </div>

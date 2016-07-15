@@ -1,0 +1,51 @@
+@import '../../variables';
+
+.pager {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  align-items: center;
+  color: $primary-color;
+  margin-bottom: 20px;
+  line-height: 1.3em;
+  font-size: 1.1em;
+
+  select{
+    line-height: 1.3em;
+    font-size: 1.1em;
+    align-self: flex-end;
+    border: $border;
+    color: $input-color;
+    width: 70px;
+  }
+
+  select:focus{
+    box-shadow: $input-shadow;
+  }
+}
+
+.pagination {
+  display: flex;
+  margin-top: 50px;
+  margin-bottom: 50px;
+
+  button {
+    flex:1;
+    border: none;
+    font-size: 1.5em;
+    margin-right: 5px;
+    background: $secondary-button-color;
+    color: white;
+  }
+
+  button.selected-page {
+    color: darkred;
+    box-shadow: $primary-shadow;
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
+}

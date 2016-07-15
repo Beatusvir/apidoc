@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import FontAwesome from 'react-fontawesome'
 
 class ReponseItem extends Component {
   constructor(props) {

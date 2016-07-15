@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom'
 import PureRenderMixin from 'react-addons-pure-render-mixin'
 import uuid from 'node-uuid'
 import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome'
 
 // Components
 import { SpinnerContainer } from '../spinner/spinner'
@@ -129,8 +128,8 @@ export class ApiAdd extends Component {
                 />
             </div>
             <div className="input-group">
-              <button type="button" id="button-save" className="button-add" onClick={this.handleSubmit.bind(this) }><FontAwesome name="floppy-o"/>Save</button>
-              <button type="button" id="button-cancel" className="button-cancel"><FontAwesome name="ban"/>Cancel</button>
+              <button type="button" id="button-save" className="button-add" onClick={this.handleSubmit.bind(this) }><i className="fa fa-floppy-o"/>Save</button>
+              <button type="button" id="button-cancel" className="button-cancel"><i className="fa fa-ban"/>Cancel</button>
             </div>
           </form>
         </div>
