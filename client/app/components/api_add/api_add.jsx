@@ -10,13 +10,13 @@ import { SpinnerContainer } from '../spinner/spinner'
 import Modal, { modalType, modalButtons } from '../modal/modal'
 
 // Code, styles
-import { selectApi, apisAddRequest } from '../../actions/actions'
+import { selectApi, fetchAddApi } from '../../actions/actions'
 import './styles.scss'
 
 export class ApiAdd extends Component {
   constructor(props) {
     super(props)
-    this.state = ({ modalShow: false, apiId: null, title: null })
+    this.state = ({ modalShow: false, title: null })
     this.submitNewApi = this.submitNewApi.bind(this)
     this.cancelAdding = this.cancelAdding.bind(this)
     this.modalCallback = this.modalCallback.bind(this)
@@ -31,7 +31,6 @@ export class ApiAdd extends Component {
       case 'BUTTON':
         if (e.target.id === 'button-modal-ok') {
           this.setState({ modalShow: false })
-          this.props.dispatch(selectApi(this.state.apiId, this.state.title))
           window.location = '#/add/detail/'
         } else if (e.target.id === 'button-modal-cancel') {
           window.location = '#/'
@@ -86,12 +85,11 @@ export class ApiAdd extends Component {
     const title = ReactDOM.findDOMNode(this.refs.apiTitle).value
     const description = ReactDOM.findDOMNode(this.refs.apiDescription).value
     if (!title || !description) return;
-    const apiId = uuid.v4()
     const newApi = {
-      title, description, apiId
+      title, description
     }
-    this.props.dispatch(apisAddRequest(newApi))
-    this.setState({ modalShow: true, apiId, title })
+    this.props.dispatch(fetchAddApi(newApi))
+    this.setState({ modalShow: true, title })
   }
 
   render() {
@@ -142,7 +140,7 @@ ApiAdd.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    selectedApiId: state.selectedApiId
+    
   }
 }
 

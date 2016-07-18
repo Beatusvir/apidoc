@@ -1,10 +1,12 @@
+import 'babel-polyfill'
 // Modules
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Route, Router, hashHistory } from 'react-router'
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import io from 'socket.io-client'
 
 // Components
 import { ApisContainer } from './components/apis/apis'
@@ -14,46 +16,36 @@ import { ApiAddDetailContainer } from './components/api_add_detail/api_add_detai
 import App from './components/app'
 
 // Reducer, actions, store
-import remoteActionMiddleware from './remote_action_middleware'
-import { setState, apisRequest, apisDetailRequest } from './actions/actions'
+import { fetchApis, fetchApisDetail } from './actions/actions'
 import reducer from './reducers/reducer'
 
-const socket = io(`${location.protocol}//${location.hostname}:8090`)
-// Loading state from server
-socket.on('state', state => {
-  store.dispatch(setState(state))
-})
+const loggerMiddleware = createLogger()
 
-const createStoreWithMiddlewate = applyMiddleware(
-  remoteActionMiddleware(socket)
-)(createStore)
-export const store = createStoreWithMiddlewate(reducer)
+const store = createStore(
+  reducer,
+  applyMiddleware(
+    thunkMiddleware,
+    loggerMiddleware
+  )
+)
 
 if (process.env.NODE_ENV !== 'production') {
   React.Perf = require('react-addons-perf')
 }
 
 const handleEnterHome = () => {
-  store.dispatch(apisRequest())
-}
-
-const handleLeaveViewApi = () => {
-  // store.dispatch(clearDetail())
-}
-
-const handleEnterAddDetail = (nextState) => {
-  
+  store.dispatch(fetchApis())
 }
 
 const handleEnterView = (nextState) => {
-  store.dispatch(apisDetailRequest(nextState.params.apiId))
+  store.dispatch(fetchApisDetail(nextState.params.apiId))
 }
 
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer} onEnter={handleEnterHome}/>
   <Route path="/view/:apiId" component={MethodsContainer} onEnter={handleEnterView}/>
   <Route path="/add/" component={ApiAddContainer}/>
-  <Route path="/add/detail/" component={ApiAddDetailContainer} onEnter={handleEnterAddDetail}/>
+  <Route path="/add/detail/" component={ApiAddDetailContainer}/>
 </Route>
 
 ReactDOM.render(

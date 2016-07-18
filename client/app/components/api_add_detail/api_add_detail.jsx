@@ -303,9 +303,9 @@ ApiAddDetail.propTypes = {
 }
 
 const mapStateToProps = (state) => {
+  console.log('api detail state: ', state);
   return {
-    title: state.get('selectedApiTitle'),
-    apiId: state.get('selectedApiId')
+    title: state.get('selectedApiTitle')
   }
 }
 

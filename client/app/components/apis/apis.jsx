@@ -15,7 +15,7 @@ import Filter from '../filter/filter'
 import {Pager, Pagination} from '../pagination/pagination'
 
 // Code, styles
-import { selectApi, clearError, apisDeleteRequest, apisDetailRequest } from '../../actions/actions'
+import { selectApi, clearError, fetchDeleteApi, apisDetailRequest } from '../../actions/actions'
 import './styles.scss'
 
 export class Api extends Component {
@@ -50,7 +50,7 @@ export class Api extends Component {
         this.setState({ modalShow: true })
         break
       case 'DIV':
-        this.props.dispatch(selectApi(apiId, apiTitle))
+        this.props.dispatch(selectApi(apiTitle))
         window.location = `#/view/${apiId}`
         break
     }
@@ -79,7 +79,7 @@ export class Api extends Component {
       case 'BUTTON':
         if (e.target.id === 'button-modal-ok') {
           this.setState({ modalShow: false })
-          this.props.dispatch(apisDeleteRequest(this.state.apiId))
+          this.props.dispatch(fetchDeleteApi(this.state.apiId))
         } else if (e.target.id === 'button-modal-cancel') {
           this.setState({ modalShow: false })
         }
@@ -95,7 +95,7 @@ export class Api extends Component {
         <Spinner />
       )
     }
-    if (this.props.apiList === undefined || this.props.apiList.size === 0) {
+    if (this.props.apiList === undefined || this.props.apiList.length === 0) {
       return (
         <div>
           <NothingFound message="No API documents created yet :'(" link="/add/"></NothingFound>
@@ -103,19 +103,16 @@ export class Api extends Component {
       )
     }
     let filteredApiList = this.state.filter
-      ? this.props.apiList.filter((apis) => apis.get('title').toUpperCase().includes(this.state.filter.toUpperCase()))
+      ? this.props.apiList.filter((apis) => apis.title.toUpperCase().includes(this.state.filter.toUpperCase()))
       : this.props.apiList
 
     let currentPagedItem = (this.state.totalItemsPerPage * this.state.currentPage) - this.state.totalItemsPerPage
-    // console.log(`currentPagedItem: (${this.state.totalItemsPerPage} * ${this.state.currentPage}) - ${this.state.totalItemsPerPage} = ${currentPagedItem}`);
     let pagedFilteredApiList = filteredApiList.slice(currentPagedItem, currentPagedItem + this.state.totalItemsPerPage)
-    // console.log(`slicing with: (${currentPagedItem}, ${currentPagedItem} + ${this.state.totalItemsPerPage})`);
 
-    //const apiNode = filteredApiList.map((item, index) => {
     const apiNode = pagedFilteredApiList.map((item, index) => {
-      const apiId = item.get('apiId')
-      const apiTitle = item.get('title')
-      const apiDescription = item.get('description')
+      const apiId = item._id
+      const apiTitle = item.title
+      const apiDescription = item.description
       return (
         <div className="api" key={index} title={apiTitle} onClick={this.handleApiClick.bind(this, apiId, apiTitle) }>
           <i className="fa fa-trash deleteApiIcon" id={ 'delete_' + apiId } title="Delete this document"/>
@@ -153,12 +150,13 @@ export class Api extends Component {
 }
 
 Api.propTypes = {
-  apiList: PropTypes.object,
+  apiList: PropTypes.array,
   isFetching: PropTypes.bool,
   filter: PropTypes.string
 }
 
 const mapStateToProps = (state) => {
+  console.log('state:', state);
   return {
     apiList: state.get('apis'),
     isFetching: state.get('isFetching')

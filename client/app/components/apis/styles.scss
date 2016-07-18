@@ -1,3 +1,5 @@
+@import '../../variables.scss';
+
 .apiList {
   width: 80%;
   margin: 0 auto;
@@ -19,7 +21,7 @@
   align-items: flex-start;
   justify-content: flex-start;
 
-  border-bottom: 1px solid #aaa;
+  border-bottom: $border;
   position: relative;
   overflow: hidden;
   opacity: 0.8;
@@ -41,7 +43,7 @@
 
   .description {
     margin: 10px;
-    color: #666;
+    color: $primary-color;
     font-size: 1em;
     line-height: 1.2em;
     max-height: 3.6em;
@@ -52,7 +54,7 @@
 
 .api:hover {
   opacity: 1;
-  background-color: #efefef;
+  background-color: $background-color;
 }
 
 .deleteApiIcon {
