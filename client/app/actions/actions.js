@@ -26,6 +26,32 @@ export function clearError() {
   return { type: CLEAR_ERROR }
 }
 
+export const API_TITLE_REQUEST = 'API_TITLE_REQUEST'
+export const API_TITLE_SUCCESS = 'API_TITLE_SUCCESS'
+export const API_TITLE_FAILURE = 'API_TITLE_FAILURE'
+
+export function apiTitleRequest(apiId) {
+  return { type: API_TITLE_REQUEST }
+}
+
+export function apiTitleSuccess(apiId, apiTitle) {
+  return { type: API_TITLE_SUCCESS, apiId, apiTitle }
+}
+
+export function apiTitleFailure(apiId) {
+  return { type: API_TITLE_FAILURE }
+}
+
+export function fetchApiTitle(apiId) {
+  return dispatch => {
+    dispatch(apiTitleRequest(apiId))
+    return fetch(`http://localhost:8081/api/apis/${apiId}`)
+      .then(response => response.json())
+      .then(result => dispatch(apiTitleSuccess(result.api._id, result.api.title)))
+      .catch(err => dispatch(apiTitleFailure(err)))
+  }
+}
+
 export const APIS_REQUEST = 'APIS_REQUEST'
 export const APIS_SUCCESS = 'APIS_SUCCESS'
 export const APIS_FAILURE = 'APIS_FAILURE'
@@ -79,7 +105,7 @@ export function fetchAddApi(newApi) {
       body: JSON.stringify(newApi)
     })
       .then(response => response.json())
-      .then(result => dispatch(apisAddSuccess(result.newApi)) )
+      .then(result => dispatch(apisAddSuccess(result.newApi)))
       .catch(err => dispatch(apisAddFailure(err)))
   }
 }
@@ -132,12 +158,12 @@ export function apisDetailFailure(error) {
   return { type: APIS_DETAIL_FAILURE, error }
 }
 
-export function fetchApisDetail(apiId) {
+export function fetchApiDetail(apiId) {
   return dispatch => {
     dispatch(apisDetailRequest(apiId))
-    return fetch(`http://localhost:8081/api/apis/${apiId}`)
+    return fetch(`http://localhost:8081/api/apis/detail/${apiId}`)
       .then(response => response.json())
-      .then(apiDetail => dispatch(apisSuccess(apiDetail)))
+      .then(result => dispatch(apisDetailSuccess(result.apiDetail)))
   }
 }
 
@@ -150,11 +176,26 @@ export function apisCallAddRequest(apiCall) {
 }
 
 export function apisCallAddSuccess(apiCall) {
-  return { type: APIS_CALL_ADD_SUCCESS, apiCall }
+  return { type: APIS_CALL_ADD_SUCCESS }
 }
 
 export function apisCallAddFailure(error) {
   return { type: APIS_CALL_ADD_FAILURE, error }
+}
+
+export function fetchApisCallAddRequest(apiCall) {
+  return dispatch => {
+    dispatch(apisCallAddRequest(apiCall))
+    return fetch(`http://localhost:8081/api/apis/detail/${apiCall.apiId}`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(apiCall)
+    })
+      .then(response => response.json())
+      .then(result => dispatch(apisCallAddSuccess(result.apiCall)))
+  }
 }
 
 export const APIS_CALL_DELETE_REQUEST = 'APIS_CALL_DELETE_REQUEST'
@@ -169,6 +210,27 @@ export function apisCallDeleteSuccess(callId) {
 }
 export function apisCallDeleteFailure(error) {
   return { type: APIS_CALL_DELETE_FAILURE, error }
+}
+
+export function fetchApiCallDelete(callId) {
+  return dispatch => {
+    dispatch(apisCallDeleteRequest(callId))
+    console.log('sending: ', `http://localhost:8081/api/apis/detail/${callId}`);
+    return fetch(`http://localhost:8081/api/apis/detail/${callId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json'
+      },
+      mode: 'cors'
+    })
+      .then(response => response.json())
+      .then(result => {
+        if (result.result) {
+          dispatch(apisCallDeleteSuccess(callId))
+        }
+      })
+      .catch(err => dispatch(apisCallDeleteFailure(err)))
+  }
 }
 
 export const APIS_CALL_REQUEST = 'APIS_CALL_REQUEST'

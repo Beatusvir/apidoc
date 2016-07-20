@@ -16,7 +16,7 @@ import { ApiAddDetailContainer } from './components/api_add_detail/api_add_detai
 import App from './components/app'
 
 // Reducer, actions, store
-import { fetchApis, fetchApisDetail } from './actions/actions'
+import { fetchApis, fetchApiDetail, fetchApiTitle } from './actions/actions'
 import reducer from './reducers/reducer'
 
 const loggerMiddleware = createLogger()
@@ -38,14 +38,18 @@ const handleEnterHome = () => {
 }
 
 const handleEnterView = (nextState) => {
-  store.dispatch(fetchApisDetail(nextState.params.apiId))
+  store.dispatch(fetchApiDetail(nextState.params.apiId))
+}
+
+const handleEnterDetail = (nextState) => {
+  store.dispatch(fetchApiTitle(nextState.params.apiId))
 }
 
 const routes = <Route component={App}>
   <Route path="/" component={ApisContainer} onEnter={handleEnterHome}/>
   <Route path="/view/:apiId" component={MethodsContainer} onEnter={handleEnterView}/>
   <Route path="/add/" component={ApiAddContainer}/>
-  <Route path="/add/detail/" component={ApiAddDetailContainer}/>
+  <Route path="/add/detail/:apiId" component={ApiAddDetailContainer} onEnter={handleEnterDetail}/>
 </Route>
 
 ReactDOM.render(

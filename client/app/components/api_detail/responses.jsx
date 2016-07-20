@@ -13,8 +13,8 @@ class Responses extends Component {
     const responseNode = this.props.responses.map((item, index) => {
       return (
         <li key={index}>
-          <p><strong>Code:</strong>&nbsp;{item.get('code') }</p>
-          <p><strong>Content:</strong>&nbsp;<span className="code">{item.get('content') }</span></p>
+          <p><strong>Code:</strong>&nbsp;{item.code}</p>
+          <p><strong>Content:</strong>&nbsp;<span className="code">{item.content}</span></p>
         </li>
       )
     })

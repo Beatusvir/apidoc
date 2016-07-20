@@ -12,7 +12,7 @@ import { ErrorContainer } from '../error/error'
 import Spinner from '../spinner/spinner'
 
 // Code, styles
-import { clearError, apisCallAddRequest } from '../../actions/actions'
+import { clearError, fetchApisCallAddRequest } from '../../actions/actions'
 import './styles.scss'
 
 export class ApiAddDetail extends Component {
@@ -32,29 +32,29 @@ export class ApiAddDetail extends Component {
   }
 
   handleSubmit(e) {
+    console.log(this.state);
     e.preventDefault()
-    const methodId = uuid.v4()
     const title = ReactDOM.findDOMNode(this.refs.title).value
     const description = ReactDOM.findDOMNode(this.refs.description).value
     const method = ReactDOM.findDOMNode(this.refs.method).value
     const url = ReactDOM.findDOMNode(this.refs.url).value
     const sampleCall = ReactDOM.findDOMNode(this.refs.sampleCall).value
     const notes = ReactDOM.findDOMNode(this.refs.notes).value
-    let successResponseItems = []
+    let successResponse = []
     this.state.successResponseItems.map((item, index) => {
       let code = document.getElementById(`inputCode_${item}`).value
       let content = document.getElementById(`inputContent_${item}`).value
       let responseId = uuid.v4()
       let newResponse = { responseId, code, content }
-      successResponseItems.push(newResponse)
+      successResponse.push(newResponse)
     })
-    let errorResponseItems = []
+    let errorResponse = []
     this.state.errorResponseItems.map((item, index) => {
       let code = document.getElementById(`inputCode_${item}`).value
       let content = document.getElementById(`inputContent_${item}`).value
       let responseId = uuid.v4()
       let newResponse = { responseId, code, content }
-      errorResponseItems.push(newResponse)
+      errorResponse.push(newResponse)
     })
     let urlParams = []
     this.state.urlParamItems.map((item, index) => {
@@ -74,10 +74,10 @@ export class ApiAddDetail extends Component {
     })
 
     const apiCall = {
-      methodId, apiId: this.props.apiId, title, description, method, url, sampleCall, notes, successResponseItems, errorResponseItems, urlParams, dataParams
+      apiId: this.props.params.apiId, title, description, method, url, sampleCall, notes, successResponse, errorResponse, urlParams, dataParams
     }
-    this.props.dispatch(apisCallAddRequest(apiCall))
-    window.location = `#/view/${this.props.apiId}`
+    this.props.dispatch(fetchApisCallAddRequest(apiCall))
+    window.location = `#/view/${this.props.params.apiId}`
   }
 
   handleRemoveSuccessResponse(id) {
@@ -207,7 +207,7 @@ export class ApiAddDetail extends Component {
     })
     return (
       <div className="api-add-detail">
-        <h1>{this.props.title}</h1>
+        <h1>{this.props.apiTitle}</h1>
         <form onSubmit={this.handleSubmit.bind(this) }>
           <div className="input-group">
             <label className="flex-2" htmlFor="inputTitle">Title</label>
@@ -299,13 +299,13 @@ export class ApiAddDetail extends Component {
 }
 
 ApiAddDetail.propTypes = {
-  title: PropTypes.string
+  apiTitle: PropTypes.string
 }
 
 const mapStateToProps = (state) => {
-  console.log('api detail state: ', state);
   return {
-    title: state.get('selectedApiTitle')
+    apiTitle: state.get('apiTitle'),
+    apiId: state.get('apiId')
   }
 }
 

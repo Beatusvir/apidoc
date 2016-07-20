@@ -16,7 +16,7 @@ import './styles.scss'
 export class ApiAdd extends Component {
   constructor(props) {
     super(props)
-    this.state = ({ modalShow: false, title: null })
+    this.state = ({ modalShow: false })
     this.submitNewApi = this.submitNewApi.bind(this)
     this.cancelAdding = this.cancelAdding.bind(this)
     this.modalCallback = this.modalCallback.bind(this)
@@ -90,6 +90,7 @@ export class ApiAdd extends Component {
     }
     this.props.dispatch(fetchAddApi(newApi))
     this.setState({ modalShow: true, title })
+    this.props.dispatch(selectApi(title))
   }
 
   render() {

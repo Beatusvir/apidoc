@@ -12,7 +12,7 @@ import Spinner from '../spinner/spinner'
 import Modal, { modalType, modalButtons } from '../modal/modal'
 
 // Code, styles
-import {requestApiTitle, requestDetail, apisCallDeleteRequest} from '../../actions/actions'
+import {requestApiTitle, requestDetail, fetchApiCallDelete} from '../../actions/actions'
 import './styles.scss'
 
 export class Methods extends Component {
@@ -24,7 +24,7 @@ export class Methods extends Component {
   }
 
   handleAddApi() {
-    window.location = '#/add/detail/'
+    window.location = `#/add/detail/${this.props.params.apiId}`
   }
 
   handleDeleteMethod(methodId) {
@@ -43,7 +43,7 @@ export class Methods extends Component {
       case 'BUTTON':
         if (e.target.id === 'button-modal-ok') {
           this.setState({ modalShow: false })
-          this.props.dispatch(apisCallDeleteRequest(this.state.methodId))
+          this.props.dispatch(fetchApiCallDelete(this.state.methodId))
         } else if (e.target.id === 'button-modal-cancel') {
           this.setState({ modalShow: false })
         }
@@ -59,58 +59,59 @@ export class Methods extends Component {
         <Spinner/>
       )
     }
-    if (this.props.methods === undefined || this.props.methods.size == 0) {
+    if (this.props.methods === undefined || this.props.methods.length == 0) {
+      const currentLink = `/add/detail/${this.props.params.apiId}`
       return (
-        <NothingFound message="No method call added yet :'(" link="/add/detail/"/>
+        <NothingFound message="No method call added yet :'(" link={currentLink}/>
       )
     }
     const methodNode = this.props.methods.map((item, index) => {
-      const methodId = item.get('methodId')
+      const methodId = item._id
       return (
         <div className="box method" key={index}>
           <div className="method-header">
-            <h1>{item.get('methodTitle') }</h1>
+            <h1>{item.title}</h1>
             <i className="fa fa-pencil edit-method-icon" onClick={() => this.handleEditMethod(methodId) } title="Edit this method"/>
             <i className="fa fa-trash delete-method-icon" onClick={() => this.handleDeleteMethod(methodId) }  title="Delete this method"/>
           </div>
           <div className="method-content">
-            <p>{item.get('description') }</p>
+            <p>{item.description}</p>
             <ul>
               <li className="apiDetailItem">
                 <h3>URL</h3>
-                <p>{item.get('url') }</p>
+                <p>{item.url}</p>
               </li>
               <li className="apiDetailItem">
                 <h3>Method</h3>
-                <p><span className="code">{item.get('method') }</span></p>
+                <p><span className="code">{item.method}</span></p>
               </li>
               <li className="apiDetailItem">
                 <h3>URL Params</h3>
-                <Parameters parameters={item.get('urlParameters') }/>
+                <Parameters parameters={item.urlParams}/>
               </li>
               <li className="apiDetailItem">
                 <h3>Data Params</h3>
-                <Parameters parameters={item.get('dataParameters') }/>
+                <Parameters parameters={item.dataParams}/>
               </li>
               <li className="apiDetailItem">
                 <h3>Success Response</h3>
-                <Responses responses={item.get('successResponses') }/>
+                <Responses responses={item.successResponse}/>
               </li>
               <li className="apiDetailItem">
                 <h3>Error Response</h3>
-                <Responses responses={item.get('errorResponses') }/>
+                <Responses responses={item.errorResponse}/>
               </li>
               <li className="apiDetailItem">
                 <h3>Notes</h3>
-                <p>{item.get('notes') }</p>
+                <p>{item.notes}</p>
               </li>
               <li className="apiDetailItem">
                 <h3>Sample Call</h3>
-                <p>{item.get('sample_call') }</p>
+                <p>{item.sample_call}</p>
               </li>
               <li className="apiDetailItem">
                 <h3>Notes</h3>
-                <p>{item.get('notes') }</p>
+                <p>{item.notes}</p>
               </li>
             </ul>
           </div>
@@ -144,7 +145,7 @@ export class Methods extends Component {
 }
 
 Methods.propTypes = {
-  methods: PropTypes.object
+  methods: PropTypes.array
 }
 
 const mapStateToProps = (state) => {
